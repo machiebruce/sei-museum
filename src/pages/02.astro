@@ -1,0 +1,44 @@
+---
+import Layout from "../layouts/Main-Layout.astro";
+import Menu from "../components/Menu.astro";
+
+import {pageNames} from "../utils/constants.mjs";
+---
+
+<Layout title='Saline Ettore Infersa'>
+  <main class='flex flex-row'>
+    <Menu HasSectionNumber={true} sectionNumber={pageNames.page02.sectionNumber} title={pageNames.page02.title} />
+
+    <div class='grid grid-cols-2 gap-8 w-full p-32'>
+      <div class='col-span-full text-white h-fit'>
+        <p class='text-7xl font-extralight'>{pageNames.page02.sectionNumber}</p>
+        <p class='text-white font-bold text-3xl uppercase'>{pageNames.page02.title}</p>
+      </div>
+      <!--video1-->
+      <div class='flex flex-col gap-y-8'>
+        <!-- <video controls>
+          <source src='src/assets/video/placeholder_video.mp4' type='video/mp4' />
+          Your browser does not support the video tag.
+        </video> -->
+        <div class='rounded-2xl overflow-clip group w-1/2'>
+          <img src='https://images.unsplash.com/photo-1561472114-64f81c541347?q=80&w=3456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' alt='placeholder' class='overflow-clip group-hover:scale-110 animation-smooth aspect-square object-cover' />
+        </div>
+        <p class='text-white text-xl w-prose w-3/4'>Lorem ipsum dolor sit amet consectetur. Erat etiam elementum euismod mattis. Turpis vitae dolor sodales mollis viverra. Nisi lacus sed proin amet arcu. Adipiscing eu nulla amet donec urna magnis. Neque tellus ullamcorper pellentesque faucibus nec aliquam tempus enim. Eget eget molestie nibh sed cras. Molestie nibh elit neque ultrices ullamcorper tortor. Leo scelerisque tincidunt lacus amet in ipsum vitae. Nec arcu morbi sed nisi eget nulla. Sed at urna ultrices fermentum eget. Iaculis nibh montes euismod ultricies. At convallis tortor adipiscing mauris risus viverra pharetra. Ut enim vitae donec eleifend viverra sed fermentum erat.</p>
+      </div>
+      <!--video2-->
+      <div class='flex flex-col gap-y-8'>
+        <!-- <video controls>
+          <source src='src/assets/video/placeholder_video.mp4' type='video/mp4' />
+          Your browser does not support the video tag.
+        </video> -->
+        <div class='rounded-2xl overflow-clip group item relative'>
+          <img src='../../public/play.svg' alt='play video' class='z-50 opacity-0 group-hover:scale-110 group-hover:opacity-100 animation-smooth absolute origin-center left-1/2 top-1/2' />
+          <img src='https://images.unsplash.com/photo-1561472114-64f81c541347?q=80&w=3456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' alt='placeholder' class='overflow-clip group-hover:scale-110 animation-smooth object-cover aspect-video' />
+        </div>
+        <p class='text-white font-bold text-3xl uppercase'>Il restauro</p>
+      </div>
+    </div>
+
+    <a href='01-eng'><img src='/src/assets/ita.svg' alt='switch to english' class='absolute top-8 right-8 hover:opacity-80 hover:scale-110 animation-smooth' /></a>
+  </main>
+</Layout>

@@ -1,16 +1,19 @@
 ---
 import Layout from "../layouts/Main-Layout.astro";
 import Menu from "../components/Menu.astro";
+import Buttons from "../components/Buttons.astro";
+
+import {pageNames} from "../utils/constants.mjs";
 ---
 
 <Layout title='Saline Ettore Infersa'>
   <main class='flex flex-row'>
-    <Menu HasSectionNumber={true} title='GLI ATTREZZI DELLA SALINA' sectionNumber='01' />
+    <Menu HasSectionNumber={true} title={pageNames.page01.title} sectionNumber={pageNames.page01.sectionNumber} />
 
     <div class='grid grid-cols-2 gap-8 w-full p-32'>
       <div class='col-span-full text-white h-fit'>
-        <p class='text-7xl font-extralight'>01</p>
-        <p class='text-white font-bold text-3xl'>GLI ATTREZZI DELLA SALINA</p>
+        <p class='text-7xl font-extralight'>{pageNames.page01.sectionNumber}</p>
+        <p class='text-white font-bold text-3xl'>{pageNames.page01.title}</p>
       </div>
       <!--video1-->
       <div class='flex flex-col gap-y-8'>
@@ -20,7 +23,7 @@ import Menu from "../components/Menu.astro";
         </video> -->
         <div class='rounded-2xl overflow-clip group item relative'>
           <img src='../../public/play.svg' alt='play video' class='z-50 opacity-0 group-hover:scale-110 group-hover:opacity-100 animation-smooth absolute origin-center left-1/2 top-1/2' />
-          <img src='/src/assets/thumbs.png' alt='placeholder' class='overflow-clip group-hover:scale-110 animation-smooth' />
+          <img src='/src/assets/thumbs.png' alt='placeholder' class='overflow-clip group-hover:scale-110 animation-smooth object-cover aspect-video' />
         </div>
         <p class='text-white font-bold text-3xl uppercase'>Inaugurazione</p>
       </div>
@@ -32,12 +35,13 @@ import Menu from "../components/Menu.astro";
         </video> -->
         <div class='rounded-2xl overflow-clip group item relative'>
           <img src='../../public/play.svg' alt='play video' class='z-50 opacity-0 group-hover:scale-110 group-hover:opacity-100 animation-smooth absolute origin-center left-1/2 top-1/2' />
-          <img src='/src/assets/thumbs.png' alt='placeholder' class='overflow-clip group-hover:scale-110 animation-smooth' />
+          <img src='https://images.unsplash.com/photo-1636747242721-57375c7c0f22?q=80&w=2075&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' alt='placeholder' class='overflow-clip group-hover:scale-110 animation-smooth object-cover aspect-video' />
         </div>
-        <p class='text-white font-bold text-3xl uppercase'>Inaugurazione</p>
+        <p class='text-white font-bold text-3xl uppercase'>Il restauro</p>
       </div>
+      <Buttons />
     </div>
 
-    <a href='http://'><img src='/src/assets/eng.svg' alt='switch to english' class='absolute top-8 right-8 hover:opacity-80 hover:scale-110 animation-smooth' /></a>
+    <a href='01-eng'><img src='/src/assets/ita.svg' alt='switch to english' class='absolute top-8 right-8 hover:opacity-80 hover:scale-110 animation-smooth' /></a>
   </main>
 </Layout>

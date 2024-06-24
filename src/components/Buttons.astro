@@ -1,0 +1,12 @@
+---
+interface Props {
+  link?: string;
+  label?: string;
+  hasIcon?: boolean;
+  srcIcon?: string;
+}
+
+const {link = "#", label = "Bottone", hasIcon = true, srcIcon = "/public/arrowRight.svg"} = Astro.props as Props;
+---
+
+<a href={link} class='bg-white text-black font-bold px-8 py-2 w-fit h-fit flex gap-4 rounded-full uppercase'>{label} <img src={srcIcon} /></a>

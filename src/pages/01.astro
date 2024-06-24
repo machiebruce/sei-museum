@@ -1,0 +1,43 @@
+---
+import Layout from "../layouts/Main-Layout.astro";
+import Menu from "../components/Menu.astro";
+---
+
+<Layout title='Saline Ettore Infersa'>
+  <main class='flex flex-row'>
+    <Menu HasSectionNumber={true} title='GLI ATTREZZI DELLA SALINA' sectionNumber='01' />
+
+    <div class='grid grid-cols-2 gap-8 w-full p-32'>
+      <div class='col-span-full text-white h-fit'>
+        <p class='text-7xl font-extralight'>01</p>
+        <p class='text-white font-bold text-3xl'>GLI ATTREZZI DELLA SALINA</p>
+      </div>
+      <!--video1-->
+      <div class='flex flex-col gap-y-8'>
+        <!-- <video controls>
+          <source src='src/assets/video/placeholder_video.mp4' type='video/mp4' />
+          Your browser does not support the video tag.
+        </video> -->
+        <div class='rounded-2xl overflow-clip group item relative'>
+          <img src='../../public/play.svg' alt='play video' class='z-50 opacity-0 group-hover:scale-110 group-hover:opacity-100 animation-smooth absolute origin-center left-1/2 top-1/2' />
+          <img src='/src/assets/thumbs.png' alt='placeholder' class='overflow-clip group-hover:scale-110 animation-smooth' />
+        </div>
+        <p class='text-white font-bold text-3xl uppercase'>Inaugurazione</p>
+      </div>
+      <!--video2-->
+      <div class='flex flex-col gap-y-8'>
+        <!-- <video controls>
+          <source src='src/assets/video/placeholder_video.mp4' type='video/mp4' />
+          Your browser does not support the video tag.
+        </video> -->
+        <div class='rounded-2xl overflow-clip group item relative'>
+          <img src='../../public/play.svg' alt='play video' class='z-50 opacity-0 group-hover:scale-110 group-hover:opacity-100 animation-smooth absolute origin-center left-1/2 top-1/2' />
+          <img src='/src/assets/thumbs.png' alt='placeholder' class='overflow-clip group-hover:scale-110 animation-smooth' />
+        </div>
+        <p class='text-white font-bold text-3xl uppercase'>Inaugurazione</p>
+      </div>
+    </div>
+
+    <a href='http://'><img src='/src/assets/eng.svg' alt='switch to english' class='absolute top-8 right-8 hover:opacity-80 hover:scale-110 animation-smooth' /></a>
+  </main>
+</Layout>

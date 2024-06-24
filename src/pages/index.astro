@@ -7,9 +7,8 @@ import Card from "../components/Card.astro";
 <Layout title='Saline Ettore Infersa'>
   <main class='flex flex-row'>
     <Menu HasSectionNumber={false} title='Home' sectionNumber='01' />
-    <div class='snap-x flex-1 flex items-center justify-start gap-16 overflow-x-scroll scroll-pr-72'>
-      
-      <div class="ml-16"><Card sectionNumber='01' /></div>
+    <div class='snap-x flex-1 flex items-center justify-start gap-16 overflow-x-scroll scroll-pr-72 no-scrollbar'>
+      <div class='ml-16'><Card sectionNumber='01' href='01' /></div>
       <Card sectionNumber='02' />
       <Card sectionNumber='03' />
       <Card sectionNumber='04' />
@@ -22,6 +21,6 @@ import Card from "../components/Card.astro";
       <div class='min-w-32'>a</div>
     </div>
 
-    <a href="http://"></a>
+    <a href='http://'><img src='/src/assets/eng.svg' alt='change language' class='absolute top-8 right-8 hover:opacity-80 hover:scale-110 animation-smooth' /></a>
   </main>
 </Layout>

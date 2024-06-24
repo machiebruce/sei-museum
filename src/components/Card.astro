@@ -7,16 +7,17 @@ interface Props {
   alt?: string;
 }
 
-const {href = "#", title = "GLI ATTREZZI DELLA SALINA", sectionNumber = "01", image = "./../../public/placeholder.jpg", alt = ""} = Astro.props;
----
+import {Image} from "astro:assets";
 
-<a href={href} class='bg-neutral-700 rounded-xl w-[320px] p-4 gap-4 flex flex-col group items-center snap-center'>
+const {href = "#", title = "GLI ATTREZZI DELLA SALINA", sectionNumber = "01", image = "src/assets/placeholder.jpg", alt = ""} = Astro.props;
+---
+<a href={href} class='bg-neutral-700 rounded-xl min-w-[500px] snap-start h-fit p-4 gap-8 flex flex-col group items-center scroll-ml-16 first-child:pl-16'>
   <div class='w-full'>
-    <p class='text-white font-extralight text-6xl group-hover:opacity-0 animation-smooth'>
+    <p class='text-white font-extralight text-8xl group-hover:opacity-0 animation-smooth'>
       {sectionNumber}
     </p>
   </div>
-  <img src={image} alt={image} class='rounded-lg aspect-square group-hover:-translate-y-20 group-hover:scale-110 animation-smooth' />
-  <p class='text-white font-bold text-2xl group-hover:-translate-y-10 animation-smooth'>{title}</p>
-  <p class='bg-white px-8 py-2 text-xl rounded-full text-center w-fit invisible opacity-0 group-hover:visible group-hover:opacity-100 animation-smooth uppercase'>Apri</p>
+  <img src={image} alt={image} class='rounded-lg aspect-square group-hover:-translate-y-32 group-hover:scale-110 animation-smooth' />
+  <p class='text-white font-bold text-3xl group-hover:-translate-y-20 animation-smooth'>{title}</p>
+  <p class='bg-white px-8 py-2 text-2xl rounded-full text-center w-fit invisible opacity-0 group-hover:visible group-hover:opacity-100 animation-smooth uppercase'>Apri</p>
 </a>

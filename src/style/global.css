@@ -15,4 +15,8 @@
     @apply font-headings;
     @apply text-neutral-900;
   }
+
+  .animation-smooth {
+    @apply transition duration-300 ease-in-out;
+  }
 }

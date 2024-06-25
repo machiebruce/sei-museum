@@ -9,4 +9,4 @@ interface Props {
 const {link = "#", label = "Bottone", hasIcon = true, srcIcon = "/public/arrowRight.svg"} = Astro.props as Props;
 ---
 
-<a href={link} class='bg-white text-black font-bold px-8 py-2 w-fit h-fit flex gap-4 rounded-full uppercase'>{label} <img src={srcIcon} /></a>
+<a href={link} class='bg-white group text-black font-bold px-8 py-6 w-fit h-fit text-center inline-flex items-center gap-4 rounded-full uppercase animation-smooth'>{label} <img class='w-6 h-6 ml-0 group-hover:translate-x-2 animation-smooth group-hover:fill-primary-500' src={srcIcon} /></a>

@@ -1,0 +1,17 @@
+---
+export interface Props {}
+
+import logo from "./../../public/favicon.svg";
+import close from "./../../public/close.svg";
+---
+
+<div class='p-8 w-fit z-50 h-screen flex flex-col justify-between items-center gap-y-16'>
+  <!--top-->
+  <a href='/'><img class='w-24 -translate-x-2' src={logo.src} alt='Saline ettore infersa logo' /></a>
+
+  <!--bottom-->
+  <a href='javascript:history.go(-1)' class='flex items-center gap-4 hover:opacity-80 group'>
+    <img class='w-6' src={close.src} alt='Close' />
+    <p class='text-white font-bold text-xl uppercase opacity-0 group-hover:opacity-100 animation-smooth'>Close</p>
+  </a>
+</div>

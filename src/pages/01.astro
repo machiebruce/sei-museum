@@ -1,7 +1,7 @@
 ---
-import Layout from "../layouts/Main-Layout.astro";
-import Menu from "../components/Menu.astro";
 import Buttons from "../components/Buttons.astro";
+import Menu from "../components/Menu.astro";
+import Layout from "../layouts/Main-Layout.astro";
 
 import {pageNames} from "../utils/constants.mjs";
 ---
@@ -39,7 +39,12 @@ import {pageNames} from "../utils/constants.mjs";
         </div>
         <p class='text-white font-bold text-3xl uppercase'>Il restauro</p>
       </div>
-      <Buttons />
+      <!--Page controls-->
+      <div class='flex gap-4 col-span-full'>
+        <span class='ml-auto'></span>
+        <!-- <Buttons hasIconLeft={true} srcIcon='/public/arrowLeft.svg' label='' link='javascript:history.go(-1)' /> -->
+        <Buttons hasIconRight={true} srcIcon='/public/arrowRight.svg' label='Prossimo contenuto' link="03" />
+      </div>
     </div>
 
     <a href='01-eng'><img src='/src/assets/ita.svg' alt='switch to english' class='absolute top-8 right-8 hover:opacity-80 hover:scale-110 animation-smooth' /></a>

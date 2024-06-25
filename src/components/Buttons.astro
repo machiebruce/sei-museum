@@ -2,11 +2,16 @@
 interface Props {
   link?: string;
   label?: string;
-  hasIcon?: boolean;
+  hasIconLeft?: boolean;
+  hasIconRight?: boolean;
   srcIcon?: string;
 }
 
-const {link = "#", label = "Bottone", hasIcon = true, srcIcon = "/public/arrowRight.svg"} = Astro.props as Props;
+const {link = "#", label = "Bottone", hasIconLeft, hasIconRight, srcIcon = "/public/arrowRight.svg"} = Astro.props as Props;
 ---
 
-<a href={link} class='bg-white group text-black font-bold px-8 py-6 w-fit h-fit text-center inline-flex items-center gap-4 rounded-full uppercase animation-smooth'>{label} <img class='w-6 h-6 ml-0 group-hover:translate-x-2 animation-smooth group-hover:fill-primary-500' src={srcIcon} /></a>
+<a href={link} class='bg-white group text-black font-bold px-6 py-4 w-fit h-fit text-center inline-flex items-center gap-4 rounded-full uppercase animation-smooth'>
+  {hasIconLeft && <img class='w-6 h-6  group-hover:-translate-x-2 animation-smooth ' src={srcIcon} />}
+  {label}
+  {hasIconRight && <img class='w-6 h-6 group-hover:translate-x-2 animation-smooth' src={srcIcon} />}
+</a>

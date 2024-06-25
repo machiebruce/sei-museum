@@ -1,4 +1,5 @@
 ---
+import Buttons from "../components/Buttons.astro";
 import Layout from "../layouts/Main-Layout.astro";
 import Menu from "../components/Menu.astro";
 
@@ -39,6 +40,12 @@ import {pageNames} from "../utils/constants.mjs";
           <img src='https://images.unsplash.com/photo-1561472114-64f81c541347?q=80&w=3456&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' alt='placeholder' class='overflow-clip group-hover:scale-110 animation-smooth object-cover aspect-video' />
         </div>
         <p class='text-white font-bold text-3xl uppercase'>Il restauro</p>
+      </div>
+      <!--Page controls-->
+      <div class='flex gap-4 col-span-full'>
+        <span class='ml-auto'></span>
+        <Buttons hasIconLeft={true} srcIcon='/public/arrowLeft.svg' label='' link='javascript:history.go(-1)' />
+        <Buttons hasIconRight={true} srcIcon='/public/arrowRight.svg' label='Prossimo contenuto' link='02' />
       </div>
     </div>
 

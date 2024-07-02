@@ -5,20 +5,22 @@ interface Props {
   sectionNumber?: string;
   image?: string;
   alt?: string;
+  HasTools?: boolean;
 }
 
 import {Image} from "astro:assets";
 
-const {href = "#", title = "GLI ATTREZZI DELLA SALINA", sectionNumber = "01", image = "src/assets/placeholder.jpg", alt = ""} = Astro.props;
+const {href = "#", title = "GLI ATTREZZI DELLA SALINA", sectionNumber = "01", image = "src/assets/placeholder.jpg", alt = "", HasTools = true} = Astro.props;
 ---
 
-<a href={href} class='bg-neutral-700 rounded-xl min-w-[500px] snap-start h-fit p-4 gap-8 flex flex-col group items-center scroll-ml-16 first-child:pl-16' transition:animate='slide'>
+<a href={href} class='bg-neutral-700 rounded-xl min-w-[500px] snap-start p-4 gap-8 flex flex-col group items-center scroll-ml-16 first-child:pl-16' transition:animate='slide'>
   <div class='w-full'>
     <p class='text-white font-extralight text-8xl group-hover:opacity-0 animation-smooth'>
       {sectionNumber}
     </p>
+    {HasTools && <p class='text-white font-extralight text-2xl uppercase group-hover:opacity-0 animation-smooth'>Gli attrezzi della salina</p>}
   </div>
-  <img src={image} alt={image} class='rounded-lg aspect-square group-hover:-translate-y-32 group-hover:scale-110 animation-smooth' />
+  <img src={image} alt={image} class='rounded-lg aspect-square group-hover:-translate-y-32 group-hover:scale-110 animation-smooth object-cover' />
   <p class='text-white font-bold text-3xl group-hover:-translate-y-20 animation-smooth uppercase w-full'>{title}</p>
   <p class='bg-white px-8 py-2 text-xl rounded-full text-center w-fit invisible opacity-0 group-hover:visible group-hover:opacity-100 animation-smooth uppercase'>Apri</p>
 </a>

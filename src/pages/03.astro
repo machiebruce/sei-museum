@@ -1,0 +1,45 @@
+---
+import Buttons from "../components/Buttons.astro";
+import Layout from "../layouts/Main-Layout.astro";
+import Menu from "../components/Menu.astro";
+
+import {pageNames} from "../utils/constants.mjs";
+---
+
+<Layout title='Saline Ettore Infersa'>
+  <main class='flex flex-row'>
+    <Menu HasSectionNumber={true} sectionNumber={pageNames.page03.sectionNumber} title={pageNames.page03.title} />
+
+    <div class='grid grid-cols-2 gap-8 w-full p-32'>
+      <div class='col-span-full text-white h-fit space-y-2'>
+        <p class='text-7xl font-extralight'>{pageNames.page03.sectionNumber}</p>
+        <p class='text-white font-light text-xl uppercase'>Gli attrezzi della salina</p>
+        <p class='text-white font-bold text-3xl uppercase'>{pageNames.page03.title}</p>
+      </div>
+      <!--Col 1-->
+      <div class='flex flex-col gap-y-8'>
+        <div class='rounded-2xl overflow-clip group'>
+          <img src={pageNames.page03.image} alt={pageNames.page03.alt} class='overflow-clip group-hover:scale-110 animation-smooth aspect-video object-cover' />
+        </div>
+        <!-- <Videolink hasIconRight={true} srcIcon='/public/video.svg' label='' link='03-video' /> -->
+      </div>
+      <!--Col 2-->
+      <div class='flex flex-col gap-y-8'>
+        <p class='text-white text-lg w-prose w-4/5'>
+          {pageNames.page03.ITdescription}
+        </p>
+        <p class='text-white text-lg w-prose w-4/5'>
+          {pageNames.page03.ENdescription}
+        </p>
+      </div>
+      <!--Page controls-->
+      <div class='flex gap-4 col-span-full'>
+        <span class='ml-auto'></span>
+        <Buttons hasIconLeft={true} srcIcon='/public/arrowLeft.svg' label='' link='javascript:history.go(-1)' />
+        <Buttons hasIconRight={true} srcIcon='/public/arrowRight.svg' label='Prossimo contenuto' link='02' />
+      </div>
+    </div>
+
+    <!-- <a href='01-eng'><img src='/src/assets/ita.svg' alt='switch to english' class='absolute top-8 right-8 hover:opacity-80 hover:scale-110 animation-smooth' /></a> -->
+  </main>
+</Layout>

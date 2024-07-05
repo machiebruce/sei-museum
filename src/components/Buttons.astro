@@ -7,7 +7,7 @@ interface Props {
   srcIcon?: string;
 }
 
-const {link = "#", label = "Bottone", hasIconLeft, hasIconRight, srcIcon = "/public/arrowRight.svg"} = Astro.props as Props;
+const {link = "#", label = "Bottone", hasIconLeft, hasIconRight, srcIcon = "/arrowRight.svg"} = Astro.props as Props;
 ---
 
 <a href={link} class='bg-white group text-black font-bold px-6 py-4 w-fit h-fit text-center inline-flex items-center gap-4 rounded-full uppercase animation-smooth'>

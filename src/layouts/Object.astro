@@ -21,7 +21,6 @@ const {frontmatter} = Astro.props;
         <div class='rounded-2xl overflow-clip group'>
           <img src={frontmatter.image} alt={frontmatter.alt} class='overflow-clip group-hover:scale-110 animation-smooth aspect-video object-cover' />
         </div>
-        <!-- <Videolink hasIconRight={true} srcIcon='/public/video.svg' label='' link='03-video' /> -->
       </div>
       <!--Col 2-->
       <div class='flex flex-col gap-y-8'>
@@ -34,8 +33,10 @@ const {frontmatter} = Astro.props;
       </div>
       <!--Page controls-->
       <div class='flex gap-4 col-span-full'>
+        <Buttons hasIconLeft={true} srcIcon='/public/monitorPlay.svg' label='Video' link={frontmatter.videoLink} />
         <span class='ml-auto'></span>
-        <Buttons hasIconLeft={true} srcIcon='/public/arrowLeft.svg' label='' link='javascript:history.go(-1)' />
+        <Buttons hasIconLeft={true} srcIcon='/public/arrowLeft.svg' label='' link={frontmatter.prevSection} />
+
         <Buttons hasIconRight={true} srcIcon='/public/arrowRight.svg' label='Prossimo contenuto' link={frontmatter.nextSection} />
       </div>
     </div>

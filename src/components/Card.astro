@@ -18,7 +18,7 @@ const {href = "#", title = "GLI ATTREZZI DELLA SALINA", sectionNumber = "01", im
     </p>
     {(HasTools && <p class='text-white font-extralight text-2xl uppercase group-hover:opacity-0 animation-smooth'>Gli attrezzi della salina</p>) || <p class='text-white font-extralight text-2xl uppercase group-hover:opacity-0 animation-smooth'>La storia del museo</p>}
   </div>
-  <img src={image} alt={image} class='rounded-lg aspect-square group-hover:-translate-y-32 group-hover:scale-110 animation-smooth object-cover' />
+  <img src={image} alt={image} class='rounded-lg group-hover:-translate-y-32 group-hover:scale-110 animation-smooth object-fit' />
   <p class='text-white font-bold text-3xl group-hover:-translate-y-20 animation-smooth uppercase w-full'>{title}</p>
   <p class='bg-white px-8 py-2 text-xl rounded-full text-center w-fit invisible opacity-0 group-hover:visible group-hover:opacity-100 animation-smooth uppercase'>Apri</p>
 </a>

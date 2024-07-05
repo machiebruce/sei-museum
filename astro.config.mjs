@@ -9,3 +9,5 @@ export default defineConfig({
   site: 'https://machiebruce.github.io',
   base: '/sei-museum',
 });
+
+

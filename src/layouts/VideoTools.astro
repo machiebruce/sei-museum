@@ -14,7 +14,11 @@ const {frontmatter} = Astro.props;
 
       <!--Page controls-->
       <div class='flex gap-4 w-full justify-around'>
-        <Buttons hasIconLeft={false} label='Chiudi' link='javascript:history.go(-1)' />
+        <Buttons hasIconLeft={false} label='Chiudi' link='/' />
+        <div class='flex gap-4'>
+          <Buttons hasIconLeft={true} srcIcon='/public/arrowLeft.svg' label='' link={frontmatter.prevSection} />
+          <Buttons hasIconRight={true} srcIcon='/public/arrowRight.svg' label='Prossimo contenuto' link={frontmatter.nextSection} />
+        </div>
       </div>
     </div>
   </main>

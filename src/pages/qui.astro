@@ -1,8 +1,10 @@
 ---
+import Buttons from "../components/Buttons.astro"
 
 ---
 
 
-  <main>
-    <iframe class="w-full h-screen" src='https://www.youtube.com/embed/eUcVttkFAsM?si=ArQO9LKcP7dWe0Kc' title='YouTube video player' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' referrerpolicy='strict-origin-when-cross-origin' allowfullscreen></iframe>
+  <main class="flex flex-col gap-8 bg-black h-screen justify-center items-center">
+    <img class="h-64 w-64" src="/public/Sei_logo.svg" alt="">
+    <Buttons label="clicca per iniziare" link="/"></Buttons>
   </main>

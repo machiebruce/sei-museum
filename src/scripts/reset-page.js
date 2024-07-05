@@ -1,8 +1,8 @@
 /** @format */
 
 (function () {
-  const idleDurationSecs = 10; // X number of seconds
-  const redirectUrl = "qui.html"; // Redirect idle users to this URL
+  const idleDurationSecs = 240; // X number of seconds
+  const redirectUrl = "./../qui.html"; // Redirect idle users to this URL
   let idleTimeout; // variable to hold the timeout, do not modify
 
   const resetIdleTimeout = function () {

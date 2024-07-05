@@ -10,7 +10,6 @@ export default defineConfig({
   site: "https://machiebruce.github.io",
   base: "/sei-museum",
   output: "static",
-  output: "static",
 
   build: {
     // Example: Generate `page.html` instead of `page/index.html` during build.

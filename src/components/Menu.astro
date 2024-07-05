@@ -14,7 +14,7 @@ const {HasSectionNumber = true, title = "Menu", sectionNumber = "01"} = Astro.pr
 
 <div class='bg-primary-500 p-8 w-fit z-50 h-screen flex flex-col justify-between items-center gap-y-16'>
   <!--top-->
-  <a href='/'><img class='w-24' src={logo.src} alt='Saline ettore infersa logo' /></a>
+  <a href='/sei-museum'><img class='w-24' src={logo.src} alt='Saline ettore infersa logo' /></a>
   <!--middle-->
   <div class='gap-16 flex flex-col justify-end flex-1 w-24'>
     <!--title-->
@@ -23,7 +23,7 @@ const {HasSectionNumber = true, title = "Menu", sectionNumber = "01"} = Astro.pr
     {HasSectionNumber && <p class='text-white font-extralight text-6xl whitespace-nowrap -rotate-90'>{sectionNumber}</p>}
   </div>
   <!--bottom-->
-  <a href='../' class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 animation-smooth'>
+  <a href='/sei-museum' class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 animation-smooth'>
     <img class='w-12' src={menu.src} alt='Home' />
     <p class='text-white font-bold'>HOME</p>
   </a>

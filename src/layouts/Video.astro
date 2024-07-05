@@ -1,0 +1,32 @@
+---
+import Buttons from "../components/Buttons.astro";
+import Layout from "./Main-Layout.astro";
+import Menu from "../components/Menu.astro";
+
+const {frontmatter} = Astro.props;
+---
+
+<Layout title={frontmatter.title}>
+  <main class='flex flex-row'>
+    <Menu HasSectionNumber={true} sectionNumber={frontmatter.sectionNumber} title={frontmatter.title} />
+
+    <div class='w-full p-4 h-screen flex flex-col justify-around'>
+     
+  
+          <video class='rounded-2xl aspect-video' controls='' transition:persist>
+            <source src={frontmatter.video} type='video/mp4' />
+          </video>
+
+
+        <!--Page controls-->
+        <div class='flex gap-4 col-span-full'>
+          <span class='ml-auto'></span>
+          <Buttons hasIconLeft={true} srcIcon='/public/arrowLeft.svg' label='' link='javascript:history.go(-1)' />
+          <Buttons hasIconRight={true} srcIcon='/public/arrowRight.svg' label='Prossimo contenuto' link={frontmatter.nextSection} />
+        </div>
+      
+
+      <!-- <a href='01-eng'><img src='/src/assets/ita.svg' alt='switch to english' class='absolute top-8 right-8 hover:opacity-80 hover:scale-110 animation-smooth' /></a> -->
+    </div>
+  </main>
+</Layout>

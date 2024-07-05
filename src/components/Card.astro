@@ -8,8 +8,6 @@ interface Props {
   HasTools?: boolean;
 }
 
-import {Image} from "astro:assets";
-
 const {href = "#", title = "GLI ATTREZZI DELLA SALINA", sectionNumber = "01", image = "src/assets/placeholder.jpg", alt = "", HasTools = true} = Astro.props;
 ---
 
@@ -18,7 +16,7 @@ const {href = "#", title = "GLI ATTREZZI DELLA SALINA", sectionNumber = "01", im
     <p class='text-white font-extralight text-8xl group-hover:opacity-0 animation-smooth'>
       {sectionNumber}
     </p>
-    {HasTools && <p class='text-white font-extralight text-2xl uppercase group-hover:opacity-0 animation-smooth'>Gli attrezzi della salina</p>}
+    {(HasTools && <p class='text-white font-extralight text-2xl uppercase group-hover:opacity-0 animation-smooth'>Gli attrezzi della salina</p>) || <p class='text-white font-extralight text-2xl uppercase group-hover:opacity-0 animation-smooth'>La storia del museo</p>}
   </div>
   <img src={image} alt={image} class='rounded-lg aspect-square group-hover:-translate-y-32 group-hover:scale-110 animation-smooth object-cover' />
   <p class='text-white font-bold text-3xl group-hover:-translate-y-20 animation-smooth uppercase w-full'>{title}</p>

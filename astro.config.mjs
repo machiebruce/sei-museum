@@ -7,4 +7,5 @@ import mdx from "@astrojs/mdx";
 export default defineConfig({
   integrations: [tailwind(), mdx()],
   site: 'https://machiebruce.github.io',
+  base: '/sei-museum',
 });

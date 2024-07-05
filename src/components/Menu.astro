@@ -5,29 +5,22 @@ export interface Props {
   sectionNumber?: string;
 }
 
-import logo from "./../../public/favicon.svg";
-import menu from "./../../public/menu.svg";
+import logo from "/public/favicon.svg";
+import menu from "/public/menu.svg";
 
 // Props
 const {HasSectionNumber = true, title = "Menu", sectionNumber = "01"} = Astro.props as Props;
 ---
 
-<div class='bg-primary-500 p-8 w-fit  z-50 h-screen flex flex-col justify-between items-center gap-y-16'>
+<div class='bg-primary-500 p-8 w-fit z-50 h-screen flex flex-col justify-between items-center gap-y-16'>
   <!--top-->
   <a href='/'><img class='w-24' src={logo.src} alt='Saline ettore infersa logo' /></a>
   <!--middle-->
   <div class='gap-16 flex flex-col justify-end flex-1 w-24'>
     <!--title-->
 
-    
-      <p class='text-white text-center font-bold text-2xl uppercase whitespace-nowrap -rotate-90'>{title}</p>
-    {
-      HasSectionNumber && (
-        
-          <p class='text-white font-extralight text-6xl whitespace-nowrap -rotate-90'>{sectionNumber}</p>
-        
-      )
-    }
+    <p class='text-white text-center font-bold text-2xl uppercase whitespace-nowrap -rotate-90'>{title}</p>
+    {HasSectionNumber && <p class='text-white font-extralight text-6xl whitespace-nowrap -rotate-90'>{sectionNumber}</p>}
   </div>
   <!--bottom-->
   <a href='../' class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 animation-smooth'>

@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@astrojs/check": "^0.7.0",
+    "@astrojs/mdx": "^3.1.2",
     "@astrojs/tailwind": "^5.1.0",
     "@tailwindcss/container-queries": "^0.1.1",
     "astro": "^4.11.0",

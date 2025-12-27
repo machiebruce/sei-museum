@@ -3,28 +3,50 @@ export interface Props {
   HasSectionNumber?: boolean;
   title: string;
   sectionNumber?: string;
+  variant?: "home" | "back"; // Nuova prop per scegliere la variante
 }
 
 import logo from "/public/favicon.svg";
 import menu from "/public/menu.svg";
 
 // Props
-const {HasSectionNumber = true, title = "Menu", sectionNumber = "01"} = Astro.props as Props;
+const {
+  HasSectionNumber = true,
+  title = "Menu",
+  sectionNumber = "01",
+  variant = "home", // Default a home
+} = Astro.props as Props;
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <div class='bg-primary-500 p-8 w-fit z-50 h-screen flex flex-col justify-between items-center gap-y-16'>
-  <!--top-->
-  <a href='/sei-museum'><img class='w-24' src={logo.src} alt='Saline ettore infersa logo' /></a>
-  <!--middle-->
-  <div class='gap-16 flex flex-col justify-end flex-1 w-24'>
-    <!--title-->
+  <a href={baseUrl || "/"}><img class='w-24' src={logo.src} alt='Logo' /></a>
 
+  <div class='gap-16 flex flex-col justify-end flex-1 w-24'>
     <p class='text-white text-center font-bold text-2xl uppercase whitespace-nowrap -rotate-90'>{title}</p>
     {HasSectionNumber && <p class='text-white font-extralight text-6xl whitespace-nowrap -rotate-90'>{sectionNumber}</p>}
   </div>
-  <!--bottom-->
-  <a href='/sei-museum' class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 animation-smooth'>
-    <img class='w-12' src={menu.src} alt='Home' />
-    <p class='text-white font-bold'>HOME</p>
-  </a>
+
+  {
+    variant === "home" ? (
+      /* Variante HOME */ <a href={baseUrl || "/"} class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 transition-all duration-300'>
+        <img class='w-12' src={menu.src} alt='Home' />
+        <p class='text-white font-bold'>HOME</p>
+      </a>
+    ) : (
+      /* Variante BACK */ <button onclick='history.back()' class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 transition-all duration-300 bg-transparent border-none cursor-pointer'>
+        <svg class='w-12 h-12 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+          <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 19l-7-7m0 0l7-7m-7 7h18' />
+        </svg>
+        <p class='text-white font-bold uppercase'>BACK</p>
+      </button>
+    )
+  }
 </div>
+
+<style>
+  .animation-smooth {
+    transition: all 0.3s ease;
+  }
+</style>

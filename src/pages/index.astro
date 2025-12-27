@@ -12,7 +12,7 @@ const categories = [
     image: `${baseUrl}/bg-oggetti.png`,
     subtitle: "La Storia",
     sectionNumber: "01",
-    description: "Lorem ipsum",
+    description: "Strumenti autentici che raccontano secoli di tradizione salinara e il mestiere antico della raccolta del sale.",
     HasDescription: true,
   },
   {
@@ -21,7 +21,7 @@ const categories = [
     image: `${baseUrl}/bg-specie.jpg`,
     subtitle: "La Fauna",
     sectionNumber: "02",
-    description: "Lorem ipsum",
+    description: "Un ecosistema unico dove convivono fenicotteri, aironi e una ricca vegetazione adattata all'acqua salata.",
     HasDescription: true,
   },
 ];
@@ -29,7 +29,7 @@ const categories = [
 
 <Layout title='Home | SEI Museum'>
   <main class='h-screen w-full flex flex-col items-center justify-center bg-neutral-900 overflow-hidden relative'>
-    <div class='absolute top-16 flex flex-col items-center gap-4'>
+    <div class='absolute top-24 pl-10 flex flex-col items-center'>
       <img src={`${baseUrl}/sei_logo.svg`} alt='Logo SEI Museum' class='w-32 h-auto' />
     </div>
 
@@ -38,7 +38,7 @@ const categories = [
         categories.map((cat) => (
           <>
             <div class='first:ml-16'>
-              <CardHome sectionNumber={cat.sectionNumber} title={cat.title} description={cat.description} HasDescription={cat.HasDescription}  href={cat.href} image={cat.image} />
+              <CardHome sectionNumber={cat.sectionNumber} title={cat.title} description={cat.description} HasDescription={cat.HasDescription} href={cat.href} image={cat.image} />
             </div>
           </>
         ))

@@ -1,0 +1,267 @@
+---
+import Layout from "./Main-Layout.astro";
+import Menu from "../components/Menu.astro";
+import fs from "node:fs";
+import path from "node:path";
+
+const {frontmatter, url} = Astro.props;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+// --- LOGICA AUTOMAZIONE GALLERIA ---
+const slug = url ? path.basename(url) : "default";
+const cleanSlug = slug.replace(/\.[^/.]+$/, "");
+
+const galleryDir = path.join(process.cwd(), "public", "galleria", cleanSlug);
+let galleryImages: string[] = [];
+
+if (fs.existsSync(galleryDir)) {
+    galleryImages = fs
+        .readdirSync(galleryDir)
+        .filter((file: string) => /\.(jpg|jpeg|png|webp|avif|svg|jog|JPG|JPEG)$/i.test(file))
+        .map((file: string) => `${baseUrl}/galleria/${cleanSlug}/${file}`);
+}
+
+if (galleryImages.length === 0) {
+    galleryImages = ["https://placehold.co/800x450/262626/ffffff?text=Immagine+non+trovata"];
+}
+---
+
+<style is:global>
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    /* Forzatura colore bianco totale */
+    .force-white,
+    .force-white * {
+        color: #ffffff !important;
+    }
+
+    /* COLORAZIONE PUNTI ELENCO (Bullets e Numeri) */
+    .force-white ul li::marker,
+    .force-white ol li::marker {
+        color: #ffffff !important;
+        font-weight: bold;
+    }
+
+    /* GESTIONE LINK */
+    .force-white a {
+        color: #60a5fa !important; /* Azzurro per i link */
+        text-decoration: underline !important;
+        cursor: pointer !important;
+        position: relative;
+        z-index: 20;
+    }
+    .force-white a:hover {
+        color: #ffffff !important;
+    }
+
+    .carousel-container {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+    .carousel-item {
+        flex: 0 0 100%;
+        scroll-snap-align: start;
+    }
+    .dot {
+        cursor: pointer;
+    }
+    .dot.active {
+        background-color: white !important;
+        width: 1.5rem;
+    }
+
+    /* STILE SEZIONI COMPATTE */
+    .content-compact,
+    .content-compact * {
+        font-size: 0.875rem !important;
+        line-height: 1.5 !important;
+    }
+
+    .content-compact strong,
+    .content-compact b {
+        display: block;
+        margin-top: 1.5rem !important;
+        margin-bottom: 0.5rem !important;
+        font-weight: 800 !important;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding-bottom: 4px;
+    }
+
+    .content-compact > *:first-child strong,
+    .content-compact > strong:first-child {
+        margin-top: 0 !important;
+    }
+
+    /* Padding per gli elenchi */
+    .force-white ul,
+    .force-white ol {
+        padding-left: 1.5rem !important;
+        margin-bottom: 1rem !important;
+    }
+</style>
+
+<Layout title={frontmatter.title}>
+    <main class='flex flex-row h-screen overflow-hidden bg-neutral-900'>
+        <Menu HasSectionNumber={false} variant='back' title={frontmatter.title || "Specie"} />
+
+        <div class='grid grid-cols-2 gap-12 w-full p-32 overflow-y-auto no-scrollbar'>
+            <div class='flex flex-col gap-y-8 sticky top-0 self-start'>
+                <div class='text-white space-y-2'>
+                    <h1 class='text-4xl font-bold text-white'>{frontmatter.title}</h1>
+                    {frontmatter.scientificName && <p class='text-2xl font-light italic text-white/60'>{frontmatter.scientificName}</p>}
+                </div>
+                <div class='relative group overflow-hidden rounded-2xl border border-white/10 bg-neutral-800 shadow-2xl'>
+                    <div id='carousel' class='carousel-container no-scrollbar'>
+                        {
+                            galleryImages.map((img: string, index: number) => (
+                                <div class='carousel-item aspect-video bg-neutral-800'>
+                                    <img src={img} class='w-full h-full object-cover' alt={`Slide ${index}`} />
+                                </div>
+                            ))
+                        }
+                    </div>
+
+                    <button id='prevBtn' class='absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10'>
+                        <svg class='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 19l-7-7 7-7'></path></svg>
+                    </button>
+                    <button id='nextBtn' class='absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/80 text-white p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity z-10'>
+                        <svg class='w-6 h-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 5l7 7-7 7'></path></svg>
+                    </button>
+
+                    <div class='absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10'>
+                        {galleryImages.map((_: string, index: number) => <div class='dot h-1.5 w-1.5 rounded-full bg-white/30 transition-all duration-300' data-index={index} />)}
+                    </div>
+                </div>
+
+                <div id='species-description' class='prose prose-invert max-w-none text-white text-base force-white'></div>
+            </div>
+
+            <div class='flex flex-col overflow-visible'>
+                <div id='species-sections-container' class='flex flex-col gap-6 overflow-visible pb-32 force-white'>
+                    <div id='species-full-content' style='display: none;'>
+                        <slot />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script is:inline>
+        (function () {
+            // Logica Carousel e Navigazione
+            const carousel = document.getElementById("carousel");
+            const dots = document.querySelectorAll(".dot");
+            const prevBtn = document.getElementById("prevBtn");
+            const nextBtn = document.getElementById("nextBtn");
+            let currentIndex = 0;
+
+            function scrollToSlide(index) {
+                if (!carousel) return;
+                currentIndex = index;
+                carousel.scrollTo({left: carousel.offsetWidth * index, behavior: "smooth"});
+                dots.forEach((dot, i) => dot.classList.toggle("active", i === index));
+            }
+
+            if (dots.length > 0) {
+                dots.forEach((dot, i) =>
+                    dot.addEventListener("click", () => {
+                        clearInterval(autoTimer);
+                        scrollToSlide(i);
+                    }),
+                );
+                prevBtn?.addEventListener("click", () => {
+                    clearInterval(autoTimer);
+                    scrollToSlide(currentIndex === 0 ? dots.length - 1 : currentIndex - 1);
+                });
+                nextBtn?.addEventListener("click", () => {
+                    clearInterval(autoTimer);
+                    scrollToSlide((currentIndex + 1) % dots.length);
+                });
+                carousel?.addEventListener("scroll", () => {
+                    const index = Math.round(carousel.scrollLeft / carousel.offsetWidth);
+                    if (index !== currentIndex) {
+                        currentIndex = index;
+                        dots.forEach((dot, i) => dot.classList.toggle("active", i === index));
+                    }
+                });
+                let autoTimer = setInterval(() => scrollToSlide((currentIndex + 1) % dots.length), 5000);
+                dots[0].classList.add("active");
+            }
+
+            // Estrazione sezioni dal Markdown
+            function extractSections() {
+                const sectionTitles = ["Come riconoscerlo", "Aspetto e Caratteristiche Fisiche", "Distribuzione e Habitat", "Alimentazione", "Comportamento e Riproduzione", "Status e Conservazione", "Curiosità e Riepilogo", "Differenze con", "Fonti e Risorse per Approfondire"];
+                const fullContentDiv = document.getElementById("species-full-content");
+                const container = document.getElementById("species-sections-container");
+                const descContainer = document.getElementById("species-description");
+                if (!fullContentDiv || !container) return;
+
+                const headings = fullContentDiv.querySelectorAll("h3, h4");
+                const sections = [];
+
+                headings.forEach((heading) => {
+                    const headingText = heading.textContent.trim().replace(/\*\*/g, "").trim();
+                    const matchingSection = sectionTitles.find((title) => headingText.includes(title));
+                    if (matchingSection) {
+                        let content = "";
+                        let nextElement = heading.nextElementSibling;
+                        while (nextElement && !nextElement.matches("h3, h4")) {
+                            content += nextElement.outerHTML;
+                            nextElement = nextElement.nextElementSibling;
+                        }
+                        if (content.trim()) sections.push({title: headingText, content: content.trim()});
+                    }
+                });
+
+                const firstP = fullContentDiv.querySelector("p");
+                if (firstP && descContainer) descContainer.innerHTML = firstP.outerHTML;
+
+                sections.forEach((section, index) => {
+                    const accordionId = `accordion-${index}`;
+                    const isCompact = section.title.toLowerCase().includes("riconoscerlo") || section.title.toLowerCase().includes("curiosità") || section.title.toLowerCase().includes("fonti");
+
+                    const accordionDiv = document.createElement("div");
+                    accordionDiv.className = "bg-neutral-800 border border-white/10 rounded-2xl transition-all duration-300 overflow-hidden";
+                    accordionDiv.innerHTML = `
+                        <button class="accordion-button w-full text-left p-6 text-white hover:bg-white/5 transition-colors flex items-center justify-between" data-accordion-id="${accordionId}">
+                            <h3 class="text-lg font-bold text-white">${section.title}</h3>
+                            <svg class="accordion-icon w-5 h-5 transition-transform duration-300 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                        </button>
+                        <div class="accordion-content hidden p-6 pt-0 prose prose-invert max-w-none text-white force-white ${isCompact ? "content-compact" : ""}" id="${accordionId}">
+                            ${section.content}
+                        </div>`;
+                    container.appendChild(accordionDiv);
+                });
+
+                container.querySelectorAll(".accordion-button").forEach((button) => {
+                    button.addEventListener("click", function () {
+                        const targetId = this.getAttribute("data-accordion-id");
+                        const targetContent = document.getElementById(targetId);
+                        const isOpening = targetContent.classList.contains("hidden");
+                        document.querySelectorAll(".accordion-content").forEach((c) => c.classList.add("hidden"));
+                        document.querySelectorAll(".accordion-icon").forEach((i) => (i.style.transform = "rotate(0deg)"));
+                        if (isOpening) {
+                            targetContent.classList.remove("hidden");
+                            this.querySelector(".accordion-icon").style.transform = "rotate(180deg)";
+                            setTimeout(() => this.scrollIntoView({behavior: "smooth", block: "start"}), 150);
+                        }
+                    });
+                });
+                fullContentDiv.remove();
+            }
+            if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", extractSections);
+            else extractSections();
+        })();
+    </script>
+</Layout>

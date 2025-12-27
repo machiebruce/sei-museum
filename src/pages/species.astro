@@ -1,0 +1,24 @@
+---
+import Layout from "../layouts/Main-Layout.astro";
+import Menu from "../components/Menu.astro";
+import Card from "../components/Card.astro";
+
+const objects = await Astro.glob("../pages/species/*.mdx"); // returns an array of posts
+---
+
+<Layout title='Saline Ettore Infersa'>
+  <main class='flex flex-row'>
+    <Menu HasSectionNumber={false} title='Le specie delle saline' />
+    <div class='snap-x flex-1 flex items-center justify-start gap-16 overflow-x-scroll scroll-pr-72 no-scrollbar'>
+      {
+        objects.map((object) => (
+          <div class='first:ml-16'>
+            <Card sectionNumber={object.frontmatter.sectionNumber} title={object.frontmatter.title} href={object.frontmatter.link} image={object.frontmatter.image} HasTools={object.frontmatter.HasTools} />
+          </div>
+        ))
+      }
+
+      <div class='min-w-32'>a</div>
+    </div>
+  </main>
+</Layout>

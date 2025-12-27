@@ -3,12 +3,39 @@ import Layout from "../layouts/Main-Layout.astro";
 import Menu from "../components/Menu.astro";
 import CardSpecie from "../components/CardSpecie.astro";
 
-const objects = await Astro.glob("../pages/species/*.mdx"); // returns an array of posts
+const objects = await Astro.glob("../pages/species/*.mdx");
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
+<style>
+  .view-toggle-btn {
+    transition: all 0.3s ease;
+  }
+
+  .view-toggle-btn.active {
+    color: white !important;
+  }
+</style>
+
 <Layout title='Saline Ettore Infersa'>
-  <main class='flex flex-row'>
+  <!-- Material Icons -->
+  <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet' />
+
+  <main class='flex flex-row h-screen overflow-hidden relative'>
     <Menu HasSectionNumber={false} title='Le specie delle saline' />
+
+    <!-- Toggle Buttons -->
+    <div class='absolute top-6 right-6 z-50 flex items-center gap-4'>
+      <a href={`${baseUrl}/species`} class='active view-toggle-btn border border-white flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
+        <span class='material-icons'>note</span>
+      </a>
+
+      <a href={`${baseUrl}/species-map`} class='view-toggle-btn flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
+        <span class='material-icons'>landscape</span>
+      </a>
+    </div>
+
+    <!-- List View -->
     <div class='snap-x flex-1 flex items-center justify-start gap-16 overflow-x-scroll scroll-pr-72 no-scrollbar'>
       {
         objects.map((object) => (
@@ -17,8 +44,7 @@ const objects = await Astro.glob("../pages/species/*.mdx"); // returns an array 
           </div>
         ))
       }
-
-      <div class='min-w-32'>a</div>
+      <div class='min-w-32'></div>
     </div>
   </main>
 </Layout>

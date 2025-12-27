@@ -144,11 +144,11 @@ if (galleryImages.length === 0) {
                     </div>
                 </div>
 
-                <div id='species-description' class='prose prose-invert max-w-none text-white text-base force-white'></div>
+                <div id='species-description' class='prose prose-invert max-w-none text-white text-2xl force-white'></div>
             </div>
 
             <div class='flex flex-col overflow-visible'>
-                <div id='species-sections-container' class='flex flex-col gap-6 overflow-visible pb-32 force-white'>
+                <div id='species-sections-container' class='flex flex-col gap-6 overflow-visible py-28 force-white'>
                     <div id='species-full-content' style='display: none;'>
                         <slot />
                     </div>
@@ -232,9 +232,9 @@ if (galleryImages.length === 0) {
                     const isCompact = section.title.toLowerCase().includes("riconoscerlo") || section.title.toLowerCase().includes("curiosità") || section.title.toLowerCase().includes("fonti");
 
                     const accordionDiv = document.createElement("div");
-                    accordionDiv.className = "bg-neutral-800 border border-white/10 rounded-2xl transition-all duration-300 overflow-hidden";
+                    accordionDiv.className = "bg-neutral-900 border border-white/10 rounded-2xl transition-all duration-300 overflow-hidden";
                     accordionDiv.innerHTML = `
-                        <button class="accordion-button w-full text-left p-6 text-white hover:bg-white/5 transition-colors flex items-center justify-between" data-accordion-id="${accordionId}">
+                        <button class="accordion-button w-full text-left p-6 text-white hover:bg-black/50 transition-colors flex items-center justify-between" data-accordion-id="${accordionId}">
                             <h3 class="text-lg font-bold text-white">${section.title}</h3>
                             <svg class="accordion-icon w-5 h-5 transition-transform duration-300 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                         </button>

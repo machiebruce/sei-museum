@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Main-Layout.astro";
 import Menu from "../components/Menu.astro";
-import Card from "../components/Card.astro";
+import CardSpecie from "../components/CardSpecie.astro";
 
 const objects = await Astro.glob("../pages/species/*.mdx"); // returns an array of posts
 ---
@@ -13,7 +13,7 @@ const objects = await Astro.glob("../pages/species/*.mdx"); // returns an array 
       {
         objects.map((object) => (
           <div class='first:ml-16'>
-            <Card sectionNumber={object.frontmatter.sectionNumber} title={object.frontmatter.title} href={object.frontmatter.link} image={object.frontmatter.image} HasTools={object.frontmatter.HasTools} />
+            <CardSpecie sectionNumber={object.frontmatter.sectionNumber} title={object.frontmatter.title} href={object.frontmatter.link} image={object.frontmatter.image} IsFauna={object.frontmatter.IsFauna} />
           </div>
         ))
       }

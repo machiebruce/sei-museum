@@ -41,23 +41,36 @@ if (galleryImages.length === 0) {
     color: #ffffff !important;
   }
 
-  /* COLORAZIONE PUNTI ELENCO (Bullets e Numeri) */
+  /* RIMOZIONE PUNTI ELENCO */
+  .force-white ul,
+  .force-white ol {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin-bottom: 1rem !important;
+  }
+
+  .force-white ul li,
+  .force-white ol li {
+    margin-bottom: 0.5rem !important;
+    padding-left: 0 !important;
+  }
+
   .force-white ul li::marker,
   .force-white ol li::marker {
-    color: #ffffff !important;
-    font-weight: bold;
+    display: none !important;
+    content: none !important;
   }
 
   /* GESTIONE LINK */
   .force-white a {
-    color: #60a5fa !important; /* Azzurro per i link */
-    text-decoration: underline !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
     cursor: pointer !important;
     position: relative;
     z-index: 20;
   }
   .force-white a:hover {
-    color: #ffffff !important;
+    color: #60a5fa !important;
   }
 
   .carousel-container {
@@ -102,13 +115,6 @@ if (galleryImages.length === 0) {
   .content-compact > *:first-child strong,
   .content-compact > strong:first-child {
     margin-top: 0 !important;
-  }
-
-  /* Padding per gli elenchi */
-  .force-white ul,
-  .force-white ol {
-    padding-left: 1.5rem !important;
-    margin-bottom: 1rem !important;
   }
 
   /* MODAL FULLSCREEN */
@@ -176,6 +182,17 @@ if (galleryImages.length === 0) {
     margin-right: 0.75rem;
     font-size: 1.5rem;
     color: #60a5fa;
+  }
+
+  /* Stile link sezione fonti */
+  .section-link {
+    display: block;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+
+  .section-link:hover {
+    transform: translateX(4px);
   }
 </style>
 
@@ -248,7 +265,7 @@ if (galleryImages.length === 0) {
     </div>
   </main>
 
-  <script is:inline define:vars={{galleryImages}}>
+  <script is:inline define:vars={{galleryImages, baseUrl}}>
     (function () {
       // Logica Carousel e Navigazione
       const carousel = document.getElementById("carousel");
@@ -385,23 +402,43 @@ if (galleryImages.length === 0) {
 
         sections.forEach((section, index) => {
           const accordionId = `accordion-${index}`;
-          const isCompact = section.title.toLowerCase().includes("riconoscerlo") || section.title.toLowerCase().includes("curiosità") || section.title.toLowerCase().includes("fonti");
+          const isCompact = section.title.toLowerCase().includes("riconoscerlo") || section.title.toLowerCase().includes("curiosità");
           const icon = getIconForSection(section.title);
+          const isFonti = section.title.toLowerCase().includes("fonti") || section.title.toLowerCase().includes("risorse");
 
-          const accordionDiv = document.createElement("div");
-          accordionDiv.className = "bg-neutral-900 border border-white/10 rounded-2xl transition-all duration-300 overflow-hidden";
-          accordionDiv.innerHTML = `
-                        <button class="accordion-button w-full text-left p-6 text-white hover:bg-black/50 transition-colors flex items-center justify-between" data-accordion-id="${accordionId}">
-                            <div class="flex items-center">
-                                <span class="material-icons accordion-section-icon">${icon}</span>
-                                <h3 class="text-lg font-bold text-white">${section.title}</h3>
-                            </div>
-                            <svg class="accordion-icon w-5 h-5 transition-transform duration-300 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                        </button>
-                        <div class="accordion-content hidden p-6 pt-0 prose prose-invert max-w-none text-white force-white ${isCompact ? "content-compact" : ""}" id="${accordionId}">
-                            ${section.content}
-                        </div>`;
-          container.appendChild(accordionDiv);
+          if (isFonti) {
+            // Crea un link invece di un accordion
+            const linkDiv = document.createElement("a");
+            linkDiv.href = `${baseUrl}/fonti`;
+            linkDiv.className = "section-link bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden";
+            linkDiv.innerHTML = `
+                            <div class="w-full text-left p-6 text-white hover:bg-black/50 transition-colors flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <span class="material-icons accordion-section-icon">${icon}</span>
+                                    <h3 class="text-lg font-bold text-white">${section.title}</h3>
+                                </div>
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </div>`;
+            container.appendChild(linkDiv);
+          } else {
+            // Crea un accordion normale
+            const accordionDiv = document.createElement("div");
+            accordionDiv.className = "bg-neutral-900 border border-white/10 rounded-2xl transition-all duration-300 overflow-hidden";
+            accordionDiv.innerHTML = `
+                            <button class="accordion-button w-full text-left p-6 text-white hover:bg-black/50 transition-colors flex items-center justify-between" data-accordion-id="${accordionId}">
+                                <div class="flex items-center">
+                                    <span class="material-icons accordion-section-icon">${icon}</span>
+                                    <h3 class="text-lg font-bold text-white">${section.title}</h3>
+                                </div>
+                                <svg class="accordion-icon w-5 h-5 transition-transform duration-300 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                            </button>
+                            <div class="accordion-content hidden p-6 pt-0 prose prose-invert max-w-none text-white force-white ${isCompact ? "content-compact" : ""}" id="${accordionId}">
+                                ${section.content}
+                            </div>`;
+            container.appendChild(accordionDiv);
+          }
         });
 
         container.querySelectorAll(".accordion-button").forEach((button) => {

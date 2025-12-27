@@ -28,16 +28,16 @@ const categories = [
 ---
 
 <Layout title='Home | SEI Museum'>
-  <main class='h-screen w-full flex flex-col items-center justify-center bg-neutral-900 overflow-hidden relative'>
-    <div class='absolute top-24 pl-10 flex flex-col items-center'>
+  <main class='h-screen w-full flex flex-col items-center justify-center bg-neutral-900 overflow-hidden'>
+    <div class='top-24 flex flex-col items-center'>
       <img src={`${baseUrl}/sei_logo.svg`} alt='Logo SEI Museum' class='w-32 h-auto' />
     </div>
 
-    <div class='flex flex-row gap-12 px-16 items-center mt-20 w-6/12 mx-auto'>
+    <div class='flex flex-row gap-12 items-center mt-20 w-1/2 mx-auto'>
       {
         categories.map((cat) => (
           <>
-            <div class='first:ml-16'>
+            <div>
               <CardHome sectionNumber={cat.sectionNumber} title={cat.title} description={cat.description} HasDescription={cat.HasDescription} href={cat.href} image={cat.image} />
             </div>
           </>

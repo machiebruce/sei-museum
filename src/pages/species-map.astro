@@ -1,0 +1,59 @@
+---
+import Layout from "../layouts/Main-Layout.astro";
+import Menu from "../components/Menu.astro";
+
+const objects = await Astro.glob("../pages/species/*.mdx");
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<style>
+  .view-toggle-btn {
+    transition: all 0.3s ease;
+  }
+
+  .species-silhouette {
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .species-silhouette:hover {
+    transform: scale(1.1);
+    filter: drop-shadow(0 0 10px rgba(231, 121, 104, 0.8));
+  }
+
+  .species-label {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .species-group:hover .species-label {
+    opacity: 1;
+  }
+</style>
+
+<Layout title='Saline Ettore Infersa - Mappa'>
+  <!-- Material Icons -->
+  <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet' />
+
+  <main class='flex flex-row h-screen overflow-hidden relative bg-gradient-to-b from-neutral-900 to-neutral-800'>
+    <Menu HasSectionNumber={false} title='Le specie delle saline' />
+
+    <!-- Toggle Buttons -->
+    <div class='absolute top-6 right-6 z-50 flex items-center gap-4'>
+      <a href={`${baseUrl}/species`} class='active view-toggle-btn flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
+        <span class='material-icons'>note</span>
+      </a>
+
+      <a href={`${baseUrl}/species-map`} class='view-toggle-btn flex items-center border border-white gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
+        <span class='material-icons'>landscape</span>
+      </a>
+    </div>
+
+    <!-- Map View -->
+    <div class='flex-1 overflow-auto p-16'>
+      <div class='max-w-7xl mx-auto flex items-center justify-center h-full'>
+        <span class="text-white text-4xl">Vista mappa</span>
+      </div>
+    </div>
+  </main>
+</Layout>

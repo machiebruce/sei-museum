@@ -1,24 +1,56 @@
 ---
 import Layout from "../layouts/Main-Layout.astro";
-import Menu from "../components/Menu.astro";
-import Card from "../components/Card.astro";
+import CardHome from "../components/CardHome.astro";
 
-const objects = await Astro.glob("../pages/objects/*.mdx"); // returns an array of posts
+// Recuperiamo il baseUrl per i link
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const categories = [
+  {
+    title: "Gli Oggetti del Museo",
+    href: `${baseUrl}/objects`,
+    image: `${baseUrl}/bg-oggetti.png`,
+    subtitle: "La Storia",
+    sectionNumber: "01",
+    description: "Lorem ipsum",
+    HasDescription: true,
+  },
+  {
+    title: "Le Specie delle Saline",
+    href: `${baseUrl}/species`,
+    image: `${baseUrl}/bg-specie.jpg`,
+    subtitle: "La Fauna",
+    sectionNumber: "02",
+    description: "Lorem ipsum",
+    HasDescription: true,
+  },
+];
 ---
 
-<Layout title='Saline Ettore Infersa'>
-  <main class='flex flex-row'>
-    <Menu HasSectionNumber={false} title='Capitoli' />
-    <div class='snap-x flex-1 flex items-center justify-start gap-16 overflow-x-scroll scroll-pr-72 no-scrollbar'>
+<Layout title='Home | SEI Museum'>
+  <main class='h-screen w-full flex flex-col items-center justify-center bg-neutral-900 overflow-hidden relative'>
+    <div class='absolute top-16 flex flex-col items-center gap-4'>
+      <img src={`${baseUrl}/sei_logo.svg`} alt='Logo SEI Museum' class='w-32 h-auto' />
+    </div>
+
+    <div class='flex flex-row gap-12 px-16 items-center mt-20 w-6/12 mx-auto'>
       {
-        objects.map((object) => (
-          <div class='first:ml-16'>
-            <Card sectionNumber={object.frontmatter.sectionNumber} title={object.frontmatter.title} href={object.frontmatter.link} image={object.frontmatter.image} HasTools={object.frontmatter.HasTools} />
-          </div>
+        categories.map((cat) => (
+          <>
+            <div class='first:ml-16'>
+              <CardHome sectionNumber={cat.sectionNumber} title={cat.title} description={cat.description} HasDescription={cat.HasDescription}  href={cat.href} image={cat.image} />
+            </div>
+          </>
         ))
       }
-
-      <div class='min-w-32'>a</div>
     </div>
   </main>
 </Layout>
+
+<style>
+  .transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 500ms;
+  }
+</style>

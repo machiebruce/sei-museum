@@ -1,6 +1,7 @@
 ---
 import Layout from "./Main-Layout.astro";
 import Menu from "../components/Menu.astro";
+import Buttons from "../components/Buttons.astro";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -24,6 +25,54 @@ if (fs.existsSync(galleryDir)) {
 if (galleryImages.length === 0) {
   galleryImages = ["https://placehold.co/800x450/262626/ffffff?text=Immagine+non+trovata"];
 }
+
+// --- LOGICA NAVIGAZIONE AUTOMATICA ---
+const allSpecies = await Astro.glob("../pages/species/*.mdx");
+
+console.log("\n=== DEBUG NAVIGAZIONE ===");
+console.log("Totale specie trovate:", allSpecies.length);
+
+// Ordina per sectionNumber (CONVERSIONE ESPLICITA A NUMERO)
+const sortedSpecies = allSpecies.sort((a, b) => {
+  const numA = Number(a.frontmatter.sectionNumber) || 999;
+  const numB = Number(b.frontmatter.sectionNumber) || 999;
+  return numA - numB;
+});
+
+// Stampa l'ordinamento
+console.log("\nSpecie ordinate:");
+sortedSpecies.forEach((s, idx) => {
+  console.log(`${idx}: [${s.frontmatter.sectionNumber}] ${s.frontmatter.title} - ${s.frontmatter.link}`);
+});
+
+// Trova l'indice corrente
+console.log("\nCercando pagina corrente...");
+console.log("Current frontmatter.link:", frontmatter.link);
+console.log("Current url:", url);
+
+const currentIndex = sortedSpecies.findIndex((species) => species.frontmatter.link === frontmatter.link);
+
+console.log("Current index trovato:", currentIndex);
+
+if (currentIndex !== -1) {
+  console.log("Pagina corrente:", sortedSpecies[currentIndex].frontmatter.title);
+}
+
+// Determina prev e next
+const prevSpecies = currentIndex > 0 ? sortedSpecies[currentIndex - 1] : null;
+const nextSpecies = currentIndex >= 0 && currentIndex < sortedSpecies.length - 1 ? sortedSpecies[currentIndex + 1] : null;
+
+console.log("\nNavigazione:");
+console.log("Prev:", prevSpecies?.frontmatter.title || "NESSUNO");
+console.log("Next:", nextSpecies?.frontmatter.title || "NESSUNO");
+
+const prevSection = prevSpecies?.frontmatter?.link || null;
+const nextSection = nextSpecies?.frontmatter?.link || null;
+
+console.log("\nLink navigazione:");
+console.log("prevSection:", prevSection);
+console.log("nextSection:", nextSection);
+console.log("=== FINE DEBUG ===\n");
 ---
 
 <style is:global>
@@ -70,7 +119,7 @@ if (galleryImages.length === 0) {
     z-index: 20;
   }
   .force-white a:hover {
-    color: #60a5fa !important;
+    color: rgb(231, 121, 104) !important;
   }
 
   .carousel-container {
@@ -91,30 +140,6 @@ if (galleryImages.length === 0) {
   .dot.active {
     background-color: white !important;
     width: 1.5rem;
-  }
-
-  /* STILE SEZIONI COMPATTE */
-  .content-compact,
-  .content-compact * {
-    font-size: 0.875rem !important;
-    line-height: 1.5 !important;
-  }
-
-  .content-compact strong,
-  .content-compact b {
-    display: block;
-    margin-top: 1.5rem !important;
-    margin-bottom: 0.5rem !important;
-    font-weight: 800 !important;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 4px;
-  }
-
-  .content-compact > *:first-child strong,
-  .content-compact > strong:first-child {
-    margin-top: 0 !important;
   }
 
   /* MODAL FULLSCREEN */
@@ -181,7 +206,7 @@ if (galleryImages.length === 0) {
   .accordion-section-icon {
     margin-right: 0.75rem;
     font-size: 1.5rem;
-    color: #60a5fa;
+    color: rgb(231, 121, 104);
   }
 
   /* Stile link sezione fonti */
@@ -194,14 +219,58 @@ if (galleryImages.length === 0) {
   .section-link:hover {
     transform: translateX(4px);
   }
+
+  /* Sezione credits compatta */
+  .content-compact,
+  .content-compact * {
+    font-size: 0.875rem !important;
+    line-height: 1.5 !important;
+  }
+
+  /* Layout a due colonne per Descrizione della Specie */
+  .species-description-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-top: 1rem;
+  }
+
+  .species-description-grid > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .species-description-grid strong {
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: rgb(231, 121, 104);
+    margin-bottom: 0.25rem;
+  }
+
+  .species-description-grid p {
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  /* Responsive: singola colonna su schermi piccoli */
+  @media (max-width: 768px) {
+    .species-description-grid {
+      grid-template-columns: 1fr;
+    }
+  }
 </style>
 
 <Layout title={frontmatter.title}>
   <!-- Material Icons -->
   <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet' />
 
+  
+
   <main class='flex flex-row h-screen overflow-hidden bg-neutral-900'>
-    <Menu HasSectionNumber={false} variant='back' title={frontmatter.title || "Specie"} />
+    <Menu HasSectionNumber={false} variant='flora' title={frontmatter.title || "Specie"} />
 
     <div class='grid grid-cols-2 gap-12 w-full p-32 overflow-y-auto no-scrollbar'>
       <div class='flex flex-col gap-y-8 sticky top-0 self-start'>
@@ -209,6 +278,8 @@ if (galleryImages.length === 0) {
           <h1 class='text-4xl font-bold text-white'>{frontmatter.title}</h1>
           {frontmatter.scientificName && <p class='text-2xl font-light italic text-white/60'>{frontmatter.scientificName}</p>}
         </div>
+
+        <!-- Carousel Galleria -->
         <div class='relative group overflow-hidden rounded-2xl border border-white/10 bg-neutral-800 shadow-2xl'>
           <div id='carousel' class='carousel-container no-scrollbar'>
             {
@@ -233,6 +304,14 @@ if (galleryImages.length === 0) {
         </div>
 
         <div id='species-description' class='prose prose-invert max-w-none text-white text-xl force-white'></div>
+
+        <!-- Page Controls -->
+        <div class='flex gap-4 w-full'>
+          {frontmatter.videoLink && <Buttons hasIconLeft={true} srcIcon='/sei-museum/monitorPlay.svg' label='Video' link={frontmatter.videoLink} />}
+          <span class='flex-1'></span>
+          {prevSection && <Buttons hasIconLeft={true} srcIcon='/sei-museum/arrowLeft.svg' label='' link={prevSection} />}
+          {nextSection && <Buttons hasIconRight={true} srcIcon='/sei-museum/arrowRight.svg' label='Prossimo contenuto' link={nextSection} />}
+        </div>
       </div>
 
       <div class='flex flex-col overflow-visible'>
@@ -286,7 +365,7 @@ if (galleryImages.length === 0) {
           dot.addEventListener("click", () => {
             clearInterval(autoTimer);
             scrollToSlide(i);
-          })
+          }),
         );
         prevBtn?.addEventListener("click", () => {
           clearInterval(autoTimer);
@@ -360,94 +439,104 @@ if (galleryImages.length === 0) {
       // Funzione per ottenere l'icona appropriata
       function getIconForSection(title) {
         const lowerTitle = title.toLowerCase();
-        if (lowerTitle.includes("riconoscerlo")) return "search";
-        if (lowerTitle.includes("aspetto") || lowerTitle.includes("fisiche")) return "palette";
         if (lowerTitle.includes("distribuzione") || lowerTitle.includes("habitat")) return "public";
-        if (lowerTitle.includes("alimentazione")) return "restaurant";
-        if (lowerTitle.includes("comportamento") || lowerTitle.includes("riproduzione")) return "pets";
-        if (lowerTitle.includes("status") || lowerTitle.includes("conservazione")) return "eco";
-        if (lowerTitle.includes("curiosità") || lowerTitle.includes("riepilogo")) return "lightbulb";
-        if (lowerTitle.includes("differenze")) return "compare";
+        if (lowerTitle.includes("descrizione") || lowerTitle.includes("specie")) return "pets";
+        if (lowerTitle.includes("credit") || lowerTitle.includes("fotograf")) return "photo_camera";
         if (lowerTitle.includes("fonti") || lowerTitle.includes("risorse")) return "menu_book";
         return "info";
       }
 
+      // Funzione per creare il link Fonti
+      function createFontiLink(container) {
+        const linkDiv = document.createElement("a");
+        linkDiv.href = `${baseUrl}/fonti`;
+        linkDiv.className = "section-link bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden";
+        linkDiv.innerHTML = `
+          <div class="w-full text-left p-6 text-white hover:bg-black/50 transition-colors flex items-center justify-between">
+            <div class="flex items-center">
+              <span class="material-icons accordion-section-icon">menu_book</span>
+              <h3 class="text-lg font-bold text-white">Fonti e Risorse per Approfondire</h3>
+            </div>
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path d="M9 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+            </svg>
+          </div>`;
+        container.appendChild(linkDiv);
+      }
+
       // Estrazione sezioni dal Markdown
       function extractSections() {
-        const sectionTitles = ["Come riconoscerlo", "Aspetto e Caratteristiche Fisiche", "Distribuzione e Habitat", "Alimentazione", "Comportamento e Riproduzione", "Status e Conservazione", "Curiosità e Riepilogo", "Differenze con", "Fonti e Risorse per Approfondire"];
         const fullContentDiv = document.getElementById("species-full-content");
         const container = document.getElementById("species-sections-container");
         const descContainer = document.getElementById("species-description");
         if (!fullContentDiv || !container) return;
 
-        const headings = fullContentDiv.querySelectorAll("h3, h4");
+        // Estrai il primo paragrafo per la descrizione
+        const firstP = fullContentDiv.querySelector("p");
+        if (firstP && descContainer) descContainer.innerHTML = firstP.outerHTML;
+
+        // Cerca le sezioni h4
+        const headings = fullContentDiv.querySelectorAll("h4");
         const sections = [];
 
         headings.forEach((heading) => {
           const headingText = heading.textContent.trim().replace(/\*\*/g, "").trim();
-          const matchingSection = sectionTitles.find((title) => headingText.includes(title));
-          if (matchingSection) {
-            let content = "";
-            let nextElement = heading.nextElementSibling;
-            while (nextElement && !nextElement.matches("h3, h4")) {
-              content += nextElement.outerHTML;
-              nextElement = nextElement.nextElementSibling;
-            }
-            if (content.trim()) sections.push({title: headingText, content: content.trim()});
+          let content = "";
+          let nextElement = heading.nextElementSibling;
+
+          while (nextElement && !nextElement.matches("h4")) {
+            content += nextElement.outerHTML;
+            nextElement = nextElement.nextElementSibling;
+          }
+
+          if (content.trim()) {
+            sections.push({title: headingText, content: content.trim()});
           }
         });
 
-        const firstP = fullContentDiv.querySelector("p");
-        if (firstP && descContainer) descContainer.innerHTML = firstP.outerHTML;
-
+        // Crea gli accordion per le sezioni
         sections.forEach((section, index) => {
-          const accordionId = `accordion-${index}`;
-          const isCompact = section.title.toLowerCase().includes("riconoscerlo") || section.title.toLowerCase().includes("curiosità");
-          const icon = getIconForSection(section.title);
-          const isFonti = section.title.toLowerCase().includes("fonti") || section.title.toLowerCase().includes("risorse");
+          const lowerTitle = section.title.toLowerCase();
+          const isFonti = lowerTitle.includes("fonti");
+          const isCredits = lowerTitle.includes("credit") || lowerTitle.includes("fotograf");
 
-          if (isFonti) {
-            // Crea un link invece di un accordion
-            const linkDiv = document.createElement("a");
-            linkDiv.href = `${baseUrl}/fonti`;
-            linkDiv.className = "section-link bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden";
-            linkDiv.innerHTML = `
-                            <div class="w-full text-left p-6 text-white hover:bg-black/50 transition-colors flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <span class="material-icons accordion-section-icon">${icon}</span>
-                                    <h3 class="text-lg font-bold text-white">${section.title}</h3>
-                                </div>
-                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path d="M9 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                </svg>
-                            </div>`;
-            container.appendChild(linkDiv);
-          } else {
-            // Crea un accordion normale
+          if (!isFonti) {
+            // Accordion normale
+            const accordionId = `accordion-${index}`;
+            const icon = getIconForSection(section.title);
+
             const accordionDiv = document.createElement("div");
             accordionDiv.className = "bg-neutral-900 border border-white/10 rounded-2xl transition-all duration-300 overflow-hidden";
             accordionDiv.innerHTML = `
-                            <button class="accordion-button w-full text-left p-6 text-white hover:bg-black/50 transition-colors flex items-center justify-between" data-accordion-id="${accordionId}">
-                                <div class="flex items-center">
-                                    <span class="material-icons accordion-section-icon">${icon}</span>
-                                    <h3 class="text-lg font-bold text-white">${section.title}</h3>
-                                </div>
-                                <svg class="accordion-icon w-5 h-5 transition-transform duration-300 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
-                            </button>
-                            <div class="accordion-content hidden p-6 pt-0 prose prose-invert max-w-none text-white force-white ${isCompact ? "content-compact" : ""}" id="${accordionId}">
-                                ${section.content}
-                            </div>`;
+              <button class="accordion-button w-full text-left p-6 text-white hover:bg-black/50 transition-colors flex items-center justify-between" data-accordion-id="${accordionId}">
+                <div class="flex items-center">
+                  <span class="material-icons accordion-section-icon">${icon}</span>
+                  <h3 class="text-lg font-bold text-white">${section.title}</h3>
+                </div>
+                <svg class="accordion-icon w-5 h-5 transition-transform duration-300 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </button>
+              <div class="accordion-content hidden p-6 pt-0 prose prose-invert max-w-none text-white force-white ${isCredits ? "content-compact" : ""}" id="${accordionId}">
+                ${section.content}
+              </div>`;
             container.appendChild(accordionDiv);
           }
         });
 
+        // Aggiungi sempre il link a Fonti e Risorse alla fine
+        createFontiLink(container);
+
+        // Event listeners per gli accordion
         container.querySelectorAll(".accordion-button").forEach((button) => {
           button.addEventListener("click", function () {
             const targetId = this.getAttribute("data-accordion-id");
             const targetContent = document.getElementById(targetId);
             const isOpening = targetContent.classList.contains("hidden");
+
             document.querySelectorAll(".accordion-content").forEach((c) => c.classList.add("hidden"));
             document.querySelectorAll(".accordion-icon").forEach((i) => (i.style.transform = "rotate(0deg)"));
+
             if (isOpening) {
               targetContent.classList.remove("hidden");
               this.querySelector(".accordion-icon").style.transform = "rotate(180deg)";
@@ -455,10 +544,15 @@ if (galleryImages.length === 0) {
             }
           });
         });
+
         fullContentDiv.remove();
       }
-      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", extractSections);
-      else extractSections();
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", extractSections);
+      } else {
+        extractSections();
+      }
     })();
   </script>
 </Layout>

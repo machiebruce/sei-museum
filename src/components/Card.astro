@@ -13,7 +13,7 @@ interface Props {
 const {href = "#", title = "GLI ATTREZZI DELLA SALINA", description="Lorem ipsum", sectionNumber = "01", image = "/sei-museum/assets/placeholder.jpg", alt = "", HasTools = true, HasDescription = false} = Astro.props;
 ---
 
-<a href={href} class='bg-neutral-700 rounded-xl min-w-[500px] snap-start p-4 gap-8 flex flex-col group items-center scroll-ml-16 first-child:pl-16' transition:animate='slide'>
+<a href={href} class='bg-neutral-700 rounded-xl w-[400px] snap-start p-4 gap-8 flex flex-col group items-center scroll-ml-16 first-child:pl-16' transition:animate='slide'>
   <div class='w-full'>
     <p class='text-white font-extralight text-8xl group-hover:opacity-0 animation-smooth'>{sectionNumber}</p>
 

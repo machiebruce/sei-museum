@@ -5,57 +5,96 @@ import Menu from "../components/Menu.astro";
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 const fotografi = [
-  {nome: "Nome Fotografo 1"},
-  {nome: "Nome Fotografo 2"},
-  {nome: "Nome Fotografo 3"},
-  // Aggiungi qui i nomi dei fotografi
+  {nome: "Marco Valentini"},
+  {nome: "Sara Monteleone"},
+  {nome: "Giuseppe Giordano"},
+  // Aggiungi qui i nomi dei fotografi reali
 ];
 ---
 
 <Layout title='Credits | SEI Museum'>
-  <main class='flex overflow-hidden flex-row h-screen bg-neutral-900'>
+  <main class='flex flex-row h-screen overflow-hidden bg-neutral-900'>
     <Menu HasSectionNumber={false} variant='home' title='Credits' />
 
-    <div class='flex overflow-y-auto flex-1 justify-center items-center no-scrollbar'>
-      <div class='px-16 py-24 max-w-3xl'>
-        <!-- Progetto Grafico -->
+    <div class='flex-1 overflow-y-auto no-scrollbar'>
+      <div class='max-w-3xl mx-auto px-16 py-24'>
+        <!-- Design e Sviluppo -->
         <section class='mb-16'>
-          <h2 class='mb-6 text-2xl font-bold text-white'>Progetto Grafico e Interazione interaction design</h2>
-          <div class='space-y-2 text-lg leading-relaxed text-white'>
-            <p><strong>Studio HYPEBANG.IT</strong></p>
-            <p><strong>Maria Pia Erice</strong> – Designer</p>
+          <h2 class='text-2xl font-bold text-white mb-6'>Design e Sviluppo</h2>
+          <div class='text-white text-lg leading-relaxed space-y-2'>
+            <img src={`${baseUrl}/hypebang.min.svg`} alt='Hypebang studio' class='w-24 mb-4' />
+            <p><strong>HYPEBANG.IT - Design studio</strong></p>
+            <p class='text-base'>info@hypebang.it</p>
+            <p class='mt-4'>
+              <strong>Maria Pia Erice</strong> – Designer
+            </p>
             <p><strong>Maurizio Schifano</strong> – Interaction Designer</p>
           </div>
         </section>
 
-        <!-- Cura Scientifica -->
+        <!-- Divider -->
+        <div class='w-full h-px bg-white/10 mb-16'></div>
+
+        <!-- Contenuti Scientifici -->
         <section class='mb-16'>
-          <h2 class='mb-6 text-2xl font-bold text-white'>Cura Scientifica e Contenuti</h2>
-          <div class='text-lg leading-relaxed text-white'>
-            <p><strong>Dott. Francesco Ciulla</strong> – Naturalista</p>
+          <h2 class='text-2xl font-bold text-white mb-6'>Contenuti Scientifici</h2>
+          <div class='text-white text-lg leading-relaxed'>
+            <p><strong>Dott. Francesco Ciulla</strong> – Dottore in Scienze Naturali</p>
           </div>
         </section>
 
-        <!-- Fotografie -->
+        <!-- Divider -->
+        <div class='w-full h-px bg-white/10 mb-16'></div>
+
+        <!-- Immagini -->
         <section class='mb-16'>
-          <h2 class='mb-6 text-2xl font-bold text-white'>Fotografie di</h2>
-          <div class='space-y-2 text-lg leading-relaxed text-white'>
+          <h2 class='text-2xl font-bold text-white mb-6'>Immagini</h2>
+          <div class='text-white text-lg leading-relaxed space-y-2'>
             {fotografi.map((fotografo) => <p>{fotografo.nome}</p>)}
           </div>
         </section>
 
-        <!-- Finanziamento PNRR -->
+        <!-- Divider -->
+        <div class='w-full h-px bg-white/10 mb-16'></div>
+
+        <!-- Realizzato grazie al PNRR -->
         <section class='mb-16'>
-          <h2 class='mb-6 text-2xl font-bold text-white'>Realizzato grazie al</h2>
-          <div class='space-y-4 text-lg leading-relaxed text-white'>
+          <h2 class='text-2xl font-bold text-white mb-6'>Realizzato grazie al</h2>
+          <div class='text-white text-lg leading-relaxed space-y-3'>
             <p><strong>Bando PNRR</strong></p>
             <p>Missione 1 – Digitalizzazione, innovazione, competitività e cultura</p>
             <p>Componente 3 – Cultura 4.0 (M1C3)</p>
             <p>Misura 2 – "Protezione e valorizzazione dell'architettura e del paesaggio rurale"</p>
-            <p class='mt-6'>Next Generation EU</p>
+            <p class='mt-4'><strong>Next Generation EU</strong></p>
             <p>CUP: G87B22000530004</p>
             <p>Progetto ID PNRR: M1C3 - 2.2 - 2022, n. progressivo 002501</p>
-            <p class='mt-6 text-xl font-semibold'>"CASA DEL SALINAIO" della salina Ettore Infersa</p>
+            <p class='mt-4 text-xl font-semibold'>"CASA DEL SALINAIO" della salina Ettore Infersa</p>
+          </div>
+        </section>
+
+        <!-- Divider -->
+        <div class='w-full h-px bg-white/10 mb-16'></div>
+
+        <!-- Fonti e Bibliografia -->
+        <section class='mb-16'>
+          <h2 class='text-2xl font-bold text-white mb-6'>Fonti e Bibliografia</h2>
+          <div class='text-white text-lg leading-relaxed'>
+            <p>Per l'elenco completo delle fonti scientifiche e bibliografiche consultate, visita la sezione dedicata:</p>
+            <a href={`${baseUrl}/fonti`} class='inline-block mt-4 px-6 py-2 border border-white rounded-full hover:bg-white hover:text-black transition-all duration-300'> Fonti e Risorse </a>
+          </div>
+        </section>
+
+        <!-- Divider -->
+        <div class='w-full h-px bg-white/10 mb-16'></div>
+
+        <!-- Copyright -->
+        <section class='mb-16'>
+          <h2 class='text-2xl font-bold text-white mb-6'>Copyright e Licenze</h2>
+          <div class='text-white text-lg leading-relaxed space-y-2'>
+            <p><strong>© 2024 Saline Ettore Infersa</strong></p>
+            <p>Tutti i contenuti sono protetti da copyright</p>
+            <p class='mt-4'><strong>Immagini:</strong> I diritti delle fotografie appartengono ai rispettivi autori</p>
+            <p><strong>Contenuti scientifici:</strong> Libera consultazione per scopi educativi e di ricerca con citazione della fonte</p>
           </div>
         </section>
       </div>

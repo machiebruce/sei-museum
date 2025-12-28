@@ -41,18 +41,18 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
     <!-- Toggle Buttons -->
     <div class='absolute top-6 right-6 z-50 flex items-center gap-4'>
       <a href={`${baseUrl}/species`} class='active view-toggle-btn flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
-        <span class='material-icons'>note</span>
+        <span class='material-icons'>view_column</span>
       </a>
 
       <a href={`${baseUrl}/species-map`} class='view-toggle-btn flex items-center border border-white gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
-        <span class='material-icons'>landscape</span>
+        <span class='material-icons'>image_search</span>
       </a>
     </div>
 
     <!-- Map View -->
     <div class='flex-1 overflow-auto p-16'>
       <div class='max-w-7xl mx-auto flex items-center justify-center h-full'>
-        <span class="text-white text-4xl">Vista mappa</span>
+        <span class='text-white text-4xl'>Vista mappa</span>
       </div>
     </div>
   </main>

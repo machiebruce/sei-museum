@@ -3,7 +3,7 @@ export interface Props {
   HasSectionNumber?: boolean;
   title: string;
   sectionNumber?: string;
-  variant?: "home" | "back"; // Nuova prop per scegliere la variante
+  variant?: "home" | "back" | "flora"; // Aggiunta variante flora
 }
 
 import logo from "/public/favicon.svg";
@@ -34,13 +34,20 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
         <img class='w-12' src={menu.src} alt='Home' />
         <p class='text-white font-bold'>HOME</p>
       </a>
-    ) : (
-      /* Variante BACK */ <button onclick='history.back()' class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 transition-all duration-300 bg-transparent border-none cursor-pointer'>
+    ) : variant === "flora" ? (
+      /* Variante FLORA - Torna a species */ <a href={`${baseUrl}/species`} class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 transition-all duration-300'>
         <svg class='w-12 h-12 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
           <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 19l-7-7m0 0l7-7m-7 7h18' />
         </svg>
         <p class='text-white font-bold uppercase'>BACK</p>
-      </button>
+      </a>
+    ) : (
+      /* Variante BACK */ <a href={`${baseUrl}/objects`} class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 transition-all duration-300 bg-transparent border-none cursor-pointer'>
+        <svg class='w-12 h-12 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+          <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 19l-7-7m0 0l7-7m-7 7h18' />
+        </svg>
+        <p class='text-white font-bold uppercase'>BACK</p>
+      </a>
     )
   }
 </div>

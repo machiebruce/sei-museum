@@ -29,50 +29,22 @@ if (galleryImages.length === 0) {
 // --- LOGICA NAVIGAZIONE AUTOMATICA ---
 const allSpecies = await Astro.glob("../pages/species/*.mdx");
 
-console.log("\n=== DEBUG NAVIGAZIONE ===");
-console.log("Totale specie trovate:", allSpecies.length);
-
-// Ordina per sectionNumber (CONVERSIONE ESPLICITA A NUMERO)
+// Ordina per sectionNumber
 const sortedSpecies = allSpecies.sort((a, b) => {
   const numA = Number(a.frontmatter.sectionNumber) || 999;
   const numB = Number(b.frontmatter.sectionNumber) || 999;
   return numA - numB;
 });
 
-// Stampa l'ordinamento
-console.log("\nSpecie ordinate:");
-sortedSpecies.forEach((s, idx) => {
-  console.log(`${idx}: [${s.frontmatter.sectionNumber}] ${s.frontmatter.title} - ${s.frontmatter.link}`);
-});
-
 // Trova l'indice corrente
-console.log("\nCercando pagina corrente...");
-console.log("Current frontmatter.link:", frontmatter.link);
-console.log("Current url:", url);
-
 const currentIndex = sortedSpecies.findIndex((species) => species.frontmatter.link === frontmatter.link);
-
-console.log("Current index trovato:", currentIndex);
-
-if (currentIndex !== -1) {
-  console.log("Pagina corrente:", sortedSpecies[currentIndex].frontmatter.title);
-}
 
 // Determina prev e next
 const prevSpecies = currentIndex > 0 ? sortedSpecies[currentIndex - 1] : null;
 const nextSpecies = currentIndex >= 0 && currentIndex < sortedSpecies.length - 1 ? sortedSpecies[currentIndex + 1] : null;
 
-console.log("\nNavigazione:");
-console.log("Prev:", prevSpecies?.frontmatter.title || "NESSUNO");
-console.log("Next:", nextSpecies?.frontmatter.title || "NESSUNO");
-
 const prevSection = prevSpecies?.frontmatter?.link || null;
 const nextSection = nextSpecies?.frontmatter?.link || null;
-
-console.log("\nLink navigazione:");
-console.log("prevSection:", prevSection);
-console.log("nextSection:", nextSection);
-console.log("=== FINE DEBUG ===\n");
 ---
 
 <style is:global>
@@ -267,8 +239,6 @@ console.log("=== FINE DEBUG ===\n");
   <!-- Material Icons -->
   <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet' />
 
-  
-
   <main class='flex flex-row h-screen overflow-hidden bg-neutral-900'>
     <Menu HasSectionNumber={false} variant='flora' title={frontmatter.title || "Specie"} />
 
@@ -277,6 +247,7 @@ console.log("=== FINE DEBUG ===\n");
         <div class='text-white space-y-2'>
           <h1 class='text-4xl font-bold text-white'>{frontmatter.title}</h1>
           {frontmatter.scientificName && <p class='text-2xl font-light italic text-white/60'>{frontmatter.scientificName}</p>}
+          {frontmatter.family && <p class='text-lg font-bold italic text-white/60'>{frontmatter.family}</p>}
         </div>
 
         <!-- Carousel Galleria -->

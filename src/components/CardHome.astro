@@ -14,11 +14,11 @@ const {href = "#", title = "GLI ATTREZZI DELLA SALINA", description = "Lorem ips
 
 <a href={href} class='bg-neutral-700 rounded-xl min-w-[100px] p-4 gap-8 flex flex-col group h-full items-center'>
   <div class='w-full'>
-    <p class='text-white font-extralight text-8xl group-hover:opacity-0 animation-smooth'>{sectionNumber}</p>
-    <p class='text-white font-bold text-3xl group-hover:-translate-y-20 animation-smooth uppercase w-full'>{title}</p>
+    <!-- <p class='text-8xl font-extralight text-white group-hover:opacity-0 animation-smooth'>{sectionNumber}</p> -->
+    <p class='w-full text-3xl font-bold text-white uppercase group-hover:-translate-y-20 animation-smooth'>{title}</p>
   </div>
   <img src={image} alt={image} class='rounded-lg group-hover:-translate-y-32 group-hover:scale-110 animation-smooth object-fit' />
 
-  {HasDescription && <p class='text-white text-left font-extralight text-2xl w-full uppercase  animation-smooth group-hover:-translate-y-20'>{description}</p>}
-  <p class='bg-white text-black font-bold px-8 py-2 text-xl rounded-full text-center w-fit invisible opacity-0 group-hover:visible group-hover:opacity-100 animation-smooth uppercase'>Inizia</p>
+  {HasDescription && <p class='w-full text-2xl font-extralight text-left text-white uppercase animation-smooth group-hover:-translate-y-20'>{description}</p>}
+  <p class='invisible px-8 py-2 text-xl font-bold text-center text-black uppercase bg-white rounded-full opacity-0 w-fit group-hover:visible group-hover:opacity-100 animation-smooth'>Inizia</p>
 </a>

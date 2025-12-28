@@ -5,6 +5,15 @@ import CardSpecie from "../components/CardSpecie.astro";
 
 const objects = await Astro.glob("../pages/species/*.mdx");
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+// Estrai le famiglie uniche
+const families = new Set<string>();
+objects.forEach((obj) => {
+  if (obj.frontmatter.family) {
+    families.add(obj.frontmatter.family);
+  }
+});
+const uniqueFamilies = Array.from(families).sort();
 ---
 
 <style>
@@ -15,36 +24,145 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
   .view-toggle-btn.active {
     color: white !important;
   }
+
+  /* Tab Filtri */
+  .filter-tab {
+    padding: 0.75rem 1.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 9999px;
+    color: white;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .filter-tab:hover {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: rgb(255, 255, 255);
+  }
+
+  .filter-tab.active {
+    background: white;
+    border-color: white;
+    color: black;
+  }
+
+  /* IMPORTANTE: mantieni dimensioni originali delle card */
+  .species-card {
+    transition: opacity 0.3s ease;
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+
+  .species-card.hidden {
+    display: none;
+  }
+
+  /* Margin dinamico sulla prima card */
+  .species-card.first-visible {
+    margin-left: 4rem !important;
+  }
 </style>
 
 <Layout title='Saline Ettore Infersa'>
   <!-- Material Icons -->
   <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet' />
 
-  <main class='flex flex-row h-screen overflow-hidden relative'>
-    <Menu HasSectionNumber={false} title='Le specie delle saline' />
+  <main class='flex flex-col h-screen overflow-hidden relative'>
+    <div class='flex flex-row flex-1 overflow-hidden'>
+      <Menu HasSectionNumber={false} title='Le specie delle saline' />
 
-    <!-- Toggle Buttons -->
-    <div class='absolute top-6 right-6 z-50 flex items-center gap-4'>
-      <a href={`${baseUrl}/species`} class='active view-toggle-btn border border-white flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
-        <span class='material-icons'>note</span>
-      </a>
+      <div class='flex flex-col flex-1 overflow-hidden'>
+        <!-- Tab Filtri -->
+        <div class='flex items-center gap-3 px-8 pt-8 pb-4 overflow-x-auto no-scrollbar'>
+          <button class='filter-tab active' data-family='all'>Tutte</button>
+          {
+            uniqueFamilies.map((family) => (
+              <button class='filter-tab' data-family={family}>
+                {family}
+              </button>
+            ))
+          }
+        </div>
 
-      <a href={`${baseUrl}/species-map`} class='view-toggle-btn flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
-        <span class='material-icons'>landscape</span>
-      </a>
-    </div>
+        <!-- Toggle Buttons -->
+        <div class='absolute top-6 right-6 z-50 flex items-center gap-4'>
+          <a href={`${baseUrl}/species`} class='active view-toggle-btn border border-white flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
+            <span class='material-icons'>note</span>
+          </a>
 
-    <!-- List View -->
-    <div class='snap-x flex-1 flex items-center justify-start gap-16 overflow-x-scroll scroll-pr-72 no-scrollbar'>
-      {
-        objects.map((object) => (
-          <div class='first:ml-16'>
-            <CardSpecie sectionNumber={object.frontmatter.sectionNumber} title={object.frontmatter.title} href={object.frontmatter.link} image={object.frontmatter.image} IsFauna={object.frontmatter.IsFauna} />
-          </div>
-        ))
-      }
-      <div class='min-w-32'></div>
+          <a href={`${baseUrl}/species-map`} class='view-toggle-btn flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
+            <span class='material-icons'>landscape</span>
+          </a>
+        </div>
+
+        <!-- List View -->
+        <div class='snap-x flex-1 flex items-center justify-start gap-16 overflow-x-scroll scroll-pr-72 no-scrollbar'>
+          {
+            objects.map((object) => (
+              <div class='species-card' data-family={object.frontmatter.family || "undefined"}>
+                <CardSpecie sectionNumber={object.frontmatter.sectionNumber} title={object.frontmatter.title} href={object.frontmatter.link} image={object.frontmatter.image} IsFauna={object.frontmatter.IsFauna} />
+              </div>
+            ))
+          }
+          <div class='min-w-32'></div>
+        </div>
+      </div>
     </div>
   </main>
+
+  <script is:inline>
+    (function () {
+      const filterTabs = document.querySelectorAll(".filter-tab");
+      const speciesCards = document.querySelectorAll(".species-card");
+
+      // Funzione per aggiornare il margin sulla prima card visibile
+      function updateFirstVisibleMargin() {
+        // Rimuovi la classe da tutte le card
+        speciesCards.forEach((card) => card.classList.remove("first-visible"));
+
+        // Trova la prima card visibile e aggiungi la classe
+        const firstVisible = Array.from(speciesCards).find((card) => !card.classList.contains("hidden"));
+        if (firstVisible) {
+          firstVisible.classList.add("first-visible");
+        }
+      }
+
+      // Esegui all'avvio
+      updateFirstVisibleMargin();
+
+      filterTabs.forEach((tab) => {
+        tab.addEventListener("click", function () {
+          const selectedFamily = this.getAttribute("data-family");
+
+          // Aggiorna stato attivo delle tab
+          filterTabs.forEach((t) => t.classList.remove("active"));
+          this.classList.add("active");
+
+          // Filtra le card
+          speciesCards.forEach((card) => {
+            const cardFamily = card.getAttribute("data-family");
+
+            if (selectedFamily === "all") {
+              card.classList.remove("hidden");
+            } else {
+              if (cardFamily === selectedFamily) {
+                card.classList.remove("hidden");
+              } else {
+                card.classList.add("hidden");
+              }
+            }
+          });
+
+          // Aggiorna il margin sulla prima card visibile
+          updateFirstVisibleMargin();
+        });
+      });
+    })();
+  </script>
 </Layout>

@@ -26,7 +26,7 @@ const categories = [
   },
   {
     title: "Nidificazioni dal vivo",
-    href: `${baseUrl}/live`, // ✅ Corretto se in src/pages/
+    href: `${baseUrl}/live`,
     image: `${baseUrl}/bg-live.jpg`,
     subtitle: "Camera live",
     sectionNumber: "03",
@@ -37,22 +37,25 @@ const categories = [
 ---
 
 <Layout title='Home | SEI Museum'>
-  <main class='h-screen w-full flex flex-col items-center justify-center bg-neutral-900 overflow-hidden'>
-    <div class='top-24 flex flex-col items-center'>
+  <main class='flex overflow-hidden flex-col justify-between items-center py-16 w-full h-screen bg-neutral-900'>
+    <div class='flex flex-col items-center'>
       <img src={`${baseUrl}/sei_logo.svg`} alt='Logo SEI Museum' class='w-32 h-auto' />
     </div>
 
-    <div class='flex flex-row items-stretch gap-12 mt-20 w-1/2 mx-auto'>
+    <div class='flex flex-row gap-12 items-stretch mx-auto w-1/2'>
       {
         categories.map((cat) => (
-          <>
-            <div>
-              <CardHome sectionNumber={cat.sectionNumber} title={cat.title} description={cat.description} HasDescription={cat.HasDescription} href={cat.href} image={cat.image} />
-            </div>
-          </>
+          <div>
+            <CardHome sectionNumber={cat.sectionNumber} title={cat.title} description={cat.description} HasDescription={cat.HasDescription} href={cat.href} image={cat.image} />
+          </div>
         ))
       }
     </div>
+
+    <!-- Bottone Credits -->
+
+    <a href={`${baseUrl}/credits`}
+    class='px-8 py-4 text-lg font-bold tracking-wide text-black uppercase bg-white rounded-full transition-all duration-300 hover:bg-white/90 hover:-translate-y-1 hover:shadow-2xl' > Credits </a>
   </main>
 </Layout>
 

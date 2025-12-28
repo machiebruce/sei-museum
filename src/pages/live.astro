@@ -5,6 +5,11 @@ import CardHome from "../components/CardHome.astro";
 // Recuperiamo il baseUrl per i link
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 
+// Inserisci qui l'ID del video YouTube live
+// Es: se l'URL è https://www.youtube.com/watch?v=dQw4w9WgXcQ
+// l'ID è: dQw4w9WgXcQ
+const youtubeLiveId = "jfKfPfyJRdk"; // Sostituisci con il tuo ID video live
+
 const categories = [
   {
     title: "Gli Oggetti del Museo",
@@ -36,15 +41,25 @@ const categories = [
 ];
 ---
 
-<Layout title='Home | SEI Museum'>
-  <main class='h-screen w-full flex flex-col items-center justify-center bg-neutral-900 overflow-hidden'>
-    <div class='top-24 flex flex-col items-center'>
-      <img src={`${baseUrl}/sei_logo.svg`} alt='Logo SEI Museum' class='w-32 h-auto' />
+<Layout title='Live Stream | SEI Museum'>
+  <main class='flex overflow-hidden flex-col justify-center items-center p-8 w-full h-screen bg-neutral-900'>
+    <div class='flex flex-col items-center mb-8'>
+      <a href={`${baseUrl}/`}>
+        <img src={`${baseUrl}/sei_logo.svg`} alt='Logo SEI Museum' class='mb-4 w-32 h-auto' />
+      </a>
+      <h1 class='mb-2 text-4xl font-bold text-white'>Nidificazioni dal vivo</h1>
+      <p class='text-xl text-white/60'>Live streaming dalle Saline Ettore Infersa</p>
     </div>
 
-    <div class='flex flex-row gap-12 items-center mt-20 w-1/2 mx-auto justify-center text-4xl h-screen font-bold text-white'>
-      <a href="/sei-museum">Camera live coming soon</a>
+    <!-- Container video responsive -->
+    <div class='overflow-hidden w-full max-w-6xl rounded-2xl border shadow-2xl aspect-video border-white/10'>
+      <iframe class='w-full h-full' src={`https://www.youtube.com/embed/${youtubeLiveId}?autoplay=1&mute=0`} title='YouTube Live Stream' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>
     </div>
+
+    <!-- Pulsante torna indietro -->
+
+    <a href={`${baseUrl}/`}
+    class='px-8 py-4 mt-8 font-bold text-black bg-white rounded-full transition-all duration-300 hover:bg-white/90 hover:-translate-y-1' > Torna alla Home </a>
   </main>
 </Layout>
 

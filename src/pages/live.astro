@@ -26,11 +26,11 @@ const categories = [
   },
   {
     title: "Nidificazioni dal vivo",
-    href: `${baseUrl}/live`, // ✅ Corretto se in src/pages/
+    href: `${baseUrl}/live`,
     image: `${baseUrl}/bg-live.jpg`,
     subtitle: "Camera live",
     sectionNumber: "03",
-    description: "Osserva in diretta le nidificazioni nelle saline.",
+    description: "Un ecosistema unico dove convivono fenicotteri, aironi e una ricca vegetazione adattata all'acqua salata.",
     HasDescription: true,
   },
 ];
@@ -42,16 +42,8 @@ const categories = [
       <img src={`${baseUrl}/sei_logo.svg`} alt='Logo SEI Museum' class='w-32 h-auto' />
     </div>
 
-    <div class='flex flex-row items-stretch gap-12 mt-20 w-1/2 mx-auto'>
-      {
-        categories.map((cat) => (
-          <>
-            <div>
-              <CardHome sectionNumber={cat.sectionNumber} title={cat.title} description={cat.description} HasDescription={cat.HasDescription} href={cat.href} image={cat.image} />
-            </div>
-          </>
-        ))
-      }
+    <div class='flex flex-row gap-12 items-center mt-20 w-1/2 mx-auto justify-center text-4xl h-screen font-bold text-white'>
+      <a href="/sei-museum">Camera live coming soon</a>
     </div>
   </main>
 </Layout>

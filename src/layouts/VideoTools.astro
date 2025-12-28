@@ -14,7 +14,7 @@ const {frontmatter} = Astro.props;
 
       <!--Page controls-->
       <div class='flex gap-4 w-full justify-around'>
-        <Buttons hasIconLeft={false} label='Chiudi' link='/sei-museum' />
+        <Buttons hasIconLeft={false} label='Chiudi' link='/objects' />
         <div class='flex gap-4'>
           <Buttons hasIconLeft={true} srcIcon='/sei-museum/arrowLeft.svg' label='' link={frontmatter.prevSection} />
           <Buttons hasIconRight={true} srcIcon='/sei-museum/arrowRight.svg' label='Prossimo contenuto' link={frontmatter.nextSection} />

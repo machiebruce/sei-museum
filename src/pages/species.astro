@@ -78,18 +78,6 @@ const uniqueFamilies = Array.from(families).sort();
       <Menu HasSectionNumber={false} title='Le specie delle saline' />
 
       <div class='flex flex-col flex-1 overflow-hidden'>
-        <!-- Tab Filtri -->
-        <div class='flex items-center gap-3 px-8 pt-8 pb-4 overflow-x-auto no-scrollbar'>
-          <button class='filter-tab active' data-family='all'>Tutte</button>
-          {
-            uniqueFamilies.map((family) => (
-              <button class='filter-tab' data-family={family}>
-                {family}
-              </button>
-            ))
-          }
-        </div>
-
         <!-- Toggle Buttons -->
         <div class='absolute top-6 right-6 z-50 flex items-center gap-4'>
           <a href={`${baseUrl}/species`} class='active view-toggle-btn border border-white flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
@@ -111,6 +99,21 @@ const uniqueFamilies = Array.from(families).sort();
             ))
           }
           <div class='min-w-32'></div>
+        </div>
+
+        <!-- Tab Filtri in basso -->
+        <div class='px-8 pt-4 pb-8'>
+          <p class="text-white text-2xl font-bold mb-4">Famiglie / Family</p>
+          <div class='flex flex-wrap items-center gap-3'>
+            <button class='filter-tab active' data-family='all'>Tutte</button>
+            {
+              uniqueFamilies.map((family) => (
+                <button class='filter-tab' data-family={family}>
+                  {family}
+                </button>
+              ))
+            }
+          </div>
         </div>
       </div>
     </div>

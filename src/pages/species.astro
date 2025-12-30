@@ -8,69 +8,28 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 // Estrai le famiglie uniche
 const families = new Set<string>();
+const familyIconMap = new Map<string, string>();
+
 objects.forEach((obj) => {
   if (obj.frontmatter.family) {
     families.add(obj.frontmatter.family);
+    if (obj.frontmatter["family-icon"]) {
+      familyIconMap.set(obj.frontmatter.family, obj.frontmatter["family-icon"]);
+    }
   }
 });
+
 const uniqueFamilies = Array.from(families).sort();
 ---
 
 <style>
-  .view-toggle-btn {
-    transition: all 0.3s ease;
-  }
-
-  .view-toggle-btn.active {
-    color: white !important;
-  }
-
-  /* Tab Filtri */
-  .filter-tab {
-    padding: 0.75rem 1.5rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 9999px;
-    color: white;
-    font-weight: 600;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    white-space: nowrap;
-  }
-
-  .filter-tab:hover {
-    background: rgba(255, 255, 255, 0.3);
-    border-color: rgb(255, 255, 255);
-  }
-
-  .filter-tab.active {
-    background: white;
-    border-color: white;
-    color: black;
-  }
-
-  /* IMPORTANTE: mantieni dimensioni originali delle card */
-  .species-card {
-    transition: opacity 0.3s ease;
-    flex-shrink: 0;
-    flex-grow: 0;
-  }
-
-  .species-card.hidden {
-    display: none;
-  }
-
-  /* Margin dinamico sulla prima card */
-  .species-card.first-visible {
-    margin-left: 4rem !important;
+  /* Inversione icona SVG */
+  .filter-tab.active .filter-tab-icon:not(.material-icons) {
+    filter: invert(1);
   }
 </style>
 
 <Layout title='Saline Ettore Infersa'>
-  <!-- Material Icons -->
   <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet' />
 
   <main class='flex flex-col h-screen overflow-hidden relative'>
@@ -80,11 +39,11 @@ const uniqueFamilies = Array.from(families).sort();
       <div class='flex flex-col flex-1 overflow-hidden'>
         <!-- Toggle Buttons -->
         <div class='absolute top-6 right-6 z-50 flex items-center gap-4'>
-          <a href={`${baseUrl}/species`} class='active view-toggle-btn border border-white flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
+          <a href={`${baseUrl}/species`} class='border border-white flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
             <span class='material-icons'>view_column</span>
           </a>
 
-          <a href={`${baseUrl}/species-map`} class='view-toggle-btn flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
+          <a href={`${baseUrl}/species-map`} class='flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
             <span class='material-icons'>image_search</span>
           </a>
         </div>
@@ -93,7 +52,7 @@ const uniqueFamilies = Array.from(families).sort();
         <div class='snap-x flex-1 flex items-center justify-start gap-16 overflow-x-scroll scroll-pr-72 no-scrollbar'>
           {
             objects.map((object) => (
-              <div class='species-card' data-family={object.frontmatter.family || "undefined"}>
+              <div class='species-card flex-shrink-0 flex-grow-0' data-family={object.frontmatter.family || "undefined"}>
                 <CardSpecie sectionNumber={object.frontmatter.sectionNumber} title={object.frontmatter.title} href={object.frontmatter.link} image={object.frontmatter.image} IsFauna={object.frontmatter.IsFauna} />
               </div>
             ))
@@ -103,15 +62,19 @@ const uniqueFamilies = Array.from(families).sort();
 
         <!-- Tab Filtri in basso -->
         <div class='px-8 pt-4 pb-8'>
-          <p class="text-white text-2xl font-bold mb-4">Famiglie / Family</p>
+          <p class='text-white text-2xl font-bold mb-4'>Famiglie / Family</p>
           <div class='flex flex-wrap items-center gap-3'>
-            <button class='filter-tab active' data-family='all'>Tutte</button>
+            <button class='filter-tab active h-16 px-6 bg-white border-white rounded-full text-black font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2' data-family='all'> Tutte </button>
             {
-              uniqueFamilies.map((family) => (
-                <button class='filter-tab' data-family={family}>
-                  {family}
-                </button>
-              ))
+              uniqueFamilies.map((family) => {
+                const icon = familyIconMap.get(family);
+                return (
+                  <button class='filter-tab h-16 px-6 bg-white/10 border border-white/20 rounded-full text-white font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2' data-family={family}>
+                    {icon ? <img src={icon} alt={family} class='filter-tab-icon w-10 h-10 flex-shrink-0' /> : <span class='material-icons filter-tab-icon w-10 h-10 text-[28px] leading-none flex items-center justify-center'>category</span>}
+                    {family}
+                  </button>
+                );
+              })
             }
           </div>
         </div>
@@ -124,45 +87,60 @@ const uniqueFamilies = Array.from(families).sort();
       const filterTabs = document.querySelectorAll(".filter-tab");
       const speciesCards = document.querySelectorAll(".species-card");
 
-      // Funzione per aggiornare il margin sulla prima card visibile
-      function updateFirstVisibleMargin() {
-        // Rimuovi la classe da tutte le card
-        speciesCards.forEach((card) => card.classList.remove("first-visible"));
+      // Cache dei risultati per famiglia
+      const familyCache = new Map();
 
-        // Trova la prima card visibile e aggiungi la classe
-        const firstVisible = Array.from(speciesCards).find((card) => !card.classList.contains("hidden"));
-        if (firstVisible) {
-          firstVisible.classList.add("first-visible");
+      // Pre-calcola quali card appartengono a quale famiglia
+      speciesCards.forEach((card) => {
+        const family = card.getAttribute("data-family");
+        if (!familyCache.has(family)) {
+          familyCache.set(family, []);
         }
+        familyCache.get(family).push(card);
+      });
+
+      function updateFirstVisibleMargin() {
+        let firstFound = false;
+        speciesCards.forEach((card) => {
+          if (!firstFound && card.style.display !== "none") {
+            card.classList.add("ml-16");
+            firstFound = true;
+          } else {
+            card.classList.remove("ml-16");
+          }
+        });
       }
 
-      // Esegui all'avvio
       updateFirstVisibleMargin();
 
       filterTabs.forEach((tab) => {
         tab.addEventListener("click", function () {
           const selectedFamily = this.getAttribute("data-family");
 
-          // Aggiorna stato attivo delle tab
-          filterTabs.forEach((t) => t.classList.remove("active"));
-          this.classList.add("active");
-
-          // Filtra le card
-          speciesCards.forEach((card) => {
-            const cardFamily = card.getAttribute("data-family");
-
-            if (selectedFamily === "all") {
-              card.classList.remove("hidden");
+          // Aggiorna stato attivo
+          filterTabs.forEach((t) => {
+            if (t === this) {
+              t.className = "filter-tab active h-16 px-6 bg-white border-white rounded-full text-black font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2";
+              const icon = t.querySelector(".material-icons");
+              if (icon) icon.classList.add("text-black");
             } else {
-              if (cardFamily === selectedFamily) {
-                card.classList.remove("hidden");
-              } else {
-                card.classList.add("hidden");
-              }
+              t.className = "filter-tab h-16 px-6 bg-white/10 border border-white/20 rounded-full text-white font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2";
+              const icon = t.querySelector(".material-icons");
+              if (icon) icon.classList.remove("text-black");
             }
           });
 
-          // Aggiorna il margin sulla prima card visibile
+          // Filtraggio ottimizzato
+          if (selectedFamily === "all") {
+            speciesCards.forEach((card) => {
+              card.style.display = "";
+            });
+          } else {
+            speciesCards.forEach((card) => {
+              card.style.display = card.getAttribute("data-family") === selectedFamily ? "" : "none";
+            });
+          }
+
           updateFirstVisibleMargin();
         });
       });

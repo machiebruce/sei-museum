@@ -26,11 +26,15 @@ if (galleryImages.length === 0) {
   galleryImages = ["https://placehold.co/800x450/262626/ffffff?text=Immagine+non+trovata"];
 }
 
-// --- LOGICA NAVIGAZIONE AUTOMATICA ---
+// --- LOGICA NAVIGAZIONE AUTOMATICA (SOLO STESSA FAMIGLIA) ---
 const allSpecies = await Astro.glob("../pages/species/*.mdx");
 
+// Filtra solo le specie della stessa famiglia
+const currentFamily = frontmatter.family;
+const sameFamilySpecies = allSpecies.filter((species) => species.frontmatter.family === currentFamily);
+
 // Ordina per sectionNumber
-const sortedSpecies = allSpecies.sort((a, b) => {
+const sortedSpecies = sameFamilySpecies.sort((a, b) => {
   const numA = Number(a.frontmatter.sectionNumber) || 999;
   const numB = Number(b.frontmatter.sectionNumber) || 999;
   return numA - numB;

@@ -19,7 +19,7 @@ const {href = "#", title = "GLI ATTREZZI DELLA SALINA", description = "Lorem ips
 
   <!-- Container con aspect ratio - LE ANIMAZIONI SONO QUI -->
   <div class='w-full aspect-[4/2] overflow-hidden rounded-lg group-hover:-translate-y-32 group-hover:scale-110 animation-smooth'>
-    <img src={image} alt={alt || title} class='w-full h-full object-cover' />
+    <img src={image} alt={alt || title} class='w-full h-full object-cover' loading='lazy' decoding='async' />
   </div>
 
   <p class='text-white font-bold text-2xl h-[20px] group-hover:-translate-y-20 animation-smooth uppercase w-full'>{title}</p>

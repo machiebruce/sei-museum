@@ -4,7 +4,7 @@
  */
 
 module.exports = {
-  content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue,json}", "./node_modules/flowbite/**/*.js"],
+  content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue,json}"],
 
   presets: [require("./src/style/theme.mjs")], // Template theme
   theme: {

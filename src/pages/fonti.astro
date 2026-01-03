@@ -242,11 +242,8 @@ const fontiCategorie: Category[] = [
                                     <div class='source-card bg-neutral-800 border border-white/10 rounded-2xl p-6 space-y-3'>
                                         <h3 class='text-xl font-bold text-white'>
                                             {isWebSource ? (
-                                                <a href={(source as WebSource).url} target='_blank' rel='noopener noreferrer' class='source-link flex items-center gap-2'>
+                                                <a href={(source as WebSource).url} target='_blank' rel='noopener noreferrer' class='source-link'>
                                                     {source.title}
-                                                    <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                                                        <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'></path>
-                                                    </svg>
                                                 </a>
                                             ) : (
                                                 <span class='text-white'>{source.title}</span>

@@ -8,8 +8,8 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 const categories = [
   {
     title: "Gli Oggetti del Museo",
-    href: `${baseUrl}/objects`,
-    image: `${baseUrl}/bg-oggetti.png`,
+    href: `./objects`,
+    image: `./bg-oggetti.png`,
     subtitle: "La Storia",
     sectionNumber: "01",
     description: "Strumenti autentici che raccontano secoli di tradizione salinara e il mestiere antico della raccolta del sale.",
@@ -17,8 +17,8 @@ const categories = [
   },
   {
     title: "Le Specie delle Saline",
-    href: `${baseUrl}/species`,
-    image: `${baseUrl}/bg-specie.jpg`,
+    href: `./species`,
+    image: `./bg-specie.jpg`,
     subtitle: "La Fauna",
     sectionNumber: "02",
     description: "Un ecosistema unico dove convivono fenicotteri, aironi e una ricca vegetazione adattata all'acqua salata.",
@@ -26,7 +26,7 @@ const categories = [
   },
   {
     title: "Nidificazioni dal vivo",
-    image: `${baseUrl}/bg-live.jpg`,
+    image: `./bg-live.jpg`,
     subtitle: "Camera live",
     sectionNumber: "03",
     description: "Osserva in diretta le nidificazioni nelle saline attraverso le nostre telecamere.",
@@ -38,7 +38,7 @@ const categories = [
 <Layout title='Home | SEI Museum'>
   <main class='flex overflow-hidden flex-col justify-between items-center py-16 w-full h-screen bg-neutral-900'>
     <div class='flex flex-col items-center'>
-      <img src={`${baseUrl}/sei_logo.svg`} alt='Logo SEI Museum' class='w-32 h-auto' />
+      <img src={`./sei_logo.svg`} alt='Logo SEI Museum' class='w-32 h-auto' />
     </div>
 
     <div class='flex flex-row gap-12 items-stretch mx-auto'>
@@ -53,7 +53,7 @@ const categories = [
 
     <!-- Bottone Credits -->
 
-    <a href={`${baseUrl}/credits`} class='px-8 py-4 text-lg font-bold tracking-wide text-black uppercase bg-white rounded-full transition-all duration-300 hover:bg-white/90 hover:-translate-y-1 hover:shadow-2xl'> Credits </a>
+    <a href={`./credits`} class='px-8 py-4 text-lg font-bold tracking-wide text-black uppercase bg-white rounded-full transition-all duration-300 hover:bg-white/90 hover:-translate-y-1 hover:shadow-2xl'> Credits </a>
   </main>
 </Layout>
 

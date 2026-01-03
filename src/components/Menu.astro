@@ -35,14 +35,14 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
         <p class='text-white font-bold'>HOME</p>
       </a>
     ) : variant === "flora" ? (
-      /* Variante FLORA - Torna a species */ <a href={`${baseUrl}/species`} class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 transition-all duration-300'>
+      /* Variante FLORA - Torna a species */ <a href={`./species`} class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 transition-all duration-300'>
         <svg class='w-12 h-12 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
           <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 19l-7-7m0 0l7-7m-7 7h18' />
         </svg>
         <p class='text-white font-bold uppercase'>BACK</p>
       </a>
     ) : (
-      /* Variante BACK */ <a href={`${baseUrl}/objects`} class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 transition-all duration-300 bg-transparent border-none cursor-pointer'>
+      /* Variante BACK */ <a href={`./objects`} class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 transition-all duration-300 bg-transparent border-none cursor-pointer'>
         <svg class='w-12 h-12 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
           <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 19l-7-7m0 0l7-7m-7 7h18' />
         </svg>

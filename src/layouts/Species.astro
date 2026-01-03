@@ -263,7 +263,7 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
             {
               galleryImages.map((img: string, index: number) => (
                 <div class='carousel-item aspect-video bg-neutral-800' data-image-index={index}>
-                  <img src={img} class='w-full h-full object-cover' alt={`Slide ${index}`} />
+                  <img src={img} class='w-full h-full object-cover' alt={`Slide ${index}`} loading='lazy' decoding='async' />
                 </div>
               ))
             }

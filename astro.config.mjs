@@ -1,6 +1,5 @@
 import { defineConfig } from 'astro/config';
 import tailwind from "@astrojs/tailwind";
-
 import mdx from "@astrojs/mdx";
 
 // https://astro.build/config
@@ -10,7 +9,23 @@ export default defineConfig({
   base: "/sei-museum",
   output: "static",
   build: {
-    // Example: Generate `page.html` instead of `page/index.html` during build.
-    format: "preserve"
+    format: "preserve",
+    inlineStylesheets: "auto"
+  },
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: "viewport"
+  },
+  compressHTML: true,
+  vite: {
+    build: {
+      cssMinify: true,
+      minify: "esbuild",
+      rollupOptions: {
+        output: {
+          manualChunks: undefined
+        }
+      }
+    }
   }
 });

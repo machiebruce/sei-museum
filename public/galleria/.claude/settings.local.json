@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(/usr/bin/sips:*)",
+      "Bash(for:*)",
+      "Bash(do [ -f \"$f\" ])",
+      "Bash(done)"
+    ]
+  }
+}

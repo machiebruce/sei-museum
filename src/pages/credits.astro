@@ -5,9 +5,7 @@ import Menu from "../components/Menu.astro";
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 const fotografi = [
-  {nome: "Marco Valentini"},
-  {nome: "Sara Monteleone"},
-  {nome: "Giuseppe Giordano"},
+  {nome: ""},
   // Aggiungi qui i nomi dei fotografi reali
 ];
 ---
@@ -47,15 +45,15 @@ const fotografi = [
         <div class='w-full h-px bg-white/10 mb-16'></div>
 
         <!-- Immagini -->
-        <section class='mb-16'>
+        <!-- <section class='mb-16'>
           <h2 class='text-2xl font-bold text-white mb-6'>Immagini</h2>
           <div class='text-white text-lg leading-relaxed space-y-2'>
             {fotografi.map((fotografo) => <p>{fotografo.nome}</p>)}
           </div>
-        </section>
+        </section> -->
 
         <!-- Divider -->
-        <div class='w-full h-px bg-white/10 mb-16'></div>
+        <!-- <div class='w-full h-px bg-white/10 mb-16'></div> -->
 
         <!-- Realizzato grazie al PNRR -->
         <section class='mb-16'>

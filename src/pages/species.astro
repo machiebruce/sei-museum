@@ -6,31 +6,26 @@ import CardSpecie from "../components/CardSpecie.astro";
 const objects = await Astro.glob("../pages/species/*.mdx");
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 
-// Estrai le famiglie uniche
-const families = new Set<string>();
-const familyIconMap = new Map<string, string>();
+// Estrai gli ordini unici
+const orders = new Set<string>();
+const orderIconMap = new Map<string, string>();
 
 objects.forEach((obj) => {
-  if (obj.frontmatter.family) {
-    families.add(obj.frontmatter.family);
-    if (obj.frontmatter["family-icon"]) {
-      familyIconMap.set(obj.frontmatter.family, obj.frontmatter["family-icon"]);
+  if (obj.frontmatter.order) {
+    orders.add(obj.frontmatter.order);
+    if (obj.frontmatter["order-icon"]) {
+      orderIconMap.set(obj.frontmatter.order, obj.frontmatter["order-icon"]);
     }
   }
 });
 
-const uniqueFamilies = Array.from(families).sort();
+const uniqueOrders = Array.from(orders).sort();
 ---
 
-<style>
-  /* Inversione icona SVG */
-  .filter-tab.active .filter-tab-icon:not(.material-icons) {
-    filter: invert(1);
-  }
-</style>
+
 
 <Layout title='Saline Ettore Infersa'>
-  <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet' />
+
 
   <main class='flex flex-col h-screen overflow-hidden relative'>
     <div class='flex flex-row flex-1 overflow-hidden'>
@@ -40,11 +35,11 @@ const uniqueFamilies = Array.from(families).sort();
         <!-- Toggle Buttons -->
         <div class='absolute top-6 right-6 z-50 flex items-center gap-4'>
           <a href={`${baseUrl}/species`} class='border border-white flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
-            <span class='material-icons'>view_column</span>
+            <img src='/sei-museum/icons/view_column.svg' alt='view_column' class='w-6 h-6 invert' />
           </a>
 
           <a href={`${baseUrl}/species-map`} class='flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
-            <span class='material-icons'>image_search</span>
+            <img src='/sei-museum/icons/image_search.svg' alt='image_search' class='w-6 h-6 invert' />
           </a>
         </div>
 
@@ -52,7 +47,7 @@ const uniqueFamilies = Array.from(families).sort();
         <div class='snap-x flex-1 flex items-center justify-start gap-16 overflow-x-scroll scroll-pr-72 no-scrollbar'>
           {
             objects.map((object) => (
-              <div class='species-card flex-shrink-0 flex-grow-0' data-family={object.frontmatter.family || "undefined"}>
+              <div class='species-card flex-shrink-0 flex-grow-0' data-order={object.frontmatter.order || "undefined"}>
                 <CardSpecie sectionNumber={object.frontmatter.sectionNumber} title={object.frontmatter.title} href={object.frontmatter.link} image={object.frontmatter.image} IsFauna={object.frontmatter.IsFauna} />
               </div>
             ))
@@ -64,14 +59,14 @@ const uniqueFamilies = Array.from(families).sort();
         <div class='px-8 pt-4 pb-8'>
           <p class='text-white text-2xl font-bold mb-4'>Filtri / Filter</p>
           <div class='flex flex-wrap items-center gap-3'>
-            <button class='filter-tab active h-16 px-6 bg-white border-white rounded-full text-black font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2' data-family='all'> Tutte </button>
+            <button class='filter-tab active h-16 px-6 bg-white border-white rounded-full text-black font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2' data-order='all'> Tutte </button>
             {
-              uniqueFamilies.map((family) => {
-                const icon = familyIconMap.get(family);
+              uniqueOrders.map((order) => {
+                const icon = orderIconMap.get(order);
                 return (
-                  <button class='filter-tab h-16 px-6 bg-white/10 border border-white/20 rounded-full text-white font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2' data-family={family}>
-                    {icon ? <img src={icon} alt={family} class='filter-tab-icon w-10 h-10 flex-shrink-0' /> : <span class='material-icons filter-tab-icon w-10 h-10 text-[28px] leading-none flex items-center justify-center'>category</span>}
-                    {family}
+                  <button class='filter-tab h-16 px-6 bg-white/10 border border-white/20 rounded-full text-white font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2' data-order={order}>
+                    <img src={icon || '/sei-museum/icons/category.svg'} alt={order} class='filter-tab-icon w-7 h-7 flex-shrink-0' />
+                    {order}
                   </button>
                 );
               })
@@ -87,16 +82,16 @@ const uniqueFamilies = Array.from(families).sort();
       const filterTabs = document.querySelectorAll(".filter-tab");
       const speciesCards = document.querySelectorAll(".species-card");
 
-      // Cache dei risultati per famiglia
-      const familyCache = new Map();
+      // Cache dei risultati per ordine
+      const orderCache = new Map();
 
-      // Pre-calcola quali card appartengono a quale famiglia
+      // Pre-calcola quali card appartengono a quale ordine
       speciesCards.forEach((card) => {
-        const family = card.getAttribute("data-family");
-        if (!familyCache.has(family)) {
-          familyCache.set(family, []);
+        const order = card.getAttribute("data-order");
+        if (!orderCache.has(order)) {
+          orderCache.set(order, []);
         }
-        familyCache.get(family).push(card);
+        orderCache.get(order).push(card);
       });
 
       function updateFirstVisibleMargin() {
@@ -115,29 +110,29 @@ const uniqueFamilies = Array.from(families).sort();
 
       filterTabs.forEach((tab) => {
         tab.addEventListener("click", function () {
-          const selectedFamily = this.getAttribute("data-family");
+          const selectedOrder = this.getAttribute("data-order");
 
           // Aggiorna stato attivo
           filterTabs.forEach((t) => {
             if (t === this) {
               t.className = "filter-tab active h-16 px-6 bg-white border-white rounded-full text-black font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2";
-              const icon = t.querySelector(".material-icons");
-              if (icon) icon.classList.add("text-black");
+              const icon = t.querySelector("img");
+              if (icon) icon.style.filter = "invert(1)";
             } else {
               t.className = "filter-tab h-16 px-6 bg-white/10 border border-white/20 rounded-full text-white font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2";
-              const icon = t.querySelector(".material-icons");
-              if (icon) icon.classList.remove("text-black");
+              const icon = t.querySelector("img");
+              if (icon) icon.style.filter = "invert(0)";
             }
           });
 
           // Filtraggio ottimizzato
-          if (selectedFamily === "all") {
+          if (selectedOrder === "all") {
             speciesCards.forEach((card) => {
               card.style.display = "";
             });
           } else {
             speciesCards.forEach((card) => {
-              card.style.display = card.getAttribute("data-family") === selectedFamily ? "" : "none";
+              card.style.display = card.getAttribute("data-order") === selectedOrder ? "" : "none";
             });
           }
 

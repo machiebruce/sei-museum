@@ -207,8 +207,7 @@ const fontiCategorie: Category[] = [
 </style>
 
 <Layout title="Fonti e Risorse">
-    <!-- Material Icons -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 
     <main class='flex flex-row h-screen overflow-hidden bg-neutral-900'>
         <Menu HasSectionNumber={false} variant='flora' title='Fonti e Risorse' />
@@ -231,7 +230,7 @@ const fontiCategorie: Category[] = [
                     <div class='space-y-6'>
                         <!-- Titolo Categoria -->
                         <div class='flex items-center gap-4 border-b border-white/10 pb-4'>
-                            <span class='material-icons category-icon'>{categoria.icon}</span>
+                            <img src={`/sei-museum/icons/${categoria.icon}.svg`} alt={categoria.title} class='category-icon w-8 h-8 invert' />
                             <h2 class='text-3xl font-bold text-white'>{categoria.title}</h2>
                         </div>
 
@@ -289,7 +288,7 @@ const fontiCategorie: Category[] = [
                         Tutti i contenuti sono aggiornati regolarmente per garantire accuratezza scientifica.
                     </p>
                     <p class='text-white/40 text-xs'>
-                        Ultimo aggiornamento: Dicembre 2024
+                        Ultimo aggiornamento: Gennaio 2026
                     </p>
                 </div>
             </div>

@@ -26,15 +26,15 @@ if (galleryImages.length === 0) {
   galleryImages = ["https://placehold.co/800x450/262626/ffffff?text=Immagine+non+trovata"];
 }
 
-// --- LOGICA NAVIGAZIONE AUTOMATICA (SOLO STESSA FAMIGLIA) ---
+// --- LOGICA NAVIGAZIONE AUTOMATICA (SOLO STESSO ORDINE) ---
 const allSpecies = await Astro.glob("../pages/species/*.mdx");
 
-// Filtra solo le specie della stessa famiglia
-const currentFamily = frontmatter.family;
-const sameFamilySpecies = allSpecies.filter((species) => species.frontmatter.family === currentFamily);
+// Filtra solo le specie dello stesso ordine
+const currentOrder = frontmatter.order;
+const sameOrderSpecies = allSpecies.filter((species) => species.frontmatter.order === currentOrder);
 
 // Ordina per sectionNumber
-const sortedSpecies = sameFamilySpecies.sort((a, b) => {
+const sortedSpecies = sameOrderSpecies.sort((a, b) => {
   const numA = Number(a.frontmatter.sectionNumber) || 999;
   const numB = Number(b.frontmatter.sectionNumber) || 999;
   return numA - numB;
@@ -100,13 +100,16 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
 
   .carousel-container {
     display: flex;
+    flex-wrap: nowrap;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
+    width: 100%;
   }
   .carousel-item {
     flex: 0 0 100%;
+    min-width: 100%;
     scroll-snap-align: start;
     cursor: pointer;
   }
@@ -240,8 +243,7 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
 </style>
 
 <Layout title={frontmatter.title}>
-  <!-- Material Icons -->
-  <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet' />
+
 
   <main class='flex flex-row h-screen overflow-hidden bg-neutral-900'>
     <Menu HasSectionNumber={false} variant='flora' title={frontmatter.title || "Specie"} />
@@ -251,7 +253,8 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
         <div class='text-white space-y-2'>
           <h1 class='text-4xl font-bold text-white'>{frontmatter.title}</h1>
           {frontmatter.scientificName && <p class='text-2xl font-light italic text-white/60'>{frontmatter.scientificName}</p>}
-          {frontmatter.family && <p class='text-lg font-bold italic text-white/60'>{frontmatter.family}</p>}
+          {frontmatter.order && <p class='text-lg font-bold italic text-white/60'>{frontmatter.order}</p>}
+          {frontmatter.family && <p class='text-md font-light italic text-white/40'>{frontmatter.family}</p>}
         </div>
 
         <!-- Carousel Galleria -->
@@ -291,7 +294,7 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
 
       <div class='flex flex-col overflow-visible'>
         <div id='species-sections-container' class='flex flex-col gap-6 overflow-visible py-[72px] force-white'>
-          <div id='species-full-content' style='display: none;'>
+          <div id='species-full-content' class='hidden'>
             <slot />
           </div>
         </div>
@@ -305,13 +308,13 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
           <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 18L18 6M6 6l12 12'></path>
         </svg>
       </button>
-      <button id='modal-prev' class='modal-nav-button' style='left: 2rem;'>
+      <button id='modal-prev' class='modal-nav-button left-8'>
         <svg class='w-8 h-8' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
           <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 19l-7-7 7-7'></path>
         </svg>
       </button>
       <img id='modal-image' class='modal-image' src='' alt='Fullscreen image' />
-      <button id='modal-next' class='modal-nav-button' style='right: 2rem;'>
+      <button id='modal-next' class='modal-nav-button right-8'>
         <svg class='w-8 h-8' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
           <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M9 5l7 7-7 7'></path>
         </svg>
@@ -426,79 +429,80 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
         const linkDiv = document.createElement("a");
         linkDiv.href = `${baseUrl}/fonti`;
         linkDiv.className = "section-link bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden";
-        linkDiv.innerHTML = `
-          <div class="w-full text-left p-6 text-white hover:bg-black/50 transition-colors flex items-center justify-between">
-            <div class="flex items-center">
-              <span class="material-icons accordion-section-icon">menu_book</span>
-              <h3 class="text-lg font-bold text-white">Fonti e Risorse per Approfondire</h3>
-            </div>
-            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path d="M9 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg>
-          </div>`;
-        container.appendChild(linkDiv);
-      }
-
-      // Estrazione sezioni dal Markdown
-      function extractSections() {
-        const fullContentDiv = document.getElementById("species-full-content");
-        const container = document.getElementById("species-sections-container");
-        const descContainer = document.getElementById("species-description");
-        if (!fullContentDiv || !container) return;
-
-        // Estrai il primo paragrafo per la descrizione
-        const firstP = fullContentDiv.querySelector("p");
-        if (firstP && descContainer) descContainer.innerHTML = firstP.outerHTML;
-
-        // Cerca le sezioni h4
-        const headings = fullContentDiv.querySelectorAll("h4");
-        const sections = [];
-
-        headings.forEach((heading) => {
-          const headingText = heading.textContent.trim().replace(/\*\*/g, "").trim();
-          let content = "";
-          let nextElement = heading.nextElementSibling;
-
-          while (nextElement && !nextElement.matches("h4")) {
-            content += nextElement.outerHTML;
-            nextElement = nextElement.nextElementSibling;
-          }
-
-          if (content.trim()) {
-            sections.push({title: headingText, content: content.trim()});
-          }
-        });
-
-        // Crea gli accordion per le sezioni
-        sections.forEach((section, index) => {
-          const lowerTitle = section.title.toLowerCase();
-          const isFonti = lowerTitle.includes("fonti");
-          const isCredits = lowerTitle.includes("credit") || lowerTitle.includes("fotograf");
-
-          if (!isFonti) {
-            // Accordion normale
-            const accordionId = `accordion-${index}`;
-            const icon = getIconForSection(section.title);
-
-            const accordionDiv = document.createElement("div");
-            accordionDiv.className = "bg-neutral-900 border border-white/10 rounded-2xl transition-all duration-300 overflow-hidden";
-            accordionDiv.innerHTML = `
-              <button class="accordion-button w-full text-left p-6 text-white hover:bg-black/50 transition-colors flex items-center justify-between" data-accordion-id="${accordionId}">
-                <div class="flex items-center">
-                  <span class="material-icons accordion-section-icon">${icon}</span>
-                  <h3 class="text-lg font-bold text-white">${section.title}</h3>
-                </div>
-                <svg class="accordion-icon w-5 h-5 transition-transform duration-300 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                </svg>
-              </button>
-              <div class="accordion-content hidden p-6 pt-0 prose prose-invert max-w-none text-white force-white ${isCredits ? "content-compact" : ""}" id="${accordionId}">
-                ${section.content}
-              </div>`;
-            container.appendChild(accordionDiv);
-          }
-        });
-
+        linkDiv.innerHTML =
+          `<div class="w-full text-left p-6 text-white hover:bg-black/50 transition-colors flex items-center justify-between">` +
+          `  <div class="flex items-center">` +
+          `    <img src="${baseUrl}/icons/menu_book.svg" class="accordion-section-icon" style="width: 24px; height: 24px; filter: invert(1);" />` +
+          `    <h3 class="text-lg font-bold text-white">Fonti e Risorse per Approfondire</h3>` +
+          `  </div>` +
+          `  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">` +
+          `    <path d="M9 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>` +
+          `  </svg>` +
+          `</div>`;
+                  container.appendChild(linkDiv);
+                }
+          
+                // Estrazione sezioni dal Markdown
+                function extractSections() {
+                  const fullContentDiv = document.getElementById("species-full-content");
+                  const container = document.getElementById("species-sections-container");
+                  const descContainer = document.getElementById("species-description");
+                  if (!fullContentDiv || !container) return;
+          
+                  // Estrai il primo paragrafo per la descrizione
+                  const firstP = fullContentDiv.querySelector("p");
+                  if (firstP && descContainer) descContainer.innerHTML = firstP.outerHTML;
+          
+                  // Cerca le sezioni h4
+                  const headings = fullContentDiv.querySelectorAll("h4");
+                  const sections = [];
+          
+                  headings.forEach((heading) => {
+                    const headingText = heading.textContent.trim().replace(/\*\*/g, "").trim();
+                    let content = "";
+                    let nextElement = heading.nextElementSibling;
+          
+                    while (nextElement && !nextElement.matches("h4")) {
+                      content += nextElement.outerHTML;
+                      nextElement = nextElement.nextElementSibling;
+                    }
+          
+                    if (content.trim()) {
+                      sections.push({ title: headingText, content: content.trim() });
+                    }
+                  });
+          
+                  // Crea gli accordion per le sezioni
+                  sections.forEach((section, index) => {
+                    const lowerTitle = section.title.toLowerCase();
+                    const isFonti = lowerTitle.includes("fonti");
+                    const isCredits = lowerTitle.includes("credit") || lowerTitle.includes("fotograf");
+          
+                    if (!isFonti) {
+                      // Accordion normale
+                      const accordionId = `accordion-${index}`;
+                      const icon = getIconForSection(section.title);
+          
+                      const accordionDiv = document.createElement("div");
+                      accordionDiv.className = "bg-neutral-900 border border-white/10 rounded-2xl transition-all duration-300 overflow-hidden";
+                      accordionDiv.innerHTML =
+                        `<button class="accordion-button w-full text-left p-6 text-white hover:bg-black/50 transition-colors flex items-center justify-between" data-accordion-id="${accordionId}">` +
+                        `  <div class="flex items-center">` +
+                        `    <img src="${baseUrl}/icons/${icon}.svg" class="accordion-section-icon" style="width: 24px; height: 24px; filter: invert(1);" />` +
+                        `    <h3 class="text-lg font-bold text-white">${section.title}</h3>` +
+                        `  </div>` +
+                        `  <svg class="accordion-icon w-5 h-5 transition-transform duration-300 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">` +
+                        `    <path d="M19 9l-7 7-7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>` +
+                        `  </svg>` +
+                        `</button>` +
+                        `<div class="accordion-content hidden p-6 pt-0 prose prose-invert max-w-none text-white force-white ${
+                          isCredits ? "content-compact" : ""
+                        }" id="${accordionId}">` +
+                        `  ${section.content}` +
+                        `</div>`;
+                      container.appendChild(accordionDiv);
+                    }
+                  });
         // Aggiungi sempre il link a Fonti e Risorse alla fine
         createFontiLink(container);
 

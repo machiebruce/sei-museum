@@ -39,12 +39,12 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 
     <!-- Toggle Buttons -->
     <div class='absolute top-6 right-6 z-50 flex items-center gap-4'>
-      <a href={`${baseUrl}/species`} class='view-toggle-btn flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline border border-white/20'>
-        <img src='/sei-museum/icons/view_column.svg' alt='view_column' class='w-6 h-6 invert' />
+      <a href={`./species`} class='view-toggle-btn flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline border border-white/20'>
+        <img src='./icons/view_column.svg' alt='view_column' class='w-6 h-6 invert' />
       </a>
 
-      <a href={`${baseUrl}/species-map`} class='active view-toggle-btn border border-white flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
-        <img src='/sei-museum/icons/image_search.svg' alt='image_search' class='w-6 h-6 invert' />
+      <a href={`./species-map`} class='active view-toggle-btn border border-white flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
+        <img src='./icons/image_search.svg' alt='image_search' class='w-6 h-6 invert' />
       </a>
     </div>
 
@@ -52,11 +52,11 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
     <div class='flex-1 overflow-auto p-16 flex items-center justify-center'>
       <div class='text-center'>
         <div class='mb-8'>
-          <img src='/sei-museum/icons/map.svg' alt='map' class='w-[120px] h-[120px] invert mx-auto' />
+          <img src='./icons/map.svg' alt='map' class='w-[120px] h-[120px] invert mx-auto' />
         </div>
         <h1 class='text-6xl font-bold text-white mb-4'>Coming Soon</h1>
         <p class='text-2xl text-white/60 mb-8'>La mappa interattiva delle specie sarà presto disponibile</p>
-        <a href={`${baseUrl}/species`} class='inline-block px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-white/90 transition-all duration-300 hover:-translate-y-1'> Torna alla Lista Specie </a>
+        <a href={`./species`} class='inline-block px-8 py-4 bg-white text-black font-bold rounded-full hover:bg-white/90 transition-all duration-300 hover:-translate-y-1'> Torna alla Lista Specie </a>
       </div>
     </div>
   </main>

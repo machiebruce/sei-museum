@@ -19,7 +19,7 @@ if (fs.existsSync(galleryDir)) {
   galleryImages = fs
     .readdirSync(galleryDir)
     .filter((file: string) => /\.(jpg|jpeg|png|webp|avif|svg|jog|JPG|JPEG)$/i.test(file))
-    .map((file: string) => `${baseUrl}/galleria/${cleanSlug}/${file}`);
+    .map((file: string) => `../galleria/${cleanSlug}/${file}`);
 }
 
 if (galleryImages.length === 0) {
@@ -285,10 +285,10 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
 
         <!-- Page Controls -->
         <div class='flex gap-4 w-full'>
-          {frontmatter.videoLink && <Buttons hasIconLeft={true} srcIcon='/sei-museum/monitorPlay.svg' label='Video' link={frontmatter.videoLink} />}
+          {frontmatter.videoLink && <Buttons hasIconLeft={true} srcIcon='/monitorPlay.svg' label='Video' link={frontmatter.videoLink} />}
           <span class='flex-1'></span>
-          {prevSection && <Buttons hasIconLeft={true} srcIcon='/sei-museum/arrowLeft.svg' label='' link={prevSection} />}
-          {nextSection && <Buttons hasIconRight={true} srcIcon='/sei-museum/arrowRight.svg' label='Prossimo contenuto' link={nextSection} />}
+          {prevSection && <Buttons hasIconLeft={true} srcIcon='/arrowLeft.svg' label='' link={prevSection} />}
+          {nextSection && <Buttons hasIconRight={true} srcIcon='/arrowRight.svg' label='Prossimo contenuto' link={nextSection} />}
         </div>
       </div>
 
@@ -427,12 +427,12 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
       // Funzione per creare il link Fonti
       function createFontiLink(container) {
         const linkDiv = document.createElement("a");
-        linkDiv.href = `${baseUrl}/fonti`;
+        linkDiv.href = `./fonti`;
         linkDiv.className = "section-link bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden";
         linkDiv.innerHTML =
           `<div class="w-full text-left p-6 text-white hover:bg-black/50 transition-colors flex items-center justify-between">` +
           `  <div class="flex items-center">` +
-          `    <img src="${baseUrl}/icons/menu_book.svg" class="accordion-section-icon" style="width: 24px; height: 24px; filter: invert(1);" />` +
+          `    <img src="./icons/menu_book.svg" class="accordion-section-icon" style="width: 24px; height: 24px; filter: invert(1);" />` +
           `    <h3 class="text-lg font-bold text-white">Fonti e Risorse per Approfondire</h3>` +
           `  </div>` +
           `  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">` +
@@ -488,7 +488,7 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
                       accordionDiv.innerHTML =
                         `<button class="accordion-button w-full text-left p-6 text-white hover:bg-black/50 transition-colors flex items-center justify-between" data-accordion-id="${accordionId}">` +
                         `  <div class="flex items-center">` +
-                        `    <img src="${baseUrl}/icons/${icon}.svg" class="accordion-section-icon" style="width: 24px; height: 24px; filter: invert(1);" />` +
+                        `    <img src="./icons/${icon}.svg" class="accordion-section-icon" style="width: 24px; height: 24px; filter: invert(1);" />` +
                         `    <h3 class="text-lg font-bold text-white">${section.title}</h3>` +
                         `  </div>` +
                         `  <svg class="accordion-icon w-5 h-5 transition-transform duration-300 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">` +

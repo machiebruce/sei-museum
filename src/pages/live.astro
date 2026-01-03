@@ -13,8 +13,8 @@ const youtubeLiveId = "jfKfPfyJRdk"; // Sostituisci con il tuo ID video live
 const categories = [
   {
     title: "Gli Oggetti del Museo",
-    href: `${baseUrl}/objects`,
-    image: `${baseUrl}/bg-oggetti.png`,
+    href: `./objects`,
+    image: `./bg-oggetti.png`,
     subtitle: "La Storia",
     sectionNumber: "01",
     description: "Strumenti autentici che raccontano secoli di tradizione salinara e il mestiere antico della raccolta del sale.",
@@ -22,8 +22,8 @@ const categories = [
   },
   {
     title: "Le Specie delle Saline",
-    href: `${baseUrl}/species`,
-    image: `${baseUrl}/bg-specie.jpg`,
+    href: `./species`,
+    image: `./bg-specie.jpg`,
     subtitle: "La Fauna",
     sectionNumber: "02",
     description: "Un ecosistema unico dove convivono fenicotteri, aironi e una ricca vegetazione adattata all'acqua salata.",
@@ -31,8 +31,8 @@ const categories = [
   },
   {
     title: "Nidificazioni dal vivo",
-    href: `${baseUrl}/live`,
-    image: `${baseUrl}/bg-live.jpg`,
+    href: `./live`,
+    image: `./bg-live.jpg`,
     subtitle: "Camera live",
     sectionNumber: "03",
     description: "Un ecosistema unico dove convivono fenicotteri, aironi e una ricca vegetazione adattata all'acqua salata.",
@@ -44,8 +44,8 @@ const categories = [
 <Layout title='Live Stream | SEI Museum'>
   <main class='flex overflow-hidden flex-col justify-center items-center p-8 w-full h-screen bg-neutral-900'>
     <div class='flex flex-col items-center mb-8'>
-      <a href={`${baseUrl}/`}>
-        <img src={`${baseUrl}/sei_logo.svg`} alt='Logo SEI Museum' class='mb-4 w-32 h-auto' />
+      <a href={`./`}>
+        <img src={`./sei_logo.svg`} alt='Logo SEI Museum' class='mb-4 w-32 h-auto' />
       </a>
       <h1 class='mb-2 text-4xl font-bold text-white'>Nidificazioni dal vivo</h1>
       <p class='text-xl text-white/60'>Live streaming dalle Saline Ettore Infersa</p>
@@ -58,7 +58,7 @@ const categories = [
 
     <!-- Pulsante torna indietro -->
 
-    <a href={`${baseUrl}/`}
+    <a href={`./`}
     class='px-8 py-4 mt-8 font-bold text-black bg-white rounded-full transition-all duration-300 hover:bg-white/90 hover:-translate-y-1' > Torna alla Home </a>
   </main>
 </Layout>

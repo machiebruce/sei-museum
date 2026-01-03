@@ -5,27 +5,19 @@ import mdx from "@astrojs/mdx";
 // https://astro.build/config
 export default defineConfig({
   integrations: [tailwind(), mdx()],
-  site: "https://machiebruce.github.io",
-  base: "/sei-museum",
   output: "static",
+  base: "./",
   build: {
-    format: "preserve",
-    inlineStylesheets: "auto"
-  },
-  prefetch: {
-    prefetchAll: true,
-    defaultStrategy: "viewport"
+    format: "file",
+    inlineStylesheets: "always",
+    assets: "_assets"
   },
   compressHTML: true,
   vite: {
     build: {
       cssMinify: true,
       minify: "esbuild",
-      rollupOptions: {
-        output: {
-          manualChunks: undefined
-        }
-      }
+      assetsInlineLimit: 4096
     }
   }
 });

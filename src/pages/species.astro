@@ -34,12 +34,12 @@ const uniqueOrders = Array.from(orders).sort();
       <div class='flex flex-col flex-1 overflow-hidden'>
         <!-- Toggle Buttons -->
         <div class='absolute top-6 right-6 z-50 flex items-center gap-4'>
-          <a href={`${baseUrl}/species`} class='border border-white flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
-            <img src='/sei-museum/icons/view_column.svg' alt='view_column' class='w-6 h-6 invert' />
+          <a href={`./species`} class='border border-white flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
+            <img src='./icons/view_column.svg' alt='view_column' class='w-6 h-6 invert' />
           </a>
 
-          <a href={`${baseUrl}/species-map`} class='flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
-            <img src='/sei-museum/icons/image_search.svg' alt='image_search' class='w-6 h-6 invert' />
+          <a href={`./species-map`} class='flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
+            <img src='./icons/image_search.svg' alt='image_search' class='w-6 h-6 invert' />
           </a>
         </div>
 
@@ -65,7 +65,7 @@ const uniqueOrders = Array.from(orders).sort();
                 const icon = orderIconMap.get(order);
                 return (
                   <button class='filter-tab h-16 px-6 bg-white/10 border border-white/20 rounded-full text-white font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2' data-order={order}>
-                    <img src={icon || '/sei-museum/icons/category.svg'} alt={order} class='filter-tab-icon w-7 h-7 flex-shrink-0' />
+                    <img src={icon || '/icons/category.svg'} alt={order} class='filter-tab-icon w-7 h-7 flex-shrink-0' />
                     {order}
                   </button>
                 );

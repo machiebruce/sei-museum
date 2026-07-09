@@ -96,31 +96,38 @@ const totalOrders = speciesByOrder.size;
 <script>
   import { animate, stagger } from 'animejs';
 
-  document.addEventListener("astro:page-load", () => {
-    const dataEl = document.getElementById('map-data');
-    const speciesData = JSON.parse(dataEl.dataset.species);
-    const ordersList = JSON.parse(dataEl.dataset.orders);
+  interface SpecieData {
+    link: string;
+    image: string;
+    title: string;
+    scientificName?: string;
+  }
 
-    const ordersGrid = document.getElementById('orders-grid');
-    const ordersView = document.getElementById('orders-view');
-    const speciesView = document.getElementById('species-view');
-    const speciesGrid = document.getElementById('species-grid');
-    const selectedPill = document.getElementById('selected-pill');
-    const backBtn = document.getElementById('back-btn');
+  document.addEventListener("astro:page-load", () => {
+    const dataEl = document.getElementById('map-data')!;
+    const speciesData: Record<string, SpecieData[]> = JSON.parse(dataEl.dataset.species!);
+    const ordersList: string[] = JSON.parse(dataEl.dataset.orders!);
+
+    const ordersGrid = document.getElementById('orders-grid')!;
+    const ordersView = document.getElementById('orders-view')!;
+    const speciesView = document.getElementById('species-view')!;
+    const speciesGrid = document.getElementById('species-grid')!;
+    const selectedPill = document.getElementById('selected-pill')!;
+    const backBtn = document.getElementById('back-btn')!;
 
     function showOrdersView() {
       animate(speciesView, { opacity: [1, 0], duration: 200, easing: 'easeOutExpo', begin: () => speciesView.classList.add('pointer-events-none') });
       animate(ordersView, { opacity: [0, 1], duration: 400, delay: 200, easing: 'easeOutExpo', begin: () => ordersView.classList.remove('pointer-events-none') });
     }
 
-    function showSpeciesView(order) {
+    function showSpeciesView(order: string) {
       const species = speciesData[order];
       if (!species) return;
 
       selectedPill.innerHTML = `<span class="flex items-center justify-center w-7 h-7 rounded-full bg-black/20 text-black text-xs font-bold">${species.length}</span><span>${order}</span>`;
 
       speciesGrid.innerHTML = '';
-      species.forEach((specie) => {
+      species.forEach((specie: SpecieData) => {
         const a = document.createElement('a');
         a.href = specie.link;
         a.className = 'species-card no-underline flex flex-col items-center gap-3 w-[140px] p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10';
@@ -147,7 +154,7 @@ const totalOrders = speciesByOrder.size;
 
     function renderOrders() {
       ordersGrid.innerHTML = '';
-      ordersList.forEach((order, i) => {
+      ordersList.forEach((order: string) => {
         const species = speciesData[order] || [];
         const btn = document.createElement('button');
         btn.className = 'order-pill flex items-center gap-3 h-12 px-5 bg-white/10 border border-white/10 rounded-full text-white font-semibold text-sm uppercase tracking-wider';

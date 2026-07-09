@@ -93,76 +93,83 @@ const totalOrders = speciesByOrder.size;
 
 <div id='map-data' data-species={speciesJson} data-orders={ordersJson} style='display:none'></div>
 
-<script>
-  import { animate, stagger } from 'animejs';
+  <script>
+    import { animate, stagger } from 'animejs';
 
-  document.addEventListener("astro:page-load", () => {
-    const dataEl = document.getElementById('map-data');
-    const speciesData = JSON.parse(dataEl.dataset.species);
-    const ordersList = JSON.parse(dataEl.dataset.orders);
-
-    const ordersGrid = document.getElementById('orders-grid');
-    const ordersView = document.getElementById('orders-view');
-    const speciesView = document.getElementById('species-view');
-    const speciesGrid = document.getElementById('species-grid');
-    const selectedPill = document.getElementById('selected-pill');
-    const backBtn = document.getElementById('back-btn');
-
-    function showOrdersView() {
-      animate(speciesView, { opacity: [1, 0], duration: 200, easing: 'easeOutExpo', begin: () => speciesView.classList.add('pointer-events-none') });
-      animate(ordersView, { opacity: [0, 1], duration: 400, delay: 200, easing: 'easeOutExpo', begin: () => ordersView.classList.remove('pointer-events-none') });
+    interface SpecieData {
+      link: string;
+      image: string;
+      title: string;
+      scientificName?: string;
     }
 
-    function showSpeciesView(order) {
-      const species = speciesData[order];
-      if (!species) return;
+    document.addEventListener("astro:page-load", () => {
+      const dataEl = document.getElementById('map-data')!;
+      const speciesData: Record<string, SpecieData[]> = JSON.parse(dataEl.dataset.species!);
+      const ordersList: string[] = JSON.parse(dataEl.dataset.orders!);
 
-      selectedPill.innerHTML = `<span class="flex items-center justify-center w-7 h-7 rounded-full bg-black/20 text-black text-xs font-bold">${species.length}</span><span>${order}</span>`;
+      const ordersGrid = document.getElementById('orders-grid')!;
+      const ordersView = document.getElementById('orders-view')!;
+      const speciesView = document.getElementById('species-view')!;
+      const speciesGrid = document.getElementById('species-grid')!;
+      const selectedPill = document.getElementById('selected-pill')!;
+      const backBtn = document.getElementById('back-btn')!;
 
-      speciesGrid.innerHTML = '';
-      species.forEach((specie) => {
-        const a = document.createElement('a');
-        a.href = specie.link;
-        a.className = 'species-card no-underline flex flex-col items-center gap-3 w-[140px] p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10';
-        a.innerHTML = `
-          <div class='species-circle w-24 h-24 rounded-full overflow-hidden border-2 border-white/20 flex-shrink-0'>
-            <img src="${specie.image}" alt="${specie.title}" class='w-full h-full object-cover' loading='lazy' />
-          </div>
-          <span class="text-white text-xs font-bold text-center leading-tight">${specie.title}</span>
-          <span class="text-white/30 text-xs italic text-center">${specie.scientificName || ''}</span>
-        `;
-        a.style.opacity = '0';
-        a.style.transform = 'translateY(15px)';
-        speciesGrid.appendChild(a);
-      });
+      function showOrdersView() {
+        animate(speciesView, { opacity: [1, 0], duration: 200, easing: 'easeOutExpo', begin: () => speciesView.classList.add('pointer-events-none') });
+        animate(ordersView, { opacity: [0, 1], duration: 400, delay: 200, easing: 'easeOutExpo', begin: () => ordersView.classList.remove('pointer-events-none') });
+      }
 
-      animate(ordersView, { opacity: [1, 0], duration: 200, easing: 'easeOutExpo', begin: () => ordersView.classList.add('pointer-events-none') });
+      function showSpeciesView(order: string) {
+        const species = speciesData[order];
+        if (!species) return;
 
-      setTimeout(() => {
-        speciesView.classList.remove('pointer-events-none');
-        animate(speciesView, { opacity: [0, 1], duration: 400, easing: 'easeOutExpo' });
-        animate(speciesGrid.querySelectorAll(':scope > a'), { opacity: [0, 1], translateY: [15, 0], duration: 500, delay: stagger(60), easing: 'easeOutExpo' });
-      }, 250);
-    }
+        selectedPill.innerHTML = `<span class="flex items-center justify-center w-7 h-7 rounded-full bg-black/20 text-black text-xs font-bold">${species.length}</span><span>${order}</span>`;
 
-    function renderOrders() {
-      ordersGrid.innerHTML = '';
-      ordersList.forEach((order, i) => {
-        const species = speciesData[order] || [];
-        const btn = document.createElement('button');
-        btn.className = 'order-pill flex items-center gap-3 h-12 px-5 bg-white/10 border border-white/10 rounded-full text-white font-semibold text-sm uppercase tracking-wider';
-        btn.innerHTML = `<span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/10 text-white text-xs font-bold">${species.length}</span><span>${order}</span>`;
-        btn.addEventListener('click', () => showSpeciesView(order));
-        btn.style.opacity = '0';
-        ordersGrid.appendChild(btn);
-      });
+        speciesGrid.innerHTML = '';
+        species.forEach((specie: SpecieData) => {
+          const a = document.createElement('a');
+          a.href = specie.link;
+          a.className = 'species-card no-underline flex flex-col items-center gap-3 w-[140px] p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10';
+          a.innerHTML = `
+            <div class='species-circle w-24 h-24 rounded-full overflow-hidden border-2 border-white/20 flex-shrink-0'>
+              <img src="${specie.image}" alt="${specie.title}" class='w-full h-full object-cover' loading='lazy' />
+            </div>
+            <span class="text-white text-xs font-bold text-center leading-tight">${specie.title}</span>
+            <span class="text-white/30 text-xs italic text-center">${specie.scientificName || ''}</span>
+          `;
+          a.style.opacity = '0';
+          a.style.transform = 'translateY(15px)';
+          speciesGrid.appendChild(a);
+        });
 
-      requestAnimationFrame(() => {
-        animate(ordersGrid.querySelectorAll('.order-pill'), { opacity: [0, 1], scale: [0.8, 1], duration: 500, delay: stagger(40), easing: 'easeOutExpo' });
-      });
-    }
+        animate(ordersView, { opacity: [1, 0], duration: 200, easing: 'easeOutExpo', begin: () => ordersView.classList.add('pointer-events-none') });
 
-    backBtn.addEventListener('click', showOrdersView);
-    renderOrders();
-  });
-</script>
+        setTimeout(() => {
+          speciesView.classList.remove('pointer-events-none');
+          animate(speciesView, { opacity: [0, 1], duration: 400, easing: 'easeOutExpo' });
+          animate(speciesGrid.querySelectorAll(':scope > a'), { opacity: [0, 1], translateY: [15, 0], duration: 500, delay: stagger(60), easing: 'easeOutExpo' });
+        }, 250);
+      }
+
+      function renderOrders() {
+        ordersGrid.innerHTML = '';
+        ordersList.forEach((order: string) => {
+          const species = speciesData[order] || [];
+          const btn = document.createElement('button');
+          btn.className = 'order-pill flex items-center gap-3 h-12 px-5 bg-white/10 border border-white/10 rounded-full text-white font-semibold text-sm uppercase tracking-wider';
+          btn.innerHTML = `<span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/10 text-white text-xs font-bold">${species.length}</span><span>${order}</span>`;
+          btn.addEventListener('click', () => showSpeciesView(order));
+          btn.style.opacity = '0';
+          ordersGrid.appendChild(btn);
+        });
+
+        requestAnimationFrame(() => {
+          animate(ordersGrid.querySelectorAll('.order-pill'), { opacity: [0, 1], scale: [0.8, 1], duration: 500, delay: stagger(40), easing: 'easeOutExpo' });
+        });
+      }
+
+      backBtn.addEventListener('click', showOrdersView);
+      renderOrders();
+    });
+  </script>

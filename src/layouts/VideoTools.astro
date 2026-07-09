@@ -3,7 +3,7 @@ import Buttons from "../components/Buttons.astro";
 import Layout from "./Main-Layout.astro";
 
 const {frontmatter, url} = Astro.props;
-const isEnglish = url?.includes("/en/");
+const isEnglish = url?.startsWith("/en");
 ---
 
 <Layout title={frontmatter.title}>

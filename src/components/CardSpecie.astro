@@ -11,7 +11,7 @@ interface Props {
 
 const {href = "#", title = "GLI ATTREZZI DELLA SALINA", description = "Lorem ipsum", sectionNumber = "01", image = "/assets/placeholder.jpg", alt = "", IsFauna = true} = Astro.props;
 
-const isEnglish = Astro.url.pathname.includes("/en/");
+const isEnglish = Astro.url.pathname.startsWith("/en");
 const faunaLabel = isEnglish ? "Salt pan fauna" : "Fauna della salina";
 const floraLabel = isEnglish ? "Salt pan flora" : "Flora della salina";
 ---

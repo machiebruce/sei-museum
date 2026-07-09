@@ -76,7 +76,7 @@ const uniqueOrders = Array.from(orders).sort();
   <script>
     import { animate, stagger } from 'animejs';
 
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("astro:page-load", () => {
       const filterTabs: HTMLElement[] = Array.from(document.querySelectorAll(".filter-tab"));
       const speciesCards: HTMLElement[] = Array.from(document.querySelectorAll(".species-card"));
 

@@ -12,7 +12,7 @@ interface Props {
 
 const {href = "#", title = "GLI ATTREZZI DELLA SALINA", description="Lorem ipsum", sectionNumber = "01", image = "/assets/placeholder.jpg", alt = "", HasTools = true, HasDescription = false} = Astro.props;
 
-const isEnglish = Astro.url.pathname.includes("/en/");
+const isEnglish = Astro.url.pathname.startsWith("/en");
 ---
 
 <a href={href} class='bg-neutral-700 rounded-xl w-[400px] snap-start p-4 gap-8 flex flex-col group items-center scroll-ml-16 first-child:pl-16' transition:animate='slide'>

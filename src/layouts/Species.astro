@@ -8,6 +8,8 @@ import path from "node:path";
 const {frontmatter, url} = Astro.props;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 
+const isEnglish = url?.includes("/en/");
+
 // --- LOGICA AUTOMAZIONE GALLERIA ---
 const slug = url ? path.basename(url) : "default";
 const cleanSlug = slug.replace(/\.[^/.]+$/, "");
@@ -288,7 +290,7 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
           {frontmatter.videoLink && <Buttons hasIconLeft={true} srcIcon='/monitorPlay.svg' label='Video' link={frontmatter.videoLink} />}
           <span class='flex-1'></span>
           {prevSection && <Buttons hasIconLeft={true} srcIcon='/arrowLeft.svg' label='' link={prevSection} />}
-          {nextSection && <Buttons hasIconRight={true} srcIcon='/arrowRight.svg' label='Prossimo contenuto' link={nextSection} />}
+          {nextSection && <Buttons hasIconRight={true} srcIcon='/arrowRight.svg' label={isEnglish ? 'Next' : 'Prossimo contenuto'} link={nextSection} />}
         </div>
       </div>
 
@@ -426,14 +428,15 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
 
       // Funzione per creare il link Fonti
       function createFontiLink(container) {
+        const isEn = window.location.pathname.includes("/en/");
         const linkDiv = document.createElement("a");
-        linkDiv.href = `./fonti`;
+        linkDiv.href = isEn ? `./fonti` : `./fonti`;
         linkDiv.className = "section-link bg-neutral-900 border border-white/10 rounded-2xl overflow-hidden";
         linkDiv.innerHTML =
           `<div class="w-full text-left p-6 text-white hover:bg-black/50 transition-colors flex items-center justify-between">` +
           `  <div class="flex items-center">` +
           `    <img src="./icons/menu_book.svg" class="accordion-section-icon" style="width: 24px; height: 24px; filter: invert(1);" />` +
-          `    <h3 class="text-lg font-bold text-white">Fonti e Risorse per Approfondire</h3>` +
+          `    <h3 class="text-lg font-bold text-white">${isEn ? "Sources and Resources" : "Fonti e Risorse per Approfondire"}</h3>` +
           `  </div>` +
           `  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">` +
           `    <path d="M9 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>` +

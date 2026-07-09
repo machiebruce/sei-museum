@@ -1,0 +1,95 @@
+---
+import Layout from "../../layouts/Main-Layout.astro";
+import Menu from "../../components/Menu.astro";
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<Layout title='Credits | SEI Museum'>
+  <main class='flex flex-row h-screen overflow-hidden bg-neutral-900'>
+    <Menu HasSectionNumber={false} variant='home' title='Credits' />
+
+    <div class='flex-1 overflow-y-auto no-scrollbar'>
+      <div class='max-w-3xl mx-auto px-16 py-24'>
+        <!-- Design e Sviluppo -->
+        <section class='mb-16'>
+          <h2 class='text-2xl font-bold text-white mb-6'>Design and Development</h2>
+          <div class='text-white text-lg leading-relaxed space-y-2'>
+            <img src={`../hypebang.min.svg`} alt='Hypebang studio' class='w-24 mb-4' />
+            <p><strong>HYPEBANG.IT - Design studio</strong></p>
+            <p class='text-base'>info@hypebang.it</p>
+            <p class='mt-4'>
+              <strong>Maria Pia Erice</strong> – Designer
+            </p>
+            <p><strong>Maurizio Schifano</strong> – Interaction Designer</p>
+          </div>
+        </section>
+
+        <!-- Divider -->
+        <div class='w-full h-px bg-white/10 mb-16'></div>
+
+        <!-- Scientific Content -->
+        <section class='mb-16'>
+          <h2 class='text-2xl font-bold text-white mb-6'>Scientific Content</h2>
+          <div class='text-white text-lg leading-relaxed'>
+            <p><strong>Dr. Francesco Ciulla</strong> – Degree in Natural Sciences</p>
+          </div>
+        </section>
+
+        <!-- Divider -->
+        <div class='w-full h-px bg-white/10 mb-16'></div>
+
+        <!-- Made possible by PNRR -->
+        <section class='mb-16'>
+          <h2 class='text-2xl font-bold text-white mb-6'>Made possible by</h2>
+          <div class='text-white text-lg leading-relaxed space-y-3'>
+            <p><strong>PNRR Grant</strong></p>
+            <p>Mission 1 – Digitalization, innovation, competitiveness and culture</p>
+            <p>Component 3 – Culture 4.0 (M1C3)</p>
+            <p>Measure 2 – "Protection and enhancement of rural architecture and landscape"</p>
+            <p class='mt-4'><strong>Next Generation EU</strong></p>
+            <p>CUP: G87B22000530004</p>
+            <p>Project ID PNRR: M1C3 - 2.2 - 2022, n. progressivo 002501</p>
+            <p class='mt-4 text-xl font-semibold'>"CASA DEL SALINAIO" of the Ettore Infersa salt pan</p>
+          </div>
+        </section>
+
+        <!-- Divider -->
+        <div class='w-full h-px bg-white/10 mb-16'></div>
+
+        <!-- Sources -->
+        <section class='mb-16'>
+          <h2 class='text-2xl font-bold text-white mb-6'>Sources and Bibliography</h2>
+          <div class='text-white text-lg leading-relaxed'>
+            <p>For the complete list of scientific sources and bibliography, visit the dedicated section:</p>
+            <a href={`../fonti`} class='inline-block mt-4 px-6 py-2 border border-white rounded-full hover:bg-white hover:text-black transition-all duration-300'> Sources and Resources </a>
+          </div>
+        </section>
+
+        <!-- Divider -->
+        <div class='w-full h-px bg-white/10 mb-16'></div>
+
+        <!-- Copyright -->
+        <section class='mb-16'>
+          <h2 class='text-2xl font-bold text-white mb-6'>Copyright and Licenses</h2>
+          <div class='text-white text-lg leading-relaxed space-y-2'>
+            <p><strong>© 2024 Saline Ettore Infersa</strong></p>
+            <p>All content is protected by copyright</p>
+            <p class='mt-4'><strong>Images:</strong> Photo rights belong to their respective authors</p>
+            <p><strong>Scientific content:</strong> Free consultation for educational and research purposes with citation of the source</p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>

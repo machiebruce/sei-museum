@@ -531,7 +531,7 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
       }
 
       if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", extractSections);
+        document.addEventListener("astro:page-load", extractSections);
       } else {
         extractSections();
       }
@@ -569,7 +569,7 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
     }
 
     if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", animateSpeciesDetail);
+      document.addEventListener("astro:page-load", animateSpeciesDetail);
     } else {
       animateSpeciesDetail();
     }

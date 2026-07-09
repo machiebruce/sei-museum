@@ -30,7 +30,7 @@ import {ViewTransitions} from "astro:transitions";
 <script>
   import { animateLangSwitch, animateNav } from "../scripts/animations.js";
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("astro:page-load", () => {
     animateLangSwitch();
     animateNav();
   });

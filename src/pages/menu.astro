@@ -21,6 +21,6 @@ import Layout from "../layouts/Main-Layout.astro";
 
   <script>
     import { animateMenuPage } from "../scripts/animations.js";
-    document.addEventListener("DOMContentLoaded", animateMenuPage);
+    document.addEventListener("astro:page-load", animateMenuPage);
   </script>
 </Layout>

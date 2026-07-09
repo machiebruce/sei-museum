@@ -1,7 +1,7 @@
 ---
-const currentPath = Astro.url.pathname.replace(/\/$/, "");
-const isEnglish = currentPath === "/en" || currentPath.includes("/en/");
-const togglePath = isEnglish ? (currentPath === "/en" ? "/" : currentPath.replace("/en", "")) : (currentPath ? "/en" + currentPath : "/en");
+const currentPath = Astro.url.pathname.replace(/\/$/, "").replace(/\.html$/, "");
+const isEnglish = currentPath === "/en" || currentPath.startsWith("/en/");
+const togglePath = isEnglish ? (currentPath === "/en" ? "./" : currentPath.replace(/^\/en(\/|$)/, "/")) : (currentPath ? "/en" + currentPath : "/en");
 ---
 
 <a href={togglePath} class='lang-switch fixed top-6 right-0 z-50 flex items-center gap-0 bg-primary-500 text-white rounded-l-full hover:bg-primary-600 no-underline text-sm font-bold uppercase tracking-wider transition-all duration-300 overflow-hidden'>

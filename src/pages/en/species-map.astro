@@ -40,30 +40,47 @@ const totalOrders = speciesByOrder.size;
 ---
 
 <style>
-  .view-toggle-btn {
-    transition: all 0.3s ease;
-  }
-  .order-btn {
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  .view-toggle-btn { transition: all 0.3s ease; }
+  .order-pill {
+    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
     cursor: pointer;
+  }
+  .order-pill:hover {
+    transform: scale(1.06);
+    border-color: rgba(231, 121, 104, 0.6);
+  }
+  .flow-line {
+    width: 2px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(231, 121, 104, 0.5), rgba(231, 121, 104, 0.1));
     flex-shrink: 0;
   }
-  .order-btn:hover {
+  .species-card {
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+  }
+  .species-card:hover {
     transform: scale(1.05);
   }
-  .order-btn.active {
-    background: rgb(231 121 104);
-    border-color: rgb(231 121 104);
-    color: black;
-    transform: scale(1.08);
+  .species-card:hover .species-img {
+    border-color: rgba(231, 121, 104, 0.8);
   }
-  .species-thumb {
-    width: 48px;
-    height: 48px;
+  .species-img {
+    width: 64px;
+    height: 64px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    transition: all 0.3s ease;
     flex-shrink: 0;
+    background: rgba(255, 255, 255, 0.05);
+  }
+  .back-btn {
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .back-btn:hover {
+    transform: translateX(-3px);
   }
 </style>
 
@@ -81,15 +98,26 @@ const totalOrders = speciesByOrder.size;
         </a>
       </div>
 
-      <div class='flex-1 flex flex-col overflow-hidden'>
+      <div class='flex-1 flex flex-col overflow-hidden relative'>
 
-        <div class='flex-1 flex flex-col items-center justify-center gap-8 p-8' id='species-area'>
-          <p class='text-white/30 text-sm uppercase tracking-widest' id='order-label'>Select an order</p>
-          <div class='flex gap-8 overflow-x-auto pb-4 no-scrollbar self-start' id='species-row'></div>
+        <div id='orders-view' class='absolute inset-0 flex flex-col items-center justify-center p-8'>
+          <p class='text-white/20 text-xs uppercase tracking-[4px] mb-8'>Select an order</p>
+          <div id='orders-grid' class='flex flex-wrap justify-center gap-4 max-w-3xl'></div>
         </div>
 
-        <div class='px-8 pb-8'>
-          <div class='flex flex-wrap items-center gap-3 justify-center' id='orders-bar'></div>
+        <div id='species-view' class='absolute inset-0 flex flex-col items-center overflow-y-auto p-8 opacity-0 pointer-events-none'>
+          <button id='back-btn' class='back-btn self-start flex items-center gap-2 text-white/40 hover:text-white text-sm uppercase tracking-wider mb-6'>
+            <svg width='16' height='16' viewBox='0 0 16 16' fill='none'><path d='M10 12L6 8L10 4' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>
+            All orders
+          </button>
+
+          <div class='flex flex-col items-center gap-0 mb-8'>
+            <div id='selected-pill' class='order-pill flex items-center gap-3 h-12 px-5 bg-primary-500 rounded-full text-black font-bold text-sm uppercase tracking-wider'></div>
+            <div class='flow-line'></div>
+            <div class='w-3 h-3 rounded-full bg-primary-500/40'></div>
+          </div>
+
+          <div id='species-grid' class='flex flex-wrap justify-center gap-6 max-w-5xl'></div>
         </div>
 
       </div>
@@ -107,69 +135,87 @@ const totalOrders = speciesByOrder.size;
     const speciesData = JSON.parse(dataEl.dataset.species);
     const ordersList = JSON.parse(dataEl.dataset.orders);
 
-    const ordersBar = document.getElementById('orders-bar');
-    const speciesRow = document.getElementById('species-row');
-    const orderLabel = document.getElementById('order-label');
-    let activeOrder = null;
+    const ordersGrid = document.getElementById('orders-grid');
+    const ordersView = document.getElementById('orders-view');
+    const speciesView = document.getElementById('species-view');
+    const speciesGrid = document.getElementById('species-grid');
+    const selectedPill = document.getElementById('selected-pill');
+    const backBtn = document.getElementById('back-btn');
 
-    function renderSpecies(order) {
-      speciesRow.innerHTML = '';
-      if (!order || !speciesData[order]) return;
+    let currentView = 'orders';
 
+    function showOrdersView() {
+      currentView = 'orders';
+      animate(speciesView, { opacity: [1, 0], duration: 300, easing: 'easeOutExpo', begin: () => {
+        speciesView.classList.add('pointer-events-none');
+      }});
+      animate(ordersView, { opacity: [0, 1], duration: 400, delay: 200, easing: 'easeOutExpo', begin: () => {
+        ordersView.classList.remove('pointer-events-none');
+      }});
+    }
+
+    function showSpeciesView(order) {
+      currentView = 'species';
       const species = speciesData[order];
-      species.forEach((specie, i) => {
-        const div = document.createElement('div');
-        div.className = 'flex flex-col items-center gap-4 flex-shrink-0 w-[200px]';
+      if (!species) return;
+
+      selectedPill.innerHTML = `<span class="flex items-center justify-center w-7 h-7 rounded-full bg-black/20 text-black text-xs font-bold">${species.length}</span><span>${order}</span>`;
+
+      speciesGrid.innerHTML = '';
+      species.forEach((specie) => {
+        const div = document.createElement('a');
+        div.href = specie.link;
+        div.className = 'species-card no-underline flex flex-col items-center gap-3 w-[140px] p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10';
+
         div.innerHTML = `
-          <a href="${specie.link}" class="no-underline group flex flex-col items-center gap-3">
-            <div class="w-[160px] h-[160px] rounded-2xl overflow-hidden border border-white/10 group-hover:border-primary-500 transition-all duration-300 group-hover:scale-105">
-              <img src="${specie.image}" alt="${specie.title}" class="w-full h-full object-cover" loading="lazy" />
-            </div>
-            <div class="flex items-center gap-3">
-              <img src="${specie.image}" alt="" class="species-thumb w-10 h-10" />
-              <span class="text-white font-bold text-sm text-center">${specie.title}</span>
-            </div>
-            <span class="text-white/40 text-xs italic">${specie.scientificName || ''}</span>
-          </a>
+          <img src="${specie.image}" alt="${specie.title}" class="species-img" loading="lazy" />
+          <span class="text-white text-xs font-bold text-center leading-tight">${specie.title}</span>
+          <span class="text-white/30 text-[10px] italic text-center">${specie.scientificName || ''}</span>
         `;
+
         div.style.opacity = '0';
-        speciesRow.appendChild(div);
+        div.style.transform = 'translateY(15px)';
+        speciesGrid.appendChild(div);
       });
 
-      requestAnimationFrame(() => {
-        const cards = speciesRow.querySelectorAll(':scope > div');
-        animate(cards, { opacity: [0, 1], translateY: [20, 0], duration: 500, delay: stagger(80), easing: 'easeOutExpo' });
-      });
+      animate(ordersView, { opacity: [1, 0], duration: 300, easing: 'easeOutExpo', begin: () => {
+        ordersView.classList.add('pointer-events-none');
+      }});
+
+      setTimeout(() => {
+        speciesView.classList.remove('pointer-events-none');
+        animate(speciesView, { opacity: [0, 1], duration: 400, easing: 'easeOutExpo' });
+
+        const cards = speciesGrid.querySelectorAll(':scope > a');
+        animate(cards, { opacity: [0, 1], translateY: [15, 0], duration: 500, delay: stagger(60), easing: 'easeOutExpo' });
+      }, 250);
     }
 
     function renderOrders() {
-      ordersBar.innerHTML = '';
+      ordersGrid.innerHTML = '';
       ordersList.forEach((order, i) => {
         const species = speciesData[order] || [];
         const btn = document.createElement('button');
-        btn.className = 'order-btn flex items-center gap-3 h-14 px-5 bg-white/10 border border-white/20 rounded-full text-white font-semibold text-sm uppercase tracking-wider';
+        btn.className = 'order-pill flex items-center gap-3 h-12 px-5 bg-white/10 border border-white/10 rounded-full text-white font-semibold text-sm uppercase tracking-wider';
         btn.innerHTML = `
-          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-white text-xs font-bold">${species.length}</span>
+          <span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/10 text-white text-xs font-bold">${species.length}</span>
           <span>${order}</span>
         `;
 
-        btn.addEventListener('click', () => {
-          document.querySelectorAll('.order-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          activeOrder = order;
-          orderLabel.textContent = order;
-          renderSpecies(order);
-        });
+        btn.addEventListener('click', () => showSpeciesView(order));
 
         btn.style.opacity = '0';
-        ordersBar.appendChild(btn);
+        btn.style.transform = 'scale(0.8)';
+        ordersGrid.appendChild(btn);
       });
 
       requestAnimationFrame(() => {
-        const btns = ordersBar.querySelectorAll('.order-btn');
-        animate(btns, { opacity: [0, 1], scale: [0.8, 1], duration: 400, delay: stagger(50), easing: 'easeOutExpo' });
+        const btns = ordersGrid.querySelectorAll('.order-pill');
+        animate(btns, { opacity: [0, 1], scale: [0.8, 1], duration: 500, delay: stagger(40), easing: 'easeOutExpo' });
       });
     }
+
+    backBtn.addEventListener('click', showOrdersView);
 
     renderOrders();
   });

@@ -4,6 +4,8 @@ const isEnglish = currentPath === "/en" || currentPath.includes("/en/");
 const togglePath = isEnglish ? (currentPath === "/en" ? "/" : currentPath.replace("/en", "")) : (currentPath ? "/en" + currentPath : "/en");
 ---
 
-<a href={togglePath} class='lang-switch fixed top-6 right-0 z-50 flex items-center gap-2 pl-4 pr-3 py-3 bg-primary-500 text-white rounded-l-full hover:bg-primary-600 no-underline text-sm font-bold uppercase tracking-wider transition-all duration-300 hover:pl-6'>
-  {isEnglish ? 'IT' : 'EN'}
+<a href={togglePath} class='lang-switch fixed top-6 right-0 z-50 flex items-center gap-0 bg-primary-500 text-white rounded-l-full hover:bg-primary-600 no-underline text-sm font-bold uppercase tracking-wider transition-all duration-300 overflow-hidden'>
+  <span class={'px-3 py-3 ' + (isEnglish ? 'text-white/50' : 'text-white')}>IT</span>
+  <span class='w-px h-6 bg-white/20'></span>
+  <span class={'px-3 py-3 ' + (isEnglish ? 'text-white' : 'text-white/50')}>EN</span>
 </a>

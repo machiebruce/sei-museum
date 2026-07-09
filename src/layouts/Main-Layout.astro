@@ -27,6 +27,15 @@ import {ViewTransitions} from "astro:transitions";
   </body>
 </html>
 
+<script>
+  import { animateLangSwitch, animateNav } from "../scripts/animations.js";
+
+  document.addEventListener("DOMContentLoaded", () => {
+    animateLangSwitch();
+    animateNav();
+  });
+</script>
+
 <ViewTransitions />
 
 <script src='../scripts/reset-page.js'></script>

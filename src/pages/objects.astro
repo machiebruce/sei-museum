@@ -9,10 +9,10 @@ const objects = await Astro.glob("../pages/objects/*.mdx"); // returns an array 
 <Layout title='Saline Ettore Infersa'>
   <main class='flex flex-row'>
     <Menu HasSectionNumber={false} title='Gli oggetti del museo' />
-    <div class='snap-x flex-1 flex items-center justify-start gap-16 overflow-x-scroll scroll-pr-72 no-scrollbar'>
+    <div class='snap-x flex-1 flex items-center justify-start gap-16 overflow-x-scroll scroll-pr-72 no-scrollbar ml-16'>
       {
-        objects.map((object) => (
-          <div class='first:ml-16'>
+        objects.map((object, i) => (
+          <div class='first:ml-16 object-card'>
             <Card sectionNumber={object.frontmatter.sectionNumber} title={object.frontmatter.title} href={object.frontmatter.link} image={object.frontmatter.image} HasTools={object.frontmatter.HasTools} />
           </div>
         ))
@@ -22,3 +22,12 @@ const objects = await Astro.glob("../pages/objects/*.mdx"); // returns an array 
     </div>
   </main>
 </Layout>
+
+<script>
+  import { animate, stagger } from 'animejs';
+  document.addEventListener("DOMContentLoaded", () => {
+    const cards: HTMLElement[] = Array.from(document.querySelectorAll(".object-card"));
+    cards.forEach(c => { c.style.opacity = '0'; c.style.transform = 'translateX(40px)'; });
+    animate(cards, { opacity: [0, 1], translateX: [40, 0], duration: 800, delay: stagger(120, { start: 400 }), easing: 'easeOutExpo' });
+  });
+</script>

@@ -30,7 +30,7 @@ const uniqueOrders = Array.from(orders).sort();
     <div class='flex flex-row flex-1 overflow-hidden'>
       <Menu HasSectionNumber={false} title='Salt pan species' />
 
-      <div class='flex flex-col flex-1 overflow-hidden relative'>
+      <div class='flex flex-col flex-1 overflow-hidden relative ml-16'>
         <div class='absolute top-6 left-6 z-50 flex items-center gap-4'>
           <a href={`./species`} class='border border-white flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
             <img src='../icons/view_column.svg' alt='view_column' class='w-6 h-6 invert' />
@@ -44,7 +44,7 @@ const uniqueOrders = Array.from(orders).sort();
         <div class='snap-x flex-1 flex items-center justify-start gap-16 overflow-x-scroll scroll-pr-72 no-scrollbar'>
           {
             objects.map((object) => (
-              <div class='species-card flex-shrink-0 flex-grow-0' data-order={object.frontmatter.order || "undefined"}>
+              <div class='species-card flex-shrink-0 flex-grow-0' data-order={object.frontmatter.order || "undefined"} data-animate-species>
                 <CardSpecie sectionNumber={object.frontmatter.sectionNumber} title={object.frontmatter.title} href={object.frontmatter.link} image={object.frontmatter.image} IsFauna={object.frontmatter.IsFauna} />
               </div>
             ))
@@ -73,19 +73,24 @@ const uniqueOrders = Array.from(orders).sort();
     </div>
   </main>
 
-  <script is:inline>
-    (function () {
-      const filterTabs = document.querySelectorAll(".filter-tab");
-      const speciesCards = document.querySelectorAll(".species-card");
+  <script>
+    import { animate, stagger } from 'animejs';
 
-      const orderCache = new Map();
+    document.addEventListener("DOMContentLoaded", () => {
+      const filterTabs: HTMLElement[] = Array.from(document.querySelectorAll(".filter-tab"));
+      const speciesCards: HTMLElement[] = Array.from(document.querySelectorAll(".species-card"));
 
+      animate(filterTabs, { opacity: [0, 1], translateY: [20, 0], duration: 600, delay: stagger(80, { start: 300 }), easing: 'easeOutExpo' });
+
+      const visibleCards = speciesCards.filter(c => c.style.display !== "none" || !c.style.display);
+      visibleCards.forEach(c => { c.style.opacity = '0'; c.style.transform = 'translateY(30px) scale(0.95)'; });
+      animate(visibleCards, { opacity: [0, 1], translateY: [30, 0], scale: [0.95, 1], duration: 800, delay: stagger(100, { start: 500 }), easing: 'easeOutExpo' });
+
+      const orderCache = new Map<string, HTMLElement[]>();
       speciesCards.forEach((card) => {
-        const order = card.getAttribute("data-order");
-        if (!orderCache.has(order)) {
-          orderCache.set(order, []);
-        }
-        orderCache.get(order).push(card);
+        const order = card.getAttribute("data-order") || "undefined";
+        if (!orderCache.has(order)) orderCache.set(order, []);
+        orderCache.get(order)!.push(card);
       });
 
       function updateFirstVisibleMargin() {
@@ -103,34 +108,35 @@ const uniqueOrders = Array.from(orders).sort();
       updateFirstVisibleMargin();
 
       filterTabs.forEach((tab) => {
-        tab.addEventListener("click", function () {
-          const selectedOrder = this.getAttribute("data-order");
+        tab.addEventListener("click", () => {
+          const selectedOrder = tab.getAttribute("data-order") || "";
 
           filterTabs.forEach((t) => {
-            if (t === this) {
+            const img = t.querySelector<HTMLElement>("img");
+            if (t === tab) {
               t.className = "filter-tab active h-16 px-6 bg-white border-white rounded-full text-black font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2";
-              const icon = t.querySelector("img");
-              if (icon) icon.style.filter = "invert(1)";
+              if (img) img.style.filter = "invert(1)";
             } else {
               t.className = "filter-tab h-16 px-6 bg-white/10 border border-white/20 rounded-full text-white font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2";
-              const icon = t.querySelector("img");
-              if (icon) icon.style.filter = "invert(0)";
+              if (img) img.style.filter = "invert(0)";
             }
           });
 
           if (selectedOrder === "all") {
-            speciesCards.forEach((card) => {
-              card.style.display = "";
-            });
+            speciesCards.forEach((card) => { card.style.display = ""; });
           } else {
             speciesCards.forEach((card) => {
               card.style.display = card.getAttribute("data-order") === selectedOrder ? "" : "none";
             });
           }
 
+          const visible = speciesCards.filter(c => c.style.display !== "none");
+          visible.forEach(c => { c.style.opacity = '0'; c.style.transform = 'translateY(20px) scale(0.95)'; });
+          animate(visible, { opacity: [0, 1], translateY: [20, 0], scale: [0.95, 1], duration: 500, delay: stagger(80), easing: 'easeOutExpo' });
+
           updateFirstVisibleMargin();
         });
       });
-    })();
+    });
   </script>
 </Layout>

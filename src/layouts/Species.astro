@@ -252,7 +252,7 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
 
     <div class='grid grid-cols-2 gap-12 w-full p-32 overflow-y-auto no-scrollbar'>
       <div class='flex flex-col gap-y-8 sticky top-0 self-start'>
-        <div class='text-white space-y-2'>
+        <div class='species-title text-white space-y-2'>
           <h1 class='text-4xl font-bold text-white'>{frontmatter.title}</h1>
           {frontmatter.scientificName && <p class='text-2xl font-light italic text-white/60'>{frontmatter.scientificName}</p>}
           {frontmatter.order && <p class='text-lg font-bold italic text-white/60'>{frontmatter.order}</p>}
@@ -260,7 +260,7 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
         </div>
 
         <!-- Carousel Galleria -->
-        <div class='relative group overflow-hidden rounded-2xl border border-white/10 bg-neutral-800 shadow-2xl'>
+        <div class='species-carousel relative group overflow-hidden rounded-2xl border border-white/10 bg-neutral-800 shadow-2xl'>
           <div id='carousel' class='carousel-container no-scrollbar'>
             {
               galleryImages.map((img: string, index: number) => (
@@ -295,7 +295,7 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
       </div>
 
       <div class='flex flex-col overflow-visible'>
-        <div id='species-sections-container' class='flex flex-col gap-6 overflow-visible py-[72px] force-white'>
+        <div id='species-sections-container' class='species-sections-container flex flex-col gap-6 overflow-visible py-[72px] force-white'>
           <div id='species-full-content' class='hidden'>
             <slot />
           </div>
@@ -536,5 +536,42 @@ const nextSection = nextSpecies?.frontmatter?.link || null;
         extractSections();
       }
     })();
+  </script>
+
+  <script>
+    import { animate, stagger } from 'animejs';
+
+    function animateSpeciesDetail() {
+      const title = document.querySelector('.species-title') as HTMLElement | null;
+      const carousel = document.querySelector('.species-carousel') as HTMLElement | null;
+
+      if (title) {
+        title.style.opacity = '0';
+        title.style.transform = 'translateY(-20px)';
+        animate(title, { opacity: [0, 1], translateY: [-20, 0], duration: 700, easing: 'easeOutExpo' });
+      }
+
+      if (carousel) {
+        carousel.style.opacity = '0';
+        carousel.style.transform = 'translateY(20px)';
+        animate(carousel, { opacity: [0, 1], translateY: [20, 0], duration: 800, delay: 300, easing: 'easeOutExpo' });
+      }
+
+      const observer = new MutationObserver(() => {
+        const sections: HTMLElement[] = Array.from(document.querySelectorAll('#species-sections-container > .bg-neutral-900'));
+        if (sections.length) {
+          sections.forEach(s => { s.style.opacity = '0'; s.style.transform = 'translateY(30px)'; });
+          animate(sections, { opacity: [0, 1], translateY: [30, 0], duration: 600, delay: stagger(120), easing: 'easeOutExpo' });
+          observer.disconnect();
+        }
+      });
+      observer.observe(document.getElementById('species-sections-container') || document.body, { childList: true, subtree: true });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", animateSpeciesDetail);
+    } else {
+      animateSpeciesDetail();
+    }
   </script>
 </Layout>

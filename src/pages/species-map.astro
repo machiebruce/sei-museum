@@ -43,286 +43,35 @@ const totalOrders = speciesByOrder.size;
   .view-toggle-btn {
     transition: all 0.3s ease;
   }
-
-  .map-container {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    background: radial-gradient(ellipse at center, rgba(231, 121, 104, 0.05) 0%, transparent 70%);
-  }
-
-  #connections {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  #connections line {
-    stroke: rgba(255, 255, 255, 0.06);
-    stroke-width: 1.5;
-    stroke-linecap: round;
-    transition: stroke 0.4s ease, stroke-width 0.4s ease;
-  }
-
-  #connections line.active-line {
-    stroke: rgba(231, 121, 104, 0.35);
-    stroke-width: 2;
-  }
-
-  .order-node {
-    position: absolute;
-    z-index: 2;
+  .order-btn {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    user-select: none;
-    transform: translate(-50%, -50%);
-    padding: 10px;
-    border-radius: 16px;
-    transition: background 0.3s ease;
+    flex-shrink: 0;
   }
-
-  .order-node:hover {
-    background: rgba(231, 121, 104, 0.08);
+  .order-btn:hover {
+    transform: scale(1.05);
   }
-
-  .order-circle {
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, rgba(231, 121, 104, 0.25), rgba(231, 121, 104, 0.08));
-    border: 2px solid rgba(231, 121, 104, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 0 20px rgba(231, 121, 104, 0.08);
+  .order-btn.active {
+    background: rgb(231 121 104);
+    border-color: rgb(231 121 104);
+    color: black;
+    transform: scale(1.08);
   }
-
-  .order-circle .count {
-    font-size: 18px;
-    font-weight: 700;
-    color: white;
-    font-family: monospace;
-  }
-
-  .order-circle:hover {
-    transform: scale(1.18);
-    border-color: rgba(231, 121, 104, 0.7);
-    box-shadow: 0 0 40px rgba(231, 121, 104, 0.25);
-  }
-
-  .order-node.expanded .order-circle {
-    background: linear-gradient(135deg, rgba(231, 121, 104, 0.5), rgba(231, 121, 104, 0.2));
-    border-color: rgba(231, 121, 104, 0.9);
-    box-shadow: 0 0 60px rgba(231, 121, 104, 0.4);
-    transform: scale(1.15);
-  }
-
-  .order-name {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.7);
-    font-weight: 600;
-    text-align: center;
-    letter-spacing: 0.5px;
-    max-width: 90px;
-    line-height: 1.2;
-    text-transform: uppercase;
-  }
-
-  .species-node {
-    position: absolute;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    pointer-events: none;
-    padding: 6px;
-    border-radius: 12px;
-    transition: background 0.3s ease;
-  }
-
-  .species-node.visible {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .species-node:hover {
-    background: rgba(231, 121, 104, 0.1);
-  }
-
   .species-thumb {
     width: 48px;
     height: 48px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid rgba(255, 255, 255, 0.2);
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  .species-node:hover .species-thumb {
-    transform: scale(1.25);
-    border-color: rgba(231, 121, 104, 0.8);
-    box-shadow: 0 0 30px rgba(231, 121, 104, 0.3);
-  }
-
-  .species-label {
-    font-size: 9px;
-    color: rgba(255, 255, 255, 0.8);
-    font-weight: 500;
-    text-align: center;
-    max-width: 80px;
-    line-height: 1.1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    background: rgba(0, 0, 0, 0.6);
-    padding: 2px 8px;
-    border-radius: 4px;
-    backdrop-filter: blur(4px);
-  }
-
-  .center-label {
-    position: absolute;
-    z-index: 2;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    pointer-events: none;
-  }
-
-  .center-label h1 {
-    font-size: 24px;
-    font-weight: 300;
-    color: rgba(255, 255, 255, 0.12);
-    letter-spacing: 6px;
-    text-transform: uppercase;
-  }
-
-  .center-label .sub {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.06);
-    letter-spacing: 2px;
-    margin-top: 4px;
-  }
-
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(8px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease;
-  }
-
-  .modal-overlay.open {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .modal-card {
-    transform: scale(0.9) translateY(20px);
-    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-
-  .modal-overlay.open .modal-card {
-    transform: scale(1) translateY(0);
-  }
-
-  .modal-close {
-    position: absolute;
-    top: 24px;
-    right: 24px;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    z-index: 101;
-    line-height: 1;
-  }
-
-  .modal-close:hover {
-    background: rgba(255, 255, 255, 0.15);
-    transform: scale(1.1);
-  }
-
-  .map-legend {
-    position: absolute;
-    bottom: 32px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(8px);
-    padding: 10px 20px;
-    border-radius: 100px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    white-space: nowrap;
-  }
-
-  .legend-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: rgba(231, 121, 104, 0.6);
     flex-shrink: 0;
-  }
-
-  .map-legend span {
-    font-size: 12px;
-    color: rgba(255, 255, 255, 0.4);
-    letter-spacing: 0.5px;
-  }
-
-  .hint {
-    position: absolute;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 10;
-    font-size: 11px;
-    color: rgba(255, 255, 255, 0.15);
-    letter-spacing: 1px;
-    animation: pulse-hint 2s ease-in-out infinite;
-  }
-
-  @keyframes pulse-hint {
-    0%, 100% { opacity: 0.15; }
-    50% { opacity: 0.4; }
   }
 </style>
 
 <Layout title='Saline Ettore Infersa - Mappa'>
-  <main class='flex flex-row h-screen overflow-hidden relative bg-gradient-to-b from-neutral-900 to-neutral-800'>
+  <main class='flex flex-row h-screen overflow-hidden bg-gradient-to-b from-neutral-900 to-neutral-800'>
     <Menu HasSectionNumber={false} title='Le specie delle saline' />
 
-    <div class='flex flex-col flex-1 overflow-hidden relative ml-16'>
+    <div class='flex flex-col flex-1 overflow-hidden relative'>
       <div class='absolute top-6 left-6 z-50 flex items-center gap-4'>
         <a href={`./species`} class='view-toggle-btn flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline border border-white/20'>
           <img src='./icons/view_column.svg' alt='view_column' class='w-6 h-6 invert' />
@@ -332,32 +81,26 @@ const totalOrders = speciesByOrder.size;
         </a>
       </div>
 
-      <div class='map-container flex-1 overflow-hidden relative' id='map-container'>
-        <svg id='connections'></svg>
+      <!-- Orders row -->
+      <div class='flex-1 flex flex-col overflow-hidden'>
 
-        <div class='center-label' id='center-label'>
-          <h1>Specie delle Saline</h1>
-          <div class='sub'>{totalSpecies} specie · {totalOrders} ordini</div>
+        <!-- Selected order species -->
+        <div class='flex-1 flex flex-col items-center justify-center gap-8 p-8' id='species-area'>
+          <p class='text-white/30 text-sm uppercase tracking-widest' id='order-label'>Seleziona un ordine</p>
+          <div class='flex gap-8 overflow-x-auto pb-4 no-scrollbar self-start' id='species-row'></div>
         </div>
 
-        <div id='orders-container'></div>
-
-        <div class='hint'>clicca un cerchio per esplorare</div>
-        <div class='map-legend'>
-          <div class='legend-dot'></div>
-          <span>Ordine · numero specie</span>
+        <!-- Orders bar -->
+        <div class='px-8 pb-8'>
+          <div class='flex flex-wrap items-center gap-3 justify-center' id='orders-bar'></div>
         </div>
+
       </div>
     </div>
   </main>
-
-  <div class='modal-overlay' id='modal-overlay'>
-    <button class='modal-close' id='modal-close'>×</button>
-    <div class='modal-card' id='modal-card'></div>
-  </div>
-
-  <div id='map-data' data-species={speciesJson} data-orders={ordersJson} style='display:none'></div>
 </Layout>
+
+<div id='map-data' data-species={speciesJson} data-orders={ordersJson} style='display:none'></div>
 
 <script>
   import { animate, stagger } from 'animejs';
@@ -367,235 +110,70 @@ const totalOrders = speciesByOrder.size;
     const speciesData = JSON.parse(dataEl.dataset.species);
     const ordersList = JSON.parse(dataEl.dataset.orders);
 
-    const container = document.getElementById('map-container');
-    const ordersContainer = document.getElementById('orders-container');
-    const svg = document.getElementById('connections');
-    const centerLabel = document.getElementById('center-label');
-    const modalOverlay = document.getElementById('modal-overlay');
-    const modalCard = document.getElementById('modal-card');
-    const modalClose = document.getElementById('modal-close');
+    const ordersBar = document.getElementById('orders-bar');
+    const speciesRow = document.getElementById('species-row');
+    const orderLabel = document.getElementById('order-label');
+    let activeOrder = null;
 
-    let expandedOrder = null;
-
-    function layout() {
-      const rect = container.getBoundingClientRect();
-      const cx = rect.width / 2;
-      const cy = rect.height / 2;
-      const rx = Math.min(rect.width, rect.height) * 0.30;
-      const ry = Math.min(rect.width, rect.height) * 0.30;
-
-      centerLabel.style.left = cx + 'px';
-      centerLabel.style.top = cy + 'px';
-
-      const orderEls = ordersContainer.querySelectorAll('.order-node');
-      if (orderEls.length === 0) return;
-
-      const count = orderEls.length;
-      const angleOrder = [];
-      let l = 0, r = count - 1, toggle = true;
-      for (let i = 0; i < count; i++) {
-        angleOrder.push(toggle ? l++ : r--);
-        toggle = !toggle;
-      }
-
-      orderEls.forEach((el, idx) => {
-        const order = el.getAttribute('data-order');
-        const listIdx = ordersList.indexOf(order);
-        const angleIdx = angleOrder[listIdx >= 0 ? listIdx : idx];
-        const angle = (angleIdx / count) * Math.PI * 2 - Math.PI / 2;
-        const jitter = 0.92 + Math.random() * 0.16;
-
-        el.style.left = (cx + Math.cos(angle) * rx * jitter) + 'px';
-        el.style.top = (cy + Math.sin(angle) * ry * jitter) + 'px';
-
-        if (!el.dataset.positioned) {
-          el.dataset.positioned = 'true';
-          animate(el, { opacity: [0, 1], scale: [0.3, 1], duration: 600, delay: idx * 40, easing: 'easeOutExpo' });
-        }
-      });
-
-      updateLines();
-    }
-
-    function updateLines() {
-      const rect = container.getBoundingClientRect();
-      const cx = rect.width / 2;
-      const cy = rect.height / 2;
-
-      let lines = '';
-      const orderEls = ordersContainer.querySelectorAll('.order-node');
-
-      orderEls.forEach((el) => {
-        const left = parseFloat(el.style.left);
-        const top = parseFloat(el.style.top);
-        if (isNaN(left) || isNaN(top)) return;
-
-        const order = el.getAttribute('data-order');
-        const isExpanded = order === expandedOrder;
-
-        lines += `<line x1="${cx}" y1="${cy}" x2="${left}" y2="${top}" class="${isExpanded ? 'active-line' : ''}" />`;
-
-        if (isExpanded && speciesData[order]) {
-          const expandedNodes = container.querySelectorAll(`.species-node[data-order="${order}"]`);
-          expandedNodes.forEach((n) => {
-            const sx = parseFloat(n.style.left);
-            const sy = parseFloat(n.style.top);
-            if (!isNaN(sx) && !isNaN(sy)) {
-              lines += `<line x1="${left}" y1="${top}" x2="${sx}" y2="${sy}" class="active-line" />`;
-            }
-          });
-        }
-      });
-
-      svg.innerHTML = lines;
-    }
-
-    function toggleOrder(order) {
-      if (expandedOrder === order) { collapseOrder(order); return; }
-      if (expandedOrder) collapseOrder(expandedOrder, false);
-
-      expandedOrder = order;
-      const el = ordersContainer.querySelector(`.order-node[data-order="${order}"]`);
-      if (el) el.classList.add('expanded');
+    function renderSpecies(order) {
+      speciesRow.innerHTML = '';
+      if (!order || !speciesData[order]) return;
 
       const species = speciesData[order];
-      if (!species) return;
-
-      const rect = container.getBoundingClientRect();
-      const cx = rect.width / 2;
-      const cy = rect.height / 2;
-      const ox = parseFloat(el.style.left);
-      const oy = parseFloat(el.style.top);
-      if (isNaN(ox)) return;
-
-      container.querySelectorAll('.species-node').forEach(n => n.remove());
-
-      const count = species.length;
-      const arcRadius = Math.max(90, Math.min(rect.width, rect.height) * 0.16);
-      const spreadAngle = Math.min(Math.PI * 0.5, count * 0.1);
-      const dirAngle = Math.atan2(oy - cy, ox - cx);
-
-      const nodes = [];
-      const fragment = document.createDocumentFragment();
-
       species.forEach((specie, i) => {
         const div = document.createElement('div');
-        div.className = 'species-node';
-        div.setAttribute('data-order', order);
-
-        const angleOffset = (i / Math.max(count - 1, 1) - 0.5) * spreadAngle;
-        const nodeAngle = dirAngle + angleOffset;
-        const nx = ox + Math.cos(nodeAngle) * arcRadius;
-        const ny = oy + Math.sin(nodeAngle) * arcRadius;
-
-        div.style.left = nx + 'px';
-        div.style.top = ny + 'px';
+        div.className = 'flex flex-col items-center gap-4 flex-shrink-0 w-[200px]';
         div.innerHTML = `
-          <img class="species-thumb" src="${specie.image}" alt="${specie.title}" loading="lazy" />
-          <span class="species-label">${specie.title}</span>
+          <a href="${specie.link}" class="no-underline group flex flex-col items-center gap-3">
+            <div class="w-[160px] h-[160px] rounded-2xl overflow-hidden border border-white/10 group-hover:border-primary-500 transition-all duration-300 group-hover:scale-105">
+              <img src="${specie.image}" alt="${specie.title}" class="w-full h-full object-cover" loading="lazy" />
+            </div>
+            <div class="flex items-center gap-3">
+              <img src="${specie.image}" alt="" class="species-thumb w-10 h-10" />
+              <span class="text-white font-bold text-sm text-center">${specie.title}</span>
+            </div>
+            <span class="text-white/40 text-xs italic">${specie.scientificName || ''}</span>
+          </a>
         `;
-
-        div.addEventListener('click', (e) => {
-          e.stopPropagation();
-          openModal({ ...specie, IsFauna: specie.IsFauna !== false });
-        });
-
-        fragment.appendChild(div);
-        nodes.push(div);
+        div.style.opacity = '0';
+        speciesRow.appendChild(div);
       });
-
-      container.appendChild(fragment);
 
       requestAnimationFrame(() => {
-        nodes.forEach((n, i) => {
-          setTimeout(() => {
-            n.classList.add('visible');
-            animate(n, { opacity: [0, 1], scale: [0.3, 1], translateY: [15, 0], duration: 400, easing: 'easeOutExpo' });
-          }, i * 50);
-        });
+        const cards = speciesRow.querySelectorAll(':scope > div');
+        animate(cards, { opacity: [0, 1], translateY: [20, 0], duration: 500, delay: stagger(80), easing: 'easeOutExpo' });
       });
-
-      updateLines();
     }
 
-    function collapseOrder(order, animateOut = true) {
-      const el = ordersContainer.querySelector(`.order-node[data-order="${order}"]`);
-      if (el) el.classList.remove('expanded');
-
-      const nodes = container.querySelectorAll(`.species-node[data-order="${order}"]`);
-      if (animateOut) {
-        nodes.forEach((n, i) => {
-          setTimeout(() => {
-            n.classList.remove('visible');
-            animate(n, { opacity: [1, 0], scale: [1, 0.3], duration: 200, easing: 'easeInExpo', complete: () => n.remove() });
-          }, i * 20);
-        });
-      } else {
-        nodes.forEach(n => n.remove());
-      }
-
-      if (expandedOrder === order) expandedOrder = null;
-      updateLines();
-    }
-
-    function buildOrders() {
-      const fragment = document.createDocumentFragment();
-      ordersList.forEach((order) => {
+    function renderOrders() {
+      ordersBar.innerHTML = '';
+      ordersList.forEach((order, i) => {
         const species = speciesData[order] || [];
-        const div = document.createElement('div');
-        div.className = 'order-node';
-        div.style.opacity = '0';
-        div.setAttribute('data-order', order);
-        div.innerHTML = `
-          <div class="order-circle"><span class="count">${species.length}</span></div>
-          <span class="order-name">${order}</span>
+        const btn = document.createElement('button');
+        btn.className = 'order-btn flex items-center gap-3 h-14 px-5 bg-white/10 border border-white/20 rounded-full text-white font-semibold text-sm uppercase tracking-wider';
+        btn.innerHTML = `
+          <span class="flex items-center justify-center w-8 h-8 rounded-full bg-white/10 text-white text-xs font-bold">${species.length}</span>
+          <span>${order}</span>
         `;
-        div.addEventListener('click', () => toggleOrder(order));
-        fragment.appendChild(div);
+
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.order-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeOrder = order;
+          orderLabel.textContent = order;
+          renderSpecies(order);
+        });
+
+        btn.style.opacity = '0';
+        ordersBar.appendChild(btn);
       });
-      ordersContainer.appendChild(fragment);
-      layout();
+
+      requestAnimationFrame(() => {
+        const btns = ordersBar.querySelectorAll('.order-btn');
+        animate(btns, { opacity: [0, 1], scale: [0.8, 1], duration: 400, delay: stagger(50), easing: 'easeOutExpo' });
+      });
     }
 
-    function openModal(specie) {
-      const label = specie.IsFauna ? 'Fauna della salina' : 'Flora della salina';
-      modalCard.innerHTML = `
-        <a href="${specie.link}" class="block bg-neutral-700 rounded-xl w-[600px] flex-shrink-0 p-4 gap-8 flex flex-col items-center no-underline">
-          <div class="w-full">
-            <p class="text-white font-extralight text-2xl uppercase">${label}</p>
-          </div>
-          <div class="w-full aspect-[4/2] overflow-hidden rounded-lg">
-            <img src="${specie.image}" alt="${specie.title}" class="w-full h-full object-cover" />
-          </div>
-          <p class="text-white font-bold text-2xl uppercase w-full">${specie.title}</p>
-          <p class="text-white/60 text-lg -mt-4 italic w-full">${specie.scientificName || ''}</p>
-          <p class="bg-white text-black font-bold px-8 py-2 text-xl rounded-full text-center w-fit uppercase">Apri scheda</p>
-        </a>
-      `;
-      modalOverlay.classList.add('open');
-    }
-
-    modalClose.addEventListener('click', () => modalOverlay.classList.remove('open'));
-    modalOverlay.addEventListener('click', (e) => { if (e.target === modalOverlay) modalOverlay.classList.remove('open'); });
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        modalOverlay.classList.remove('open');
-        if (expandedOrder) collapseOrder(expandedOrder);
-      }
-    });
-
-    container.addEventListener('click', (e) => {
-      if (e.target === container || e.target === svg || e.target.closest('#center-label')) {
-        if (expandedOrder) collapseOrder(expandedOrder);
-      }
-    });
-
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-      clearTimeout(resizeTimeout);
-      resizeTimeout = setTimeout(() => layout(), 200);
-    });
-
-    buildOrders();
+    renderOrders();
   });
 </script>

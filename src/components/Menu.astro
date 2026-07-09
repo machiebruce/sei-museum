@@ -27,7 +27,7 @@ const isEnglish = currentPath === "/en" || currentPath.includes("/en/");
   <a href={baseUrl || "/"}><img class='w-24' src={logo.src} alt='Logo' /></a>
 
   <div class='gap-16 flex flex-col justify-end flex-1 w-24'>
-    <p class='text-white text-center font-bold text-2xl uppercase whitespace-nowrap -rotate-90'>{title}</p>
+    {title && <p class='text-white text-center font-bold text-2xl uppercase whitespace-nowrap -rotate-90'>{title}</p>}
     {HasSectionNumber && <p class='text-white font-extralight text-6xl whitespace-nowrap -rotate-90'>{sectionNumber}</p>}
   </div>
 

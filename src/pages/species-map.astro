@@ -40,75 +40,39 @@ const totalOrders = speciesByOrder.size;
 ---
 
 <style>
-  .view-toggle-btn { transition: all 0.3s ease; }
-  .order-pill {
-    transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    cursor: pointer;
-  }
-  .order-pill:hover {
-    transform: scale(1.06);
-    border-color: rgba(231, 121, 104, 0.6);
-  }
-  .flow-line {
-    width: 2px;
-    height: 40px;
-    background: linear-gradient(to bottom, rgba(231, 121, 104, 0.5), rgba(231, 121, 104, 0.1));
-    flex-shrink: 0;
-  }
-  .species-card {
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    cursor: pointer;
-  }
-  .species-card:hover {
-    transform: scale(1.05);
-  }
-  .species-card:hover .species-img {
-    border-color: rgba(231, 121, 104, 0.8);
-  }
-  .species-img {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid rgba(255, 255, 255, 0.15);
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-    background: rgba(255, 255, 255, 0.05);
-  }
-  .back-btn {
-    transition: all 0.3s ease;
-    cursor: pointer;
-  }
-  .back-btn:hover {
-    transform: translateX(-3px);
-  }
+  .order-pill { transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .order-pill:hover { transform: scale(1.06); }
+  .order-pill.active { background: rgb(231 121 104); border-color: rgb(231 121 104); color: black; transform: scale(1.08); }
+  .flow-line { width: 2px; height: 40px; background: linear-gradient(to bottom, rgba(231, 121, 104, 0.5), rgba(231, 121, 104, 0.1)); flex-shrink: 0; }
+  .species-card { transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+  .species-card:hover { transform: scale(1.05); }
+  .species-card:hover .species-circle { border-color: rgb(231 121 104 / 0.8); }
+  .species-circle { transition: all 0.3s ease; }
 </style>
 
 <Layout title='Saline Ettore Infersa - Mappa'>
   <main class='flex flex-row h-screen overflow-hidden bg-gradient-to-b from-neutral-900 to-neutral-800'>
-    <Menu HasSectionNumber={false} title='Le specie delle saline' />
+    <Menu HasSectionNumber={false} title='' />
 
     <div class='flex flex-col flex-1 overflow-hidden relative'>
       <div class='absolute top-6 left-6 z-50 flex items-center gap-4'>
-        <a href={`./species`} class='view-toggle-btn flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline border border-white/20'>
+        <a href={`./species`} class='flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline border border-white/20 transition-all duration-300'>
           <img src='./icons/view_column.svg' alt='view_column' class='w-6 h-6 invert' />
         </a>
-        <a href={`./species-map`} class='active view-toggle-btn border border-white flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
+        <a href={`./species-map`} class='border border-white flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline transition-all duration-300'>
           <img src='./icons/image_search.svg' alt='image_search' class='w-6 h-6 invert' />
         </a>
       </div>
 
       <div class='flex-1 flex flex-col overflow-hidden relative'>
 
-        <!-- Orders view (centered) -->
         <div id='orders-view' class='absolute inset-0 flex flex-col items-center justify-center p-8'>
-          <p class='text-white/20 text-xs uppercase tracking-[4px] mb-8'>Seleziona un ordine</p>
+          <h1 class='text-white/20 text-sm uppercase tracking-widest mb-8 font-semibold'>Le specie delle saline</h1>
           <div id='orders-grid' class='flex flex-wrap justify-center gap-4 max-w-3xl'></div>
         </div>
 
-        <!-- Species view (hidden initially) -->
         <div id='species-view' class='absolute inset-0 flex flex-col items-center overflow-y-auto p-8 opacity-0 pointer-events-none'>
-          <button id='back-btn' class='back-btn self-start flex items-center gap-2 text-white/40 hover:text-white text-sm uppercase tracking-wider mb-6'>
+          <button id='back-btn' class='self-start flex items-center gap-2 text-white/40 hover:text-white text-sm uppercase tracking-wider mb-6 transition-all duration-300 hover:-translate-x-1'>
             <svg width='16' height='16' viewBox='0 0 16 16' fill='none'><path d='M10 12L6 8L10 4' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>
             Tutti gli ordini
           </button>
@@ -144,55 +108,40 @@ const totalOrders = speciesByOrder.size;
     const selectedPill = document.getElementById('selected-pill');
     const backBtn = document.getElementById('back-btn');
 
-    let currentView = 'orders';
-
     function showOrdersView() {
-      currentView = 'orders';
-      animate(speciesView, { opacity: [1, 0], duration: 300, easing: 'easeOutExpo', begin: () => {
-        speciesView.classList.add('pointer-events-none');
-      }});
-      animate(ordersView, { opacity: [0, 1], duration: 400, delay: 200, easing: 'easeOutExpo', begin: () => {
-        ordersView.classList.remove('pointer-events-none');
-      }});
+      animate(speciesView, { opacity: [1, 0], duration: 200, easing: 'easeOutExpo', begin: () => speciesView.classList.add('pointer-events-none') });
+      animate(ordersView, { opacity: [0, 1], duration: 400, delay: 200, easing: 'easeOutExpo', begin: () => ordersView.classList.remove('pointer-events-none') });
     }
 
     function showSpeciesView(order) {
-      currentView = 'species';
       const species = speciesData[order];
       if (!species) return;
 
-      // Set selected pill
       selectedPill.innerHTML = `<span class="flex items-center justify-center w-7 h-7 rounded-full bg-black/20 text-black text-xs font-bold">${species.length}</span><span>${order}</span>`;
 
-      // Build species grid
       speciesGrid.innerHTML = '';
       species.forEach((specie) => {
-        const div = document.createElement('a');
-        div.href = specie.link;
-        div.className = 'species-card no-underline flex flex-col items-center gap-3 w-[140px] p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10';
-
-        div.innerHTML = `
-          <img src="${specie.image}" alt="${specie.title}" class="species-img" loading="lazy" />
+        const a = document.createElement('a');
+        a.href = specie.link;
+        a.className = 'species-card no-underline flex flex-col items-center gap-3 w-[140px] p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10';
+        a.innerHTML = `
+          <div class='species-circle w-24 h-24 rounded-full overflow-hidden border-2 border-white/20 flex-shrink-0'>
+            <img src="${specie.image}" alt="${specie.title}" class='w-full h-full object-cover' loading='lazy' />
+          </div>
           <span class="text-white text-xs font-bold text-center leading-tight">${specie.title}</span>
-          <span class="text-white/30 text-[10px] italic text-center">${specie.scientificName || ''}</span>
+          <span class="text-white/30 text-xs italic text-center">${specie.scientificName || ''}</span>
         `;
-
-        div.style.opacity = '0';
-        div.style.transform = 'translateY(15px)';
-        speciesGrid.appendChild(div);
+        a.style.opacity = '0';
+        a.style.transform = 'translateY(15px)';
+        speciesGrid.appendChild(a);
       });
 
-      // Transition views
-      animate(ordersView, { opacity: [1, 0], duration: 300, easing: 'easeOutExpo', begin: () => {
-        ordersView.classList.add('pointer-events-none');
-      }});
+      animate(ordersView, { opacity: [1, 0], duration: 200, easing: 'easeOutExpo', begin: () => ordersView.classList.add('pointer-events-none') });
 
       setTimeout(() => {
         speciesView.classList.remove('pointer-events-none');
         animate(speciesView, { opacity: [0, 1], duration: 400, easing: 'easeOutExpo' });
-
-        const cards = speciesGrid.querySelectorAll(':scope > a');
-        animate(cards, { opacity: [0, 1], translateY: [15, 0], duration: 500, delay: stagger(60), easing: 'easeOutExpo' });
+        animate(speciesGrid.querySelectorAll(':scope > a'), { opacity: [0, 1], translateY: [15, 0], duration: 500, delay: stagger(60), easing: 'easeOutExpo' });
       }, 250);
     }
 
@@ -202,26 +151,18 @@ const totalOrders = speciesByOrder.size;
         const species = speciesData[order] || [];
         const btn = document.createElement('button');
         btn.className = 'order-pill flex items-center gap-3 h-12 px-5 bg-white/10 border border-white/10 rounded-full text-white font-semibold text-sm uppercase tracking-wider';
-        btn.innerHTML = `
-          <span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/10 text-white text-xs font-bold">${species.length}</span>
-          <span>${order}</span>
-        `;
-
+        btn.innerHTML = `<span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/10 text-white text-xs font-bold">${species.length}</span><span>${order}</span>`;
         btn.addEventListener('click', () => showSpeciesView(order));
-
         btn.style.opacity = '0';
-        btn.style.transform = 'scale(0.8)';
         ordersGrid.appendChild(btn);
       });
 
       requestAnimationFrame(() => {
-        const btns = ordersGrid.querySelectorAll('.order-pill');
-        animate(btns, { opacity: [0, 1], scale: [0.8, 1], duration: 500, delay: stagger(40), easing: 'easeOutExpo' });
+        animate(ordersGrid.querySelectorAll('.order-pill'), { opacity: [0, 1], scale: [0.8, 1], duration: 500, delay: stagger(40), easing: 'easeOutExpo' });
       });
     }
 
     backBtn.addEventListener('click', showOrdersView);
-
     renderOrders();
   });
 </script>

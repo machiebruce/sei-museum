@@ -4,7 +4,7 @@ import Menu from "../components/Menu.astro";
 import Layout from "./Main-Layout.astro";
 
 const {frontmatter, url} = Astro.props;
-const isEnglish = url?.includes("/en/");
+const isEnglish = url?.startsWith("/en");
 ---
 
 <Layout title={frontmatter.title}>

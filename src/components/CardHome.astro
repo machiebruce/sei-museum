@@ -11,7 +11,7 @@ interface Props {
 
 const {href = "#", title = "GLI ATTREZZI DELLA SALINA", description = "Lorem ipsum", sectionNumber = "01", image = "/assets/placeholder.jpg", alt = "", HasDescription = false} = Astro.props;
 
-const isEnglish = Astro.url.pathname.includes("/en/");
+const isEnglish = Astro.url.pathname.startsWith("/en");
 
 const isClickable = href && href !== "#";
 const buttonLabel = isClickable ? (isEnglish ? "Start" : "Inizia") : "Coming Soon";

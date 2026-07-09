@@ -25,7 +25,7 @@ const objects = await Astro.glob("../../pages/objects/*.mdx");
 
 <script>
   import { animate, stagger } from 'animejs';
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("astro:page-load", () => {
     const cards: HTMLElement[] = Array.from(document.querySelectorAll(".object-card"));
     cards.forEach(c => { c.style.opacity = '0'; c.style.transform = 'translateX(40px)'; });
     animate(cards, { opacity: [0, 1], translateX: [40, 0], duration: 800, delay: stagger(120, { start: 400 }), easing: 'easeOutExpo' });

@@ -33,6 +33,8 @@ objects.forEach((obj) => {
 });
 
 const sortedOrders = Array.from(speciesByOrder.entries()).sort((a, b) => b[1].length - a[1].length);
+const speciesJson = JSON.stringify(Object.fromEntries(speciesByOrder));
+const ordersJson = JSON.stringify(sortedOrders.map(([order]) => order));
 const totalSpecies = objects.length;
 const totalOrders = speciesByOrder.size;
 ---
@@ -353,17 +355,17 @@ const totalOrders = speciesByOrder.size;
     <button class='modal-close' id='modal-close'>×</button>
     <div class='modal-card' id='modal-card'></div>
   </div>
-</Layout>
 
-<script id="map-data" type="application/json">{JSON.stringify(Object.fromEntries(speciesByOrder))}</script>
-<script id="orders-data" type="application/json">{JSON.stringify(sortedOrders.map(([order]) => order))}</script>
+  <div id='map-data' data-species={speciesJson} data-orders={ordersJson} style='display:none'></div>
+</Layout>
 
 <script>
   import { animate, stagger } from 'animejs';
 
   document.addEventListener("DOMContentLoaded", () => {
-    const speciesData = JSON.parse(document.getElementById('map-data').textContent);
-    const ordersList = JSON.parse(document.getElementById('orders-data').textContent);
+    const dataEl = document.getElementById('map-data');
+    const speciesData = JSON.parse(dataEl.dataset.species);
+    const ordersList = JSON.parse(dataEl.dataset.orders);
 
     const container = document.getElementById('map-container');
     const ordersContainer = document.getElementById('orders-container');

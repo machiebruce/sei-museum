@@ -96,7 +96,7 @@ const totalOrders = speciesByOrder.size;
 <script>
   import { animate, stagger } from 'animejs';
 
-  document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("astro:page-load", () => {
     const dataEl = document.getElementById('map-data');
     const speciesData = JSON.parse(dataEl.dataset.species);
     const ordersList = JSON.parse(dataEl.dataset.orders);

@@ -2,7 +2,8 @@
 import Buttons from "../components/Buttons.astro";
 import Layout from "./Main-Layout.astro";
 
-const {frontmatter} = Astro.props;
+const {frontmatter, url} = Astro.props;
+const isEnglish = url?.includes("/en/");
 ---
 
 <Layout title={frontmatter.title}>
@@ -14,7 +15,7 @@ const {frontmatter} = Astro.props;
 
       <!--Page controls-->
       <div class='flex gap-4 w-full justify-around'>
-        <Buttons hasIconLeft={false} label='Chiudi' link='javascript:history.go(-1)' />
+        <Buttons hasIconLeft={false} label={isEnglish ? 'Close' : 'Chiudi'} link='javascript:history.go(-1)' />
       </div>
     </div>
   </main>

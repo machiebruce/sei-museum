@@ -1,6 +1,6 @@
 ---
-// import global style
 import "../style/global.css";
+import LangSwitch from "../components/LangSwitch.astro";
 
 interface Props {
   title: string;
@@ -22,6 +22,7 @@ import {ViewTransitions} from "astro:transitions";
     <title>{title}</title>
   </head>
   <body class='bg-neutral-900 antialiased'>
+    <LangSwitch />
     <slot />
   </body>
 </html>

@@ -11,9 +11,10 @@ interface Props {
 
 const {href = "#", title = "GLI ATTREZZI DELLA SALINA", description = "Lorem ipsum", sectionNumber = "01", image = "/assets/placeholder.jpg", alt = "", HasDescription = false} = Astro.props;
 
-// Controlla se il link è valido
+const isEnglish = Astro.url.pathname.includes("/en/");
+
 const isClickable = href && href !== "#";
-const buttonLabel = isClickable ? "Inizia" : "Coming Soon";
+const buttonLabel = isClickable ? (isEnglish ? "Start" : "Inizia") : "Coming Soon";
 ---
 
 {

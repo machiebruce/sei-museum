@@ -1,0 +1,274 @@
+---
+import Menu from "../../components/Menu.astro";
+import Layout from "../../layouts/Main-Layout.astro";
+
+type BookSource = {
+    title: string;
+    author: string;
+    year: string;
+    publisher: string;
+    url?: never;
+    description?: never;
+};
+
+type WebSource = {
+    title: string;
+    url: string;
+    description: string;
+    author?: never;
+    year?: never;
+    publisher?: never;
+};
+
+type Source = BookSource | WebSource;
+
+type Category = {
+    title: string;
+    icon: string;
+    sources: Source[];
+};
+
+const fontiCategorie: Category[] = [
+    {
+        title: "Reference Books",
+        icon: "menu_book",
+        sources: [
+            {
+                title: "Guida ai Mammiferi d'Europa, Africa del Nord e Medio Oriente",
+                author: "Aulagnier et al.",
+                year: "2011",
+                publisher: "Ricca Editore"
+            },
+            {
+                title: "Mammals of Europe, North Africa and the Middle East",
+                author: "Aulagnier, S., Haffner, P., Mitchell-Jones, A.J., Moutou, F. & Zima, J.",
+                year: "2009",
+                publisher: "A&C Black Publishers"
+            }
+        ]
+    },
+    {
+        title: "Scientific Databases",
+        icon: "science",
+        sources: [
+            {
+                title: "IUCN Red List of Threatened Species",
+                url: "https://www.iucnredlist.org/",
+                description: "International database on species conservation status"
+            },
+            {
+                title: "Catalogue of Life",
+                url: "https://www.catalogueoflife.org/",
+                description: "Complete catalog of known species"
+            },
+            {
+                title: "Animal Diversity Web",
+                url: "https://animaldiversity.org/",
+                description: "Online encyclopedia of animal diversity (University of Michigan)"
+            },
+            {
+                title: "GBIF - Global Biodiversity Information Facility",
+                url: "https://www.gbif.org/",
+                description: "Open data on global biodiversity"
+            },
+            {
+                title: "IUCN Red List",
+                url: "https://www.iucnredlist.org/",
+                description: "Global conservation status"
+            },
+            {
+                title: "BirdLife International",
+                url: "https://www.birdlife.org/",
+                description: "Technical data sheets on bird populations"
+            },
+            {
+                title: "Xeno-canto",
+                url: "https://xeno-canto.org/",
+                description: "Archive of bird songs and calls"
+            },
+            {
+                title: "eBird",
+                url: "https://ebird.org/",
+                description: "Real-time bird sighting maps"
+            }
+        ]
+    },
+    {
+        title: "Organizations and Institutions",
+        icon: "account_balance",
+        sources: [
+            {
+                title: "WWF Italia",
+                url: "https://www.wwf.it/",
+                description: "Worldwide organization for nature conservation"
+            },
+            {
+                title: "Ministero dell'Ambiente e della Sicurezza Energetica",
+                url: "https://www.mase.gov.it/",
+                description: "Official information on biodiversity and conservation in Italy"
+            },
+            {
+                title: "Federparchi",
+                url: "https://www.federparchi.it/",
+                description: "Italian Federation of Parks and Nature Reserves"
+            },
+            {
+                title: "ISPRA - Istituto Superiore per la Protezione e la Ricerca Ambientale",
+                url: "https://www.isprambiente.gov.it/",
+                description: "Environmental research and monitoring in Italy"
+            }
+        ]
+    },
+    {
+        title: "Scientific Journals",
+        icon: "description",
+        sources: [
+            {
+                title: "Journal of Mammalogy",
+                url: "https://academic.oup.com/jmammal",
+                description: "Peer-reviewed scientific journal on mammals"
+            },
+            {
+                title: "Mammal Review",
+                url: "https://onlinelibrary.wiley.com/journal/13652907",
+                description: "Scientific review on mammalogy"
+            },
+            {
+                title: "Hystrix, the Italian Journal of Mammalogy",
+                url: "http://www.italian-journal-of-mammalogy.it/",
+                description: "Italian journal of mammalogy"
+            }
+        ]
+    },
+    {
+        title: "Specialized Websites",
+        icon: "language",
+        sources: [
+            {
+                title: "Arkive",
+                url: "https://www.arkive.org/",
+                description: "Archive of biodiversity images and videos"
+            },
+            {
+                title: "The Mammal Society",
+                url: "https://www.mammal.org.uk/",
+                description: "British organization for the study of mammals"
+            },
+            {
+                title: "European Mammal Assessment",
+                url: "https://www.iucn.org/regions/europe/our-work/biodiversity-conservation/european-red-list-threatened-species",
+                description: "Assessment of European mammal status"
+            }
+        ]
+    }
+];
+---
+
+<style is:global>
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    .source-card {
+        transition: all 0.3s ease;
+    }
+
+    .source-card:hover {
+        transform: translateY(-4px);
+        border-color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    .category-icon {
+        font-size: 2rem;
+        color: #ffffff;
+    }
+</style>
+
+<Layout title="Sources and Resources">
+
+
+    <main class='flex flex-row h-screen overflow-hidden bg-neutral-900'>
+        <Menu HasSectionNumber={false} variant='flora' title='Sources' />
+
+        <div class='w-full p-32 overflow-y-auto no-scrollbar'>
+            <div class='max-w-6xl mx-auto mb-16'>
+                <div class='text-white space-y-4 mb-8'>
+                    <h1 class='text-5xl font-bold text-white'>Sources and Resources</h1>
+                    <p class='text-xl text-white/60 max-w-3xl'>
+                        All the information presented in this digital museum is based on verified and authoritative scientific sources.
+                        Below is the complete list of resources used.
+                    </p>
+                </div>
+            </div>
+
+            <div class='max-w-6xl mx-auto space-y-12'>
+                {fontiCategorie.map((categoria) => (
+                    <div class='space-y-6'>
+                        <div class='flex items-center gap-4 border-b border-white/10 pb-4'>
+                            <img src={`../icons/${categoria.icon}.svg`} alt={categoria.title} class='category-icon w-8 h-8 invert' />
+                            <h2 class='text-3xl font-bold text-white'>{categoria.title}</h2>
+                        </div>
+
+                        <div class='grid grid-cols-1 md:grid-cols-2 gap-6'>
+                            {categoria.sources.map((source) => {
+                                const isWebSource = 'url' in source;
+                                return (
+                                    <div class='source-card bg-neutral-800 border border-white/10 rounded-2xl p-6 space-y-3'>
+                                        <h3 class='text-xl font-bold text-white'>
+                                            {isWebSource ? (
+                                                <!-- FUTURO: riattivare link quando disponibile
+                                                <a href={(source as WebSource).url} target='_blank' rel='noopener noreferrer' class='source-link'>
+                                                    {source.title}
+                                                </a>
+                                                -->
+                                                <span class='text-white'>{source.title}</span>
+                                            ) : (
+                                                <span class='text-white'>{source.title}</span>
+                                            )}
+                                        </h3>
+                                        
+                                        {!isWebSource && (
+                                            <>
+                                                <p class='text-white/70 text-sm'>
+                                                    <strong>Author:</strong> {(source as BookSource).author}
+                                                </p>
+                                                <p class='text-white/70 text-sm'>
+                                                    <strong>Year:</strong> {(source as BookSource).year}
+                                                </p>
+                                                <p class='text-white/70 text-sm'>
+                                                    <strong>Publisher:</strong> {(source as BookSource).publisher}
+                                                </p>
+                                            </>
+                                        )}
+                                        
+                                        {isWebSource && (
+                                            <p class='text-white/60 text-sm mt-2'>
+                                                {(source as WebSource).description}
+                                            </p>
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <div class='max-w-6xl mx-auto mt-16 pt-8 border-t border-white/10'>
+                <div class='text-center space-y-4'>
+                    <p class='text-white/60 text-sm'>
+                        This project was created for educational and informative purposes.
+                        All content is regularly updated to ensure scientific accuracy.
+                    </p>
+                    <p class='text-white/40 text-xs'>
+                        Last updated: January 2026
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+</Layout>

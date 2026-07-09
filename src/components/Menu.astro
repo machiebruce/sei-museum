@@ -18,6 +18,9 @@ const {
 } = Astro.props as Props;
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const currentPath = Astro.url.pathname.replace(/\/$/, "");
+const isEnglish = currentPath === "/en" || currentPath.includes("/en/");
 ---
 
 <div class='bg-primary-500 p-8 w-fit z-50 h-screen flex flex-col justify-between items-center gap-y-16'>
@@ -30,19 +33,19 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 
   {
     variant === "home" ? (
-      /* Variante HOME */ <a href={baseUrl || "/"} class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 transition-all duration-300'>
+      /* Variante HOME */ <a href={isEnglish ? `./en` : (baseUrl || "/")} class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 transition-all duration-300'>
         <img class='w-12' src={menu.src} alt='Home' />
         <p class='text-white font-bold'>HOME</p>
       </a>
     ) : variant === "flora" ? (
-      /* Variante FLORA - Torna a species */ <a href={`./species`} class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 transition-all duration-300'>
+      /* Variante FLORA - Torna a species */ <a href={isEnglish ? `./en/species` : `./species`} class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 transition-all duration-300'>
         <svg class='w-12 h-12 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
           <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 19l-7-7m0 0l7-7m-7 7h18' />
         </svg>
         <p class='text-white font-bold uppercase'>BACK</p>
       </a>
     ) : (
-      /* Variante BACK */ <a href={`./objects`} class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 transition-all duration-300 bg-transparent border-none cursor-pointer'>
+      /* Variante BACK */ <a href={isEnglish ? `./en/objects` : `./objects`} class='flex flex-col items-center hover:opacity-80 hover:-translate-y-2 transition-all duration-300 bg-transparent border-none cursor-pointer'>
         <svg class='w-12 h-12 text-white' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
           <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 19l-7-7m0 0l7-7m-7 7h18' />
         </svg>

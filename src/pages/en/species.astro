@@ -1,0 +1,136 @@
+---
+import Layout from "../../layouts/Main-Layout.astro";
+import Menu from "../../components/Menu.astro";
+import CardSpecie from "../../components/CardSpecie.astro";
+
+const objects = await Astro.glob("../../pages/en/species/*.mdx");
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const orders = new Set<string>();
+const orderIconMap = new Map<string, string>();
+
+objects.forEach((obj) => {
+  if (obj.frontmatter.order) {
+    orders.add(obj.frontmatter.order);
+    if (obj.frontmatter["order-icon"]) {
+      orderIconMap.set(obj.frontmatter.order, obj.frontmatter["order-icon"]);
+    }
+  }
+});
+
+const uniqueOrders = Array.from(orders).sort();
+---
+
+
+
+<Layout title='Saline Ettore Infersa'>
+
+
+  <main class='flex flex-col h-screen overflow-hidden relative'>
+    <div class='flex flex-row flex-1 overflow-hidden'>
+      <Menu HasSectionNumber={false} title='Salt pan species' />
+
+      <div class='flex flex-col flex-1 overflow-hidden relative'>
+        <div class='absolute top-6 left-6 z-50 flex items-center gap-4'>
+          <a href={`./species`} class='border border-white flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
+            <img src='../icons/view_column.svg' alt='view_column' class='w-6 h-6 invert' />
+          </a>
+
+          <a href={`./species-map`} class='flex items-center gap-2 px-6 py-3 bg-neutral-800 text-white rounded-xl hover:bg-neutral-700 no-underline'>
+            <img src='../icons/image_search.svg' alt='image_search' class='w-6 h-6 invert' />
+          </a>
+        </div>
+
+        <div class='snap-x flex-1 flex items-center justify-start gap-16 overflow-x-scroll scroll-pr-72 no-scrollbar'>
+          {
+            objects.map((object) => (
+              <div class='species-card flex-shrink-0 flex-grow-0' data-order={object.frontmatter.order || "undefined"}>
+                <CardSpecie sectionNumber={object.frontmatter.sectionNumber} title={object.frontmatter.title} href={object.frontmatter.link} image={object.frontmatter.image} IsFauna={object.frontmatter.IsFauna} />
+              </div>
+            ))
+          }
+          <div class='min-w-32'></div>
+        </div>
+
+        <div class='px-8 pt-4 pb-8'>
+          <p class='text-white text-2xl font-bold mb-4'>Filters</p>
+          <div class='flex flex-wrap items-center gap-3'>
+            <button class='filter-tab active h-16 px-6 bg-white border-white rounded-full text-black font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2' data-order='all'> All </button>
+            {
+              uniqueOrders.map((order) => {
+                const icon = orderIconMap.get(order);
+                return (
+                  <button class='filter-tab h-16 px-6 bg-white/10 border border-white/20 rounded-full text-white font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2' data-order={order}>
+                    <img src={icon || '/icons/category.svg'} alt={order} class='filter-tab-icon w-7 h-7 flex-shrink-0' />
+                    {order}
+                  </button>
+                );
+              })
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script is:inline>
+    (function () {
+      const filterTabs = document.querySelectorAll(".filter-tab");
+      const speciesCards = document.querySelectorAll(".species-card");
+
+      const orderCache = new Map();
+
+      speciesCards.forEach((card) => {
+        const order = card.getAttribute("data-order");
+        if (!orderCache.has(order)) {
+          orderCache.set(order, []);
+        }
+        orderCache.get(order).push(card);
+      });
+
+      function updateFirstVisibleMargin() {
+        let firstFound = false;
+        speciesCards.forEach((card) => {
+          if (!firstFound && card.style.display !== "none") {
+            card.classList.add("ml-16");
+            firstFound = true;
+          } else {
+            card.classList.remove("ml-16");
+          }
+        });
+      }
+
+      updateFirstVisibleMargin();
+
+      filterTabs.forEach((tab) => {
+        tab.addEventListener("click", function () {
+          const selectedOrder = this.getAttribute("data-order");
+
+          filterTabs.forEach((t) => {
+            if (t === this) {
+              t.className = "filter-tab active h-16 px-6 bg-white border-white rounded-full text-black font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2";
+              const icon = t.querySelector("img");
+              if (icon) icon.style.filter = "invert(1)";
+            } else {
+              t.className = "filter-tab h-16 px-6 bg-white/10 border border-white/20 rounded-full text-white font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2";
+              const icon = t.querySelector("img");
+              if (icon) icon.style.filter = "invert(0)";
+            }
+          });
+
+          if (selectedOrder === "all") {
+            speciesCards.forEach((card) => {
+              card.style.display = "";
+            });
+          } else {
+            speciesCards.forEach((card) => {
+              card.style.display = card.getAttribute("data-order") === selectedOrder ? "" : "none";
+            });
+          }
+
+          updateFirstVisibleMargin();
+        });
+      });
+    })();
+  </script>
+</Layout>

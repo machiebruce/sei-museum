@@ -8,7 +8,7 @@ import path from "node:path";
 const {frontmatter, url} = Astro.props;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 
-const isEnglish = url?.startsWith("/en");
+const isEnglish = Astro.url.pathname.startsWith("/en");
 
 // --- LOGICA AUTOMAZIONE GALLERIA ---
 const slug = url ? path.basename(url) : "default";
@@ -17,11 +17,13 @@ const cleanSlug = slug.replace(/\.[^/.]+$/, "");
 const galleryDir = path.join(process.cwd(), "public", "galleria", cleanSlug);
 let galleryImages: string[] = [];
 
+const galleryPrefix = isEnglish ? "../../galleria" : "../galleria";
+
 if (fs.existsSync(galleryDir)) {
   galleryImages = fs
     .readdirSync(galleryDir)
     .filter((file: string) => /\.(jpg|jpeg|png|webp|avif|svg|jog|JPG|JPEG)$/i.test(file))
-    .map((file: string) => `../galleria/${cleanSlug}/${file}`);
+    .map((file: string) => `${galleryPrefix}/${cleanSlug}/${file}`);
 }
 
 if (galleryImages.length === 0) {
@@ -29,7 +31,9 @@ if (galleryImages.length === 0) {
 }
 
 // --- LOGICA NAVIGAZIONE AUTOMATICA (SOLO STESSO ORDINE) ---
-const allSpecies = await Astro.glob("../pages/species/*.mdx");
+const itSpecies = await Astro.glob("../pages/species/*.mdx");
+const enSpecies = await Astro.glob("../pages/en/species/*.mdx");
+const allSpecies = isEnglish ? enSpecies : itSpecies;
 
 // Filtra solo le specie dello stesso ordine
 const currentOrder = frontmatter.order;

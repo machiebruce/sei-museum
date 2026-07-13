@@ -3,7 +3,7 @@ import Layout from "../../layouts/Main-Layout.astro";
 import Menu from "../../components/Menu.astro";
 import Card from "../../components/Card.astro";
 
-const objects = await Astro.glob("../../pages/en/objects/*.mdx");
+const objects = Object.values(import.meta.glob<{frontmatter: Record<string, any>}>("../../pages/en/objects/*.mdx", {eager: true}));
 ---
 
 <Layout title='Saline Ettore Infersa'>

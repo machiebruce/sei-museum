@@ -10,12 +10,12 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.7.0",
-    "@astrojs/mdx": "^3.1.2",
-    "@astrojs/tailwind": "^5.1.0",
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/mdx": "^4.3.14",
+    "@astrojs/tailwind": "^5.1.5",
     "@tailwindcss/container-queries": "^0.1.1",
     "animejs": "^4.5.0",
-    "astro": "^4.11.5",
+    "astro": "^5.18.2",
     "hls.js": "^1.6.16",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.4.5"

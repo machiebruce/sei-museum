@@ -5,10 +5,9 @@ import CardHome from "../components/CardHome.astro";
 // Recuperiamo il baseUrl per i link
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 
-// Inserisci qui l'ID del video YouTube live
-// Es: se l'URL è https://www.youtube.com/watch?v=dQw4w9WgXcQ
-// l'ID è: dQw4w9WgXcQ
-const youtubeLiveId = "jfKfPfyJRdk"; // Sostituisci con il tuo ID video live
+// URL locale dello stream HLS generato da VLC (rtsp -> HLS) sullo stesso computer dell'app.
+// PLACEHOLDER: sostituire con l'indirizzo reale una volta avviato VLC (vedi memoria "live-camera-vlc-hls").
+const liveStreamUrl = "http://localhost:8080/live/stream.m3u8";
 
 const categories = [
   {
@@ -52,8 +51,8 @@ const categories = [
     </div>
 
     <!-- Container video responsive -->
-    <div class='overflow-hidden w-full max-w-6xl rounded-2xl border shadow-2xl aspect-video border-white/10'>
-      <iframe class='w-full h-full' src={`https://www.youtube.com/embed/${youtubeLiveId}?autoplay=1&mute=0`} title='YouTube Live Stream' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share' allowfullscreen></iframe>
+    <div class='overflow-hidden w-full max-w-6xl rounded-2xl border shadow-2xl aspect-video border-white/10 bg-black'>
+      <video id='live-video' class='w-full h-full' controls autoplay muted playsinline data-src={liveStreamUrl}></video>
     </div>
 
     <!-- Pulsante torna indietro -->
@@ -70,3 +69,28 @@ const categories = [
     transition-duration: 500ms;
   }
 </style>
+
+<script>
+  import Hls from "hls.js";
+
+  function initLivePlayer() {
+    const video = document.getElementById("live-video") as HTMLVideoElement | null;
+    if (!video) return;
+    const src = video.dataset.src;
+    if (!src) return;
+
+    if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      video.src = src;
+    } else if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(src);
+      hls.attachMedia(video);
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("astro:page-load", initLivePlayer);
+  } else {
+    initLivePlayer();
+  }
+</script>

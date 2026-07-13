@@ -3,8 +3,8 @@ import Buttons from "../components/Buttons.astro";
 import Menu from "../components/Menu.astro";
 import Layout from "./Main-Layout.astro";
 
-const {frontmatter, url} = Astro.props;
-const isEnglish = url?.startsWith("/en");
+const {frontmatter} = Astro.props;
+const isEnglish = Astro.url.pathname.startsWith("/en");
 ---
 
 <Layout title={frontmatter.title}>

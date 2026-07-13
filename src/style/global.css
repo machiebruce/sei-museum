@@ -1,9 +1,35 @@
 /** @format */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@plugin "@tailwindcss/typography";
+
+@theme {
+  --font-sans: Montserrat, sans-serif;
+  --font-headings: Montserrat, sans-serif;
+
+  --color-primary: #e77968;
+  --color-primary-100: #fdf5f4;
+  --color-primary-200: #fae8e6;
+  --color-primary-300: #f5cfca;
+  --color-primary-400: #efb1aa;
+  --color-primary-500: #e77968;
+  --color-primary-600: #da7262;
+  --color-primary-700: #bd6355;
+  --color-primary-800: #9a5145;
+  --color-primary-900: #6d3931;
+
+  --color-neutral: #999999;
+  --color-neutral-100: #f2f2f2;
+  --color-neutral-200: #e1e1e1;
+  --color-neutral-300: #bfbfbf;
+  --color-neutral-400: #969595;
+  --color-neutral-500: #1f1c1c;
+  --color-neutral-600: #1d1a1a;
+  --color-neutral-700: #191717;
+  --color-neutral-800: #151313;
+  --color-neutral-900: #0f0d0d;
+}
 
 @layer base {
   h1,
@@ -24,7 +50,7 @@
      .no-scrollbar::-webkit-scrollbar {
        display: none;
      }
-  
+
      /* Hide scrollbar for IE, Edge and Firefox */
      .no-scrollbar {
        -ms-overflow-style: none;
@@ -33,5 +59,4 @@
        /* Firefox */
      }
 }
-
 

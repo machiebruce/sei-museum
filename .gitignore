@@ -21,3 +21,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# stray backup/zip files not meant for the site (public/ gets copied verbatim into dist/)
+*.zip

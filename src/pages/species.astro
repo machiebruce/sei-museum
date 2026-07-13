@@ -3,7 +3,7 @@ import Layout from "../layouts/Main-Layout.astro";
 import Menu from "../components/Menu.astro";
 import CardSpecie from "../components/CardSpecie.astro";
 
-const objects = await Astro.glob("../pages/species/*.mdx");
+const objects = Object.values(import.meta.glob<{frontmatter: Record<string, any>}>("../pages/species/*.mdx", {eager: true}));
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 // Estrai gli ordini unici

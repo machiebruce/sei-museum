@@ -31,8 +31,8 @@ if (galleryImages.length === 0) {
 }
 
 // --- LOGICA NAVIGAZIONE AUTOMATICA (SOLO STESSO ORDINE) ---
-const itSpecies = await Astro.glob("../pages/species/*.mdx");
-const enSpecies = await Astro.glob("../pages/en/species/*.mdx");
+const itSpecies = Object.values(import.meta.glob<{frontmatter: Record<string, any>}>("../pages/species/*.mdx", {eager: true}));
+const enSpecies = Object.values(import.meta.glob<{frontmatter: Record<string, any>}>("../pages/en/species/*.mdx", {eager: true}));
 const allSpecies = isEnglish ? enSpecies : itSpecies;
 
 // Filtra solo le specie dello stesso ordine

@@ -1,1 +1,0 @@
-import{H as i}from"./hls.DkI61o3c.js";function n(){const e=document.getElementById("live-video");if(!e)return;const t=e.dataset.src;if(t){if(e.canPlayType("application/vnd.apple.mpegurl"))e.src=t;else if(i.isSupported()){const a=new i;a.loadSource(t),a.attachMedia(e)}}}document.readyState==="loading"?document.addEventListener("astro:page-load",n):n();

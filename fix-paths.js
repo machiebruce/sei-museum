@@ -11,6 +11,11 @@ const distDir = './dist';
 // Fondiamo qui il file nella cartella omonima come index.html: la collisione
 // sparisce e il calcolo automatico della profondita in fixPaths() qui sotto
 // gestisce da solo tutti i percorsi assoluti "/...".
+//
+// I riferimenti relativi "in chiaro" (non "/...") gia' presenti nel file sono
+// scritti nel sorgente Astro/MDX assumendo direttamente questa profondita
+// finale (post-merge) - qui ci limitiamo a spostare il file, senza riscrivere
+// il contenuto.
 function mergeCollidingListingPages(dir) {
   const entries = fs.readdirSync(dir);
   const dirNames = new Set(entries.filter((e) => fs.statSync(path.join(dir, e)).isDirectory()));
@@ -23,19 +28,7 @@ function mergeCollidingListingPages(dir) {
     const srcFile = path.join(dir, entry);
     const destFile = path.join(dir, baseName, 'index.html');
 
-    let content = fs.readFileSync(srcFile, 'utf-8');
-
-    // Il file si sposta un livello piu in profondita: qualsiasi riferimento
-    // relativo "in chiaro" (non "/...", quindi non gestito dal passaggio
-    // automatico di fixPaths qui sotto) deve guadagnare un ulteriore "../"
-    // per continuare a puntare allo stesso posto.
-    content = content.replace(/(src|href)="(\.[^"]*)"/g, (_match, attr, value) => {
-      const stripped = value.startsWith('./') ? value.slice(2) : value;
-      return `${attr}="../${stripped}"`;
-    });
-
-    fs.writeFileSync(destFile, content);
-    fs.unlinkSync(srcFile);
+    fs.renameSync(srcFile, destFile);
     console.log(`Merged: ${srcFile} -> ${destFile}`);
   }
 

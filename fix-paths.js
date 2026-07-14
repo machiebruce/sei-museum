@@ -3,6 +3,47 @@ import path from 'path';
 
 const distDir = './dist';
 
+// Alcune pagine elenco (objects.html, species.html) condividono il nome con la
+// cartella delle rispettive schede di dettaglio (objects/, species/). Su hosting
+// statici come GitHub Pages questo crea un'ambiguita: il server preferisce la
+// cartella e serve la pagina come se vivesse un livello piu in profondita di
+// quanto i suoi percorsi relativi si aspettino, rompendo immagini e icone.
+// Fondiamo qui il file nella cartella omonima come index.html: la collisione
+// sparisce e il calcolo automatico della profondita in fixPaths() qui sotto
+// gestisce da solo tutti i percorsi assoluti "/...".
+function mergeCollidingListingPages(dir) {
+  const entries = fs.readdirSync(dir);
+  const dirNames = new Set(entries.filter((e) => fs.statSync(path.join(dir, e)).isDirectory()));
+
+  for (const entry of entries) {
+    if (!entry.endsWith('.html')) continue;
+    const baseName = entry.slice(0, -'.html'.length);
+    if (!dirNames.has(baseName)) continue;
+
+    const srcFile = path.join(dir, entry);
+    const destFile = path.join(dir, baseName, 'index.html');
+
+    let content = fs.readFileSync(srcFile, 'utf-8');
+
+    // Il file si sposta un livello piu in profondita: qualsiasi riferimento
+    // relativo "in chiaro" (non "/...", quindi non gestito dal passaggio
+    // automatico di fixPaths qui sotto) deve guadagnare un ulteriore "../"
+    // per continuare a puntare allo stesso posto.
+    content = content.replace(/(src|href)="(\.[^"]*)"/g, (_match, attr, value) => {
+      const stripped = value.startsWith('./') ? value.slice(2) : value;
+      return `${attr}="../${stripped}"`;
+    });
+
+    fs.writeFileSync(destFile, content);
+    fs.unlinkSync(srcFile);
+    console.log(`Merged: ${srcFile} -> ${destFile}`);
+  }
+
+  for (const name of dirNames) {
+    mergeCollidingListingPages(path.join(dir, name));
+  }
+}
+
 function fixPaths(dir, depth = 0) {
   const files = fs.readdirSync(dir);
 
@@ -40,5 +81,6 @@ function fixPaths(dir, depth = 0) {
   }
 }
 
+mergeCollidingListingPages(distDir);
 fixPaths(distDir);
 console.log('Done!');

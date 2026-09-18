@@ -31,15 +31,19 @@ const uniqueOrders = Array.from(orders).sort();
       <Menu HasSectionNumber={false} title='Salt pan species' />
 
       <div class='flex flex-col flex-1 overflow-hidden relative ml-16'>
-        <div class='snap-x flex-1 flex items-center justify-start gap-16 overflow-x-scroll scroll-pr-72 no-scrollbar'>
-          {
-            objects.map((object) => (
-              <div class='species-card flex-shrink-0 flex-grow-0' data-order={object.frontmatter.order || "undefined"} data-animate-species>
-                <CardSpecie sectionNumber={object.frontmatter.sectionNumber} title={object.frontmatter.title} href={object.frontmatter.link} image={object.frontmatter.image} IsFauna={object.frontmatter.IsFauna} />
-              </div>
-            ))
-          }
-          <div class='min-w-32'></div>
+        <div class='relative flex-1 overflow-hidden'>
+          <div class='pointer-events-none absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-neutral-900 to-transparent z-10'></div>
+          <div class='pointer-events-none absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-neutral-900 to-transparent z-10'></div>
+          <div class='snap-x h-full flex items-center justify-start gap-16 overflow-x-scroll scroll-pr-72 no-scrollbar'>
+            {
+              objects.map((object) => (
+                <div class='species-card flex-shrink-0 flex-grow-0' data-order={object.frontmatter.order || "undefined"} data-animate-species>
+                  <CardSpecie sectionNumber={object.frontmatter.sectionNumber} title={object.frontmatter.title} href={object.frontmatter.link} image={object.frontmatter.image} IsFauna={object.frontmatter.IsFauna} />
+                </div>
+              ))
+            }
+            <div class='min-w-32'></div>
+          </div>
         </div>
 
         <div class='px-8 pt-4 pb-8'>

@@ -7,8 +7,6 @@ interface Props {
 }
 
 const {title} = Astro.props;
-
-import {ClientRouter} from "astro:transitions";
 ---
 
 <!doctype html>
@@ -36,6 +34,17 @@ import {ClientRouter} from "astro:transitions";
   });
 </script>
 
-<ClientRouter />
+<script>
+  // Le transizioni SPA di Astro (ClientRouter) sono state rimosse: iniettavano il
+  // nuovo DOM (immagini incluse) prima di aggiornare l'URL della pagina, quindi i
+  // percorsi relativi degli asset venivano risolti alla profondita' sbagliata e
+  // le immagini restavano rotte finche' non si faceva un refresh manuale. Ogni
+  // link e' di nuovo una navigazione normale del browser; qui riemettiamo
+  // "astro:page-load" cosi' gli script di animazione delle singole pagine
+  // continuano a funzionare senza modifiche.
+  window.addEventListener("load", () => {
+    document.dispatchEvent(new Event("astro:page-load"));
+  });
+</script>
 
 <script src='../scripts/reset-page.js'></script>

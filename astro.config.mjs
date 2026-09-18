@@ -6,7 +6,7 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   integrations: [mdx()],
   output: "static",
-  base: "./",
+  base: "/",
   build: {
     format: "file",
     inlineStylesheets: "always",

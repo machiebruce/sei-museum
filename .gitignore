@@ -24,3 +24,4 @@ pnpm-debug.log*
 
 # stray backup/zip files not meant for the site (public/ gets copied verbatim into dist/)
 *.zip
+_archive/

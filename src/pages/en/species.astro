@@ -44,19 +44,23 @@ const uniqueOrders = Array.from(orders).sort();
 
         <div class='px-8 pt-4 pb-8'>
           <p class='text-white text-2xl font-bold mb-4'>Filters</p>
-          <div class='flex flex-wrap items-center gap-3'>
-            <button class='filter-tab active h-16 px-6 bg-white border-white rounded-full text-black font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2' data-order='all'> All </button>
-            {
-              uniqueOrders.map((order) => {
-                const icon = orderIconMap.get(order);
-                return (
-                  <button class='filter-tab h-16 px-6 bg-white/10 border border-white/20 rounded-full text-white font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2' data-order={order}>
-                    <img src={icon || '/icons/category.svg'} alt={order} class='filter-tab-icon w-7 h-7 flex-shrink-0' />
-                    {order}
-                  </button>
-                );
-              })
-            }
+          <div class='relative'>
+            <div class='pointer-events-none absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-neutral-900 to-transparent z-10'></div>
+            <div class='pointer-events-none absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-neutral-900 to-transparent z-10'></div>
+            <div class='filter-tabs-row flex flex-nowrap items-center gap-3 overflow-x-auto no-scrollbar scroll-smooth'>
+              <button class='filter-tab active h-16 px-6 bg-white border-white rounded-full text-black font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2 flex-shrink-0' data-order='all'> All </button>
+              {
+                uniqueOrders.map((order) => {
+                  const icon = orderIconMap.get(order);
+                  return (
+                    <button class='filter-tab h-16 px-6 bg-white/10 border border-white/20 rounded-full text-white font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2 flex-shrink-0' data-order={order}>
+                      <img src={icon || '/icons/category.svg'} alt={order} class='filter-tab-icon w-7 h-7 flex-shrink-0' />
+                      {order}
+                    </button>
+                  );
+                })
+              }
+            </div>
           </div>
         </div>
       </div>
@@ -104,10 +108,10 @@ const uniqueOrders = Array.from(orders).sort();
           filterTabs.forEach((t) => {
             const img = t.querySelector<HTMLElement>("img");
             if (t === tab) {
-              t.className = "filter-tab active h-16 px-6 bg-white border-white rounded-full text-black font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2";
+              t.className = "filter-tab active h-16 px-6 bg-white border-white rounded-full text-black font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2 flex-shrink-0";
               if (img) img.style.filter = "invert(1)";
             } else {
-              t.className = "filter-tab h-16 px-6 bg-white/10 border border-white/20 rounded-full text-white font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2";
+              t.className = "filter-tab h-16 px-6 bg-white/10 border border-white/20 rounded-full text-white font-semibold text-sm cursor-pointer uppercase tracking-wider whitespace-nowrap flex items-center gap-2 flex-shrink-0";
               if (img) img.style.filter = "invert(0)";
             }
           });
@@ -125,6 +129,7 @@ const uniqueOrders = Array.from(orders).sort();
           animate(visible, { opacity: [0, 1], translateY: [20, 0], scale: [0.95, 1], duration: 500, delay: stagger(80), easing: 'easeOutExpo' });
 
           updateFirstVisibleMargin();
+          tab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
         });
       });
     });

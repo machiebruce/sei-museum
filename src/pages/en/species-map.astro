@@ -133,7 +133,7 @@ const totalOrders = speciesByOrder.size;
         a.className = 'species-card no-underline flex flex-col items-center gap-3 w-[140px] p-4 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10';
         a.innerHTML = `
           <div class='species-circle w-24 h-24 rounded-full overflow-hidden border-2 border-white/20 flex-shrink-0'>
-            <img src="${specie.image}" alt="${specie.title}" class='w-full h-full object-cover' loading='lazy' />
+            <img src="${specie.image.replace(/^\.\.\//, './')}" alt="${specie.title}" class='w-full h-full object-cover' loading='lazy' />
           </div>
           <span class="text-white text-xs font-bold text-center leading-tight">${specie.title}</span>
           <span class="text-white/30 text-xs italic text-center">${specie.scientificName || ''}</span>

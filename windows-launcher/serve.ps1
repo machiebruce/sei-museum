@@ -128,14 +128,66 @@ $handlerScript = {
     $contentType = $mimeTypes[$ext]
     if (-not $contentType) { $contentType = "application/octet-stream" }
     $response.ContentType = $contentType
+    $response.Headers.Add("Accept-Ranges", "bytes")
 
-    # File grandi (video) a blocchi, invece di caricare tutto in RAM e
-    # scriverlo in un colpo solo: piu' leggero e permette al browser di
-    # iniziare a riprodurre prima che il download sia completo.
     $fileStream = [System.IO.File]::OpenRead($resolved)
     try {
-      $response.ContentLength64 = $fileStream.Length
-      $fileStream.CopyTo($response.OutputStream)
+      $fileLength = $fileStream.Length
+
+      # Il tag <video> carica e scorre il file con richieste HTTP Range
+      # ("dammi solo i byte X-Y"), non scaricando mai il file per intero.
+      # Senza gestirle qui, il browser resta in attesa di una risposta
+      # 206 che non arriva mai: e' per questo che le due pagine con un
+      # video si bloccavano, mentre le altre (solo immagini) andavano
+      # bene.
+      $rangeHeader = $request.Headers["Range"]
+      $rangeMatch = $null
+      if ($rangeHeader) { $rangeMatch = [regex]::Match($rangeHeader, '^bytes=(\d*)-(\d*)$') }
+
+      if ($rangeMatch -and $rangeMatch.Success) {
+        $startText = $rangeMatch.Groups[1].Value
+        $endText = $rangeMatch.Groups[2].Value
+
+        if ($startText -eq "") {
+          # "bytes=-500" = ultimi 500 byte
+          $length = [int64]$endText
+          if ($length -gt $fileLength) { $length = $fileLength }
+          $start = $fileLength - $length
+          $end = $fileLength - 1
+        } else {
+          $start = [int64]$startText
+          $end = if ($endText -ne "") { [int64]$endText } else { $fileLength - 1 }
+        }
+        if ($end -ge $fileLength) { $end = $fileLength - 1 }
+
+        if ($start -gt $end -or $start -lt 0 -or $start -ge $fileLength) {
+          $response.StatusCode = 416
+          $response.Headers.Add("Content-Range", "bytes */$fileLength")
+          return
+        }
+
+        $chunkLength = $end - $start + 1
+        $response.StatusCode = 206
+        $response.Headers.Add("Content-Range", "bytes $start-$end/$fileLength")
+        $response.ContentLength64 = $chunkLength
+
+        $fileStream.Seek($start, [System.IO.SeekOrigin]::Begin) | Out-Null
+        $buffer = New-Object byte[] 65536
+        $remaining = $chunkLength
+        while ($remaining -gt 0) {
+          $toRead = [Math]::Min($buffer.Length, $remaining)
+          $read = $fileStream.Read($buffer, 0, $toRead)
+          if ($read -le 0) { break }
+          $response.OutputStream.Write($buffer, 0, $read)
+          $remaining -= $read
+        }
+      } else {
+        # File grandi a blocchi, invece di caricare tutto in RAM e
+        # scriverlo in un colpo solo: piu' leggero e permette al browser
+        # di iniziare a riprodurre prima che il download sia completo.
+        $response.ContentLength64 = $fileLength
+        $fileStream.CopyTo($response.OutputStream)
+      }
     } finally {
       $fileStream.Close()
     }

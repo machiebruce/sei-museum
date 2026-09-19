@@ -1,7 +1,19 @@
 ---
-const currentPath = Astro.url.pathname.replace(/\/$/, "").replace(/\.html$/, "");
+// La homepage (IT e EN) ha un pathname diverso da tutte le altre pagine in
+// build statica: "/index.html" e "/en.html" invece di "/" e "/en/qualcosa",
+// perche' Astro nomina il file di output in base alla route "index" della
+// cartella. Normalizziamo "/index" a "" cosi' la home IT si comporta come
+// ogni altra pagina radice nella formula sotto.
+let currentPath = Astro.url.pathname.replace(/\/$/, "").replace(/\.html$/, "");
+if (currentPath === "/index") currentPath = "";
+
 const isEnglish = currentPath === "/en" || currentPath.startsWith("/en/");
-const togglePath = isEnglish ? (currentPath === "/en" ? "./" : currentPath.replace(/^\/en(\/|$)/, "/")) : (currentPath ? "/en" + currentPath : "/en");
+// Usiamo sempre un percorso assoluto "/...": fix-paths.js lo converte in un
+// relativo corretto in base alla profondita' reale del file dopo il merge
+// delle cartelle "en/", indipendentemente da come il browser interpreta
+// l'URL con o senza slash finale (motivo per cui un "./" hardcoded per la
+// home EN riportava alla stessa pagina invece che alla home IT).
+const togglePath = isEnglish ? (currentPath === "/en" ? "/" : currentPath.replace(/^\/en(\/|$)/, "/")) : (currentPath ? "/en" + currentPath : "/en");
 ---
 
 <a href={togglePath} class='lang-switch fixed top-6 right-0 z-50 flex items-center gap-0 bg-primary-500 text-white rounded-l-full hover:bg-primary-600 no-underline text-sm font-bold uppercase tracking-wider transition-all duration-300 overflow-hidden'>

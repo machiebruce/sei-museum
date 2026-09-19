@@ -1,12 +1,12 @@
 @echo off
-setlocal
+setlocal enabledelayedexpansion
 
 set "SCRIPT_DIR=%~dp0"
 set "PIDFILE=%SCRIPT_DIR%serve.pid"
 
 if exist "%PIDFILE%" (
     set /p SERVER_PID=<"%PIDFILE%"
-    taskkill /F /PID %SERVER_PID% >nul 2>&1
+    taskkill /F /PID !SERVER_PID! >nul 2>&1
     del "%PIDFILE%" >nul 2>&1
 )
 

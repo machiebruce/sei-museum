@@ -18,6 +18,7 @@ sei-museum-kiosk/              <- cartella a tua scelta
 │       └── saline.exe
 ├── serve.ps1
 ├── start-kiosk.bat
+├── start-kiosk.vbs            <- avvia il kiosk senza finestre visibili
 ├── stop-kiosk.bat
 ├── install-autostart.bat
 ├── uninstall-autostart.bat
@@ -43,6 +44,16 @@ sito web normale.
 `serve.ps1` usa solo PowerShell, gia' presente su ogni Windows: non serve
 installare Node, Python o altro.
 
+Gestisce le richieste in parallelo (pool di thread): una pagina carica
+CSS/JS/immagini con piu' richieste contemporanee, e i video pesano
+10-20MB. Se il server processasse una richiesta alla volta, tutte le
+altre resterebbero in coda dietro al file piu' pesante; se nel frattempo
+il browser si stanca di aspettare e chiude la connessione, la scrittura
+fallisce con l'errore Windows "il nome di rete specificato non e' piu'
+disponibile" — sito lento o pagine che non rispondono, solo sul PC
+Windows (Mac/GitHub Pages non hanno questo limite perche' servono le
+richieste in parallelo).
+
 ## Setup (una tantum, sul PC del museo)
 
 1. Copia qui `app_deploy/WindowsNoEditor/saline.exe` e la `dist/` del sito,
@@ -56,8 +67,27 @@ installare Node, Python o altro.
    quel momento il totem si avvia da solo a ogni accesso a Windows (utile se
    il PC e' impostato per fare il login automatico all'accensione).
 
+All'avvio automatico non compare nessuna finestra: il collegamento nello
+Startup lancia `start-kiosk.vbs`, che a sua volta esegue `start-kiosk.bat` in
+modo nascosto, e il server PowerShell parte senza console. Lanciando invece
+`start-kiosk.bat` a mano (per i test) la finestra nera resta visibile: e'
+normale, usa `start-kiosk.vbs` se vuoi provarlo com'e' all'avvio.
+
 Per fermare tutto manualmente: `stop-kiosk.bat` (chiude il server e il
 browser). Per rimuovere l'avvio automatico: `uninstall-autostart.bat`.
+
+### Schermo intero del browser
+
+`start-kiosk.bat` avvia Chrome/Edge con un **profilo dedicato**
+(`%LOCALAPPDATA%\SEIMuseumKiosk\browser-profile`). Senza di esso, se sul PC
+c'e' gia' una finestra di Chrome/Edge aperta, il comando aprirebbe solo una
+scheda in quella finestra e tutti i flag — `--kiosk` compreso — verrebbero
+ignorati: era questa la causa piu' comune del "non va a schermo intero".
+
+Su Edge l'URL viene passato subito dopo `--kiosk`, come richiede
+`--edge-kiosk-type=fullscreen`; su Chrome si usano `--kiosk
+--start-fullscreen`. Il primo avvio del profilo dedicato ripropone una volta
+il popup di conferma di `salina-app://`: spunta "Ricorda la mia scelta".
 
 Se cambi PC o porta, l'unica cosa da modificare e' la variabile `PORT` in
 cima a `start-kiosk.bat` (e passare `-Port` allo stesso valore se lanci
